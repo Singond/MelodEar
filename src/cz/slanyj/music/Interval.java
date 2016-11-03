@@ -2,7 +2,7 @@ package cz.slanyj.music;
 
 /**
  * This class represents musical intervals. It contains a method to calculate
- * a�tone a specified interval apart from a given note. This method will be used
+ * a tone a specified interval apart from a given note. This method will be used
  * in generating scales and chords.
  * 
  * @author Sorondil
@@ -43,8 +43,8 @@ public enum Interval {
 	ZV8	(7, 13);
 	
 	
-	int steps;				// Number of steps from the basic tone
-	int semitones;			// Number of semitones from the basic tone
+	final int steps;				// Number of steps from the basic tone
+	final int semitones;			// Number of semitones from the basic tone
 
 	Interval(int steps, int semitones) {
 		this.steps = steps;

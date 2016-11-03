@@ -76,6 +76,7 @@ public class Chord {
 	 * 
 	 * @param base (Note) The pitch of the chord.
 	 * @param type (Chord.Chords) The type of the chord.
+	 * @param inversion (int) Inversion of the chord
 	 */
 	public Chord(Note base, Chords type, int inversion) {
 		this(base, inversion, type.intervals);
