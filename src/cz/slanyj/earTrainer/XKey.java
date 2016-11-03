@@ -68,7 +68,7 @@ class XKey extends Key {
 	 * Terminates when the sequence end is reached.
 	 */
 	Thread playCadence() {
-		try {
+		/*try {
 			// Create a blank sequence with resolution specified in the Sound static class
 			// and a length of a quarter note and one track.
 			Sequence sequence = new Sequence(Sequence.PPQ, crotchet, 1);
@@ -90,7 +90,9 @@ class XKey extends Key {
 			return Sound.play(sequence);
 		} catch (InvalidMidiDataException e) {
 			return null;
-		}
+		}*/
+		Sequence sequence = mode.cadence.getCadence(new Note(scale.get(0), 4), crotchet);
+		return Sound.play(sequence);
 	}
 	
 	

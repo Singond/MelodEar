@@ -1,6 +1,8 @@
 package cz.slanyj.music;
 
 import cz.slanyj.collections.CircList;
+import cz.slanyj.earTrainer.Cadence;
+
 import static cz.slanyj.music.Interval.*;
 import static cz.slanyj.music.Tone.*;
 import static cz.slanyj.music.Key.Mode.*;
@@ -25,14 +27,16 @@ public class Key {
 	public static class Mode {
 		// Define common modes
 		// (Express the scale in terms of intervals up from the base)
-		public static final Mode MAJOR = new Mode ("major", C1, V2, V3, C4, C5, V6, V7);
-		public static final Mode MINOR = new Mode ("minor", C1, V2, M3, C4, C5, M6, M7);
+		public static final Mode MAJOR = new Mode ("major", Cadence.MAJOR, C1, V2, V3, C4, C5, V6, V7);
+		public static final Mode MINOR = new Mode ("minor", Cadence.MINOR, C1, V2, M3, C4, C5, M6, M7);
 		
-		Interval[] structure;
-		String name;
+		public final Interval[] structure;
+		public final Cadence cadence;
+		public final String name;
 		
-		Mode(String name, Interval... structure) {
+		Mode(String name, Cadence cadence, Interval... structure) {
 			this.structure = structure;
+			this.cadence = cadence;
 			this.name = name;
 		}
 	}
