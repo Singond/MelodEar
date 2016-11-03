@@ -105,7 +105,7 @@ public enum Tone {
 							break;
 			}
 		}
-		// OK, this is ugly, but simplest I have found so far�
+		// OK, this is ugly, but simplest I have found so far
 	}
 	
 	/* METHODS */
@@ -154,6 +154,15 @@ public enum Tone {
 		end = end.shift(shift);
 		
 		return end;
+	}
+	/** Transpose this tone up or down by the given oriented interval.
+	 * 
+	 * @param oInterval
+	 * @return
+	 */
+	public Tone transpose(OrientedInterval oInterval) {
+		return oInterval.direction == OrientedInterval.Direction.UP ?
+				up(oInterval.interval) : down(oInterval.interval);
 	}
 	/** Shift the natural of this tone by a given number of semitones.<p>
 	 * The shifted tone is of the same base as the original, eg. base C shifted by +2 will be C## (double sharp).

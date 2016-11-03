@@ -86,6 +86,15 @@ public class Note {
 		Note end = new Note(newPitch, newTone);
 		return end;
 	}
+	/** Transpose this note up or down by the given oriented interval.
+	 * 
+	 * @param orientedInterval
+	 * @return
+	 */
+	public Note transpose(OrientedInterval orientedInterval) {
+		return orientedInterval.direction == OrientedInterval.Direction.UP ?
+				up(orientedInterval.interval) : down(orientedInterval.interval);
+	}
 
 	/**
 	 * Returns next higher note of the given pitch class.
