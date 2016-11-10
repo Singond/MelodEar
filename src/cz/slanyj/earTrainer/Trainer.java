@@ -132,6 +132,7 @@ class Trainer implements /*ActionListener,*/ NoteListener {
 			@Override
 			protected void play() throws InterruptedException {
 				gui.display.clear();
+				Sound.silence();
 				key.playCadence().join();
 //				gui.display.clear();
 			}
