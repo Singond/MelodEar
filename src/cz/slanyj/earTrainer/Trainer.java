@@ -128,7 +128,10 @@ class Trainer implements /*ActionListener,*/ NoteListener {
 	 */
 	void playKey(long delay) {
 		Player p = new Player(delay) {
-//			long pause = 500;
+			@Override
+			protected void prepare() {
+				key.prepareCadence();
+			}
 			@Override
 			protected void play() throws InterruptedException {
 				gui.display.clear();
@@ -173,6 +176,10 @@ class Trainer implements /*ActionListener,*/ NoteListener {
 	 */
 	void playTask(long delay) {
 		Player p = new Player(delay) {
+			@Override
+			protected void prepare() {
+				task.prepareToPlay();
+			}
 			@Override
 			protected void play() throws InterruptedException {
 				gui.display.clear();
@@ -330,6 +337,7 @@ class Trainer implements /*ActionListener,*/ NoteListener {
 				// Disable input
 				input.setInactive();
 				input.stopBroadcast();
+				prepare();
 				// Wait
 				Thread.sleep(pause);
 				// Play it
@@ -350,13 +358,16 @@ class Trainer implements /*ActionListener,*/ NoteListener {
 		}
 		
 		/**
+		 * Prepares the playback to be subsequently started with play()
+		 */
+		protected abstract void prepare();
+		/**
 		 * Plays the element to the user. The note input is disabled for the duration of playback.
 		 * (Sets <code>input</code> to <code>inactive</code> and makes it stop broadcasting keys.
 		 */
 		protected abstract void play() throws InterruptedException;
 		/** What to do when the playback finishes. */
 		protected abstract void cont();
-
 	}
 
 }

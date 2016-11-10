@@ -24,6 +24,8 @@ class XKey extends Key {
 	
 	XNote[] longScale;
 	
+	Sequence cadence;
+	
 	Key key;
 	
 	/** The base of the key, ie. tonic. */
@@ -61,6 +63,16 @@ class XKey extends Key {
 
 	}
 	/**
+	 * Prepares cadence playback
+	 */
+	void prepareCadence() {
+		if (cadence == null) {
+			Sequence sequence = mode.cadence.getCadence(new Note(scale.get(0), 4), crotchet);
+			Sound.prepare(sequence);
+			cadence = sequence;
+		}
+	}
+	/**
 	 * Plays a Major cadence I-IV-V-I in a new thread.
 	 * This thread terminates only when the sequence is finished playing.
 	 * This can be used to pause execution until the sequence finishes.
@@ -91,8 +103,12 @@ class XKey extends Key {
 		} catch (InvalidMidiDataException e) {
 			return null;
 		}*/
-		Sequence sequence = mode.cadence.getCadence(new Note(scale.get(0), 4), crotchet);
-		return Sound.play(sequence);
+		prepareCadence();
+		try {
+			return Sound.play(cadence);
+		} catch (NullPointerException e) {
+			throw new IllegalStateException("Cadence has been prepared but remains null");
+		}
 	}
 	
 	
