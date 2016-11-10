@@ -3,8 +3,18 @@ package cz.slanyj.earTrainer;
 interface MusicTask {
 
 	/**
+	 * Prepares playback of this excersize.
+	 * This method should do all the tasks needed in playing a MIDI-sequence,
+	 * like opening the sequencer, except for the playback itself.
+	 */
+	void prepareToPlay();
+	
+	/**
 	 * Plays this excersize in a new thread.
-	 * This thread terminates only when the sequence is finished playing.
+	 * If prepareToPlay has been called already,
+	 * this method should only do the rest to play.
+	 * If it has not been called yet, call it first.
+	 * This thread should terminate only when the sequence is finished playing.
 	 * This can be used to pause execution until the sequence finishes.
 	 * @return The thread in which the sequence is played.
 	 * 

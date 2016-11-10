@@ -17,6 +17,8 @@ class Melody implements MusicTask {
 	
 	/** The melody itself as an array of notes. */
 	XNote[] self;
+	/** The melody transformed into a MIDI-sequence */
+	Sequence sequence;
 	/** The length of the melody. */
 	private int length;
 	/**
@@ -73,6 +75,35 @@ class Melody implements MusicTask {
 			System.out.println(note.name());
 		}
 	}
+	
+	/**
+	 * Assembles the melody into a MIDI-sequence. 
+	 */
+	private Sequence createSequence() {
+		Sequence seq = null;
+		try {
+			// Create a blank sequence with division into 1/48 of a quarter note and one track.
+			seq = new Sequence(Sequence.PPQ, crotchet, 1);
+			// Get the first track
+			Track tr1 = seq.getTracks()[0];
+			// Add this chord to the start of the sequence with a length of one crotchet (quarter note)
+			for (int i=0; i<self.length; i++) {
+				new XNote(self[i]).addToTrack(tr1, crotchet*i, crotchet);
+			}
+		} catch (InvalidMidiDataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return seq;
+	}
+	
+	/**
+	 * Prepares playback of this melody.
+	 */
+	public void prepareToPlay() {
+		sequence = createSequence();
+		Sound.prepare(sequence);
+	}
 	/**
 	 * Plays this melody in a new thread.
 	 * This thread terminates only when the sequence is finished playing.
@@ -81,29 +112,11 @@ class Melody implements MusicTask {
 	 * 
 	 */
 	public Thread play() {
-		try {
-			// Create a blank sequence with division into 1/48 of a quarter note and one track.
-			Sequence sequence = new Sequence(Sequence.PPQ, crotchet, 1);
-			// Get the first track
-			Track tr1 = sequence.getTracks()[0];
-			// Add this chord to the start of the sequence with a length of one crotchet (quarter note)
-			for (int i=0; i<self.length; i++) {
-				new XNote(self[i]).addToTrack(tr1, crotchet*i, crotchet);
-			}
-			// Send the sequence to the player (Sound)
-			return Sound.play(sequence);
-		} catch (InvalidMidiDataException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
+		if (sequence == null) {
+			sequence = createSequence();
 		}
-
-	}
-	
-	
-	
-	
-	
+		return Sound.play(sequence);
+	}	
 	
 	/**
 	 * Checks user input and compares it to the melody.<p>
