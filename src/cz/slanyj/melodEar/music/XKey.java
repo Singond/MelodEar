@@ -1,13 +1,14 @@
-package cz.slanyj.melodEar;
+package cz.slanyj.melodEar.music;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Track;
 
 import cz.slanyj.collections.CircList;
+import cz.slanyj.melodEar.Sound;
 import cz.slanyj.music.*;
 
-import static cz.slanyj.music.Chord.Chords.*;
+import static cz.slanyj.music.Chord.Type.*;
 import static cz.slanyj.music.Interval.*;
 
 /**
@@ -16,11 +17,11 @@ import static cz.slanyj.music.Interval.*;
  * @author Sorondil
  *
  */
-class XKey extends Key {
+public class XKey extends Key {
 	
-	int channel = Sound.channel;
-	int velocity = Sound.velocity;
-	static int crotchet = Sound.resolution;
+	int channel = Sound.getChannel();
+	int velocity = Sound.getVelocity();
+	static int crotchet = Sound.getResolution();
 	
 	XNote[] longScale;
 	
@@ -35,7 +36,7 @@ class XKey extends Key {
 	 * starting with [0] = tonic.
 	 */
 	
-	XKey(Key key) {
+	public XKey(Key key) {
 		super(key.tonic, key.mode);
 	}
 	
@@ -65,9 +66,9 @@ class XKey extends Key {
 	/**
 	 * Prepares cadence playback
 	 */
-	void prepareCadence() {
+	public void prepareCadence() {
 		if (cadence == null) {
-			Sequence sequence = mode.cadence.getCadence(new Note(scale.get(0), 4), crotchet);
+			Sequence sequence = new Cadence(mode.cadence).getAsSequence(new Note(scale.get(0), 4), crotchet);
 			Sound.prepare(sequence);
 			cadence = sequence;
 		}
@@ -79,7 +80,7 @@ class XKey extends Key {
 	 * @return The thread in which the sequence is played.
 	 * Terminates when the sequence end is reached.
 	 */
-	Thread playCadence() {
+	public Thread playCadence() {
 		/*try {
 			// Create a blank sequence with resolution specified in the Sound static class
 			// and a length of a quarter note and one track.

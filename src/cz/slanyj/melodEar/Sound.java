@@ -12,7 +12,7 @@ import cz.slanyj.music.*;
  * @author Sorondil
  *
  */
-class Sound {
+public class Sound {
 	
 	private static Receiver receiver;
 	private static Sequencer seq;
@@ -50,6 +50,18 @@ class Sound {
 		listener = new EndListener();
 	}
 	
+	public static int getChannel() {
+		return channel;
+	}
+	
+	public static int getVelocity() {
+		return velocity;
+	}
+	
+	public static int getResolution() {
+		return resolution;
+	}
+	
 	/* Individual notes */
 	
 	/**
@@ -58,7 +70,7 @@ class Sound {
 	 * 
 	 * @param note (Note) The note to be played.
 	 */
-	static void play(Note note) {
+	public static void play(Note note) {
 		int channel = 0;
 		int velocity = 93;
 		try {
@@ -86,7 +98,7 @@ class Sound {
 	 * This method should do all tasks which can be performed in advance,
 	 * in order to speed up the start of the subsequent playback.
 	 */
-	static void prepare(Sequence sequence) {
+	public static void prepare(Sequence sequence) {
 		try {
 			// Open sequencer
 			seq.open();
@@ -111,7 +123,7 @@ class Sound {
 	 * @return
 	 * @throws IllegalStateException if the sequencer is closed
 	 */
-	static synchronized Thread play(Sequence sequence) {
+	public static synchronized Thread play(Sequence sequence) {
 		Thread playingThread;
 		if (preparedSequence == sequence) {
 			playingThread = playPreparedInThread();
