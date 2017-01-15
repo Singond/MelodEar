@@ -1,4 +1,4 @@
-package cz.slanyj.earTrainer;
+package cz.slanyj.melodEar;
 
 public class Master {
 

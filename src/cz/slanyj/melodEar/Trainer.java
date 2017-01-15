@@ -1,4 +1,6 @@
-package cz.slanyj.earTrainer;
+package cz.slanyj.melodEar;
+
+import static cz.slanyj.melodEar.Trainer.Status.*;
 
 import java.awt.Color;
 import java.util.Random;
@@ -7,7 +9,6 @@ import javax.swing.SwingWorker;
 
 import cz.slanyj.music.*;
 import cz.slanyj.music.Key.Mode;
-import static cz.slanyj.earTrainer.Trainer.Status.*;
 
 
 /**

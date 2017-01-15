@@ -1,4 +1,4 @@
-package cz.slanyj.earTrainer;
+package cz.slanyj.melodEar;
 
 import static javax.sound.midi.ShortMessage.NOTE_OFF;
 import static javax.sound.midi.ShortMessage.NOTE_ON;

@@ -1,4 +1,4 @@
-package cz.slanyj.earTrainer;
+package cz.slanyj.melodEar;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;

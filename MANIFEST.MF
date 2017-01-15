@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 Class-Path: .
-Main-Class: cz.slanyj.earTrainer.Master
+Main-Class: cz.slanyj.melodEar.Master
 SplashScreen-Image: img/splash.jpg
 

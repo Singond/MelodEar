@@ -5,4 +5,4 @@
  * @author Sorondil
  *
  */
-package cz.slanyj.earTrainer;
+package cz.slanyj.melodEar;

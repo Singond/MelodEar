@@ -1,4 +1,4 @@
-package cz.slanyj.earTrainer;
+package cz.slanyj.melodEar;
 
 import java.lang.reflect.Array;
 import java.util.EnumSet;

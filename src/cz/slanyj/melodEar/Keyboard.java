@@ -1,4 +1,4 @@
-package cz.slanyj.earTrainer;
+package cz.slanyj.melodEar;
 /**
  * Displays a clickable piano keyboard, playing sounds when a key is clicked.
  * The section to be displayed is specified in the constructor.

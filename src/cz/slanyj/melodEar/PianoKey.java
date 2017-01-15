@@ -1,4 +1,4 @@
-package cz.slanyj.earTrainer;
+package cz.slanyj.melodEar;
 
 enum PianoKey {
 	//		ptch	pos.	isWhite

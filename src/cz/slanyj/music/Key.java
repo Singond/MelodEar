@@ -1,7 +1,7 @@
 package cz.slanyj.music;
 
 import cz.slanyj.collections.CircList;
-import cz.slanyj.earTrainer.Cadence;
+import cz.slanyj.melodEar.Cadence;
 
 import static cz.slanyj.music.Interval.*;
 import static cz.slanyj.music.Tone.*;
