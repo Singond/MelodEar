@@ -7,6 +7,7 @@ import java.util.Random;
 
 import javax.swing.SwingWorker;
 
+import cz.slanyj.melodEar.music.XKey;
 import cz.slanyj.music.*;
 import cz.slanyj.music.Key.Mode;
 

@@ -1,9 +1,11 @@
-package cz.slanyj.melodEar;
+package cz.slanyj.melodEar.music;
 
 import static javax.sound.midi.ShortMessage.NOTE_OFF;
 import static javax.sound.midi.ShortMessage.NOTE_ON;
+
+import cz.slanyj.melodEar.Sound;
 import cz.slanyj.music.*;
-import cz.slanyj.music.Chord.Chords;
+import cz.slanyj.music.Chord.Type;
 
 import javax.sound.midi.*;
 
@@ -12,40 +14,23 @@ import javax.sound.midi.*;
  * @author Sorondil
  *
  */
-public class XChord extends Chord {
+public class XChord extends ChordVoicing {
 
-	int channel = Sound.channel;
-	int velocity = Sound.velocity;
+	int channel = Sound.getChannel();
+	int velocity = Sound.getVelocity();
 	/** The length of a crotchet in ticks. */
-	static int crotchet = Sound.resolution;
+	static int crotchet = Sound.getResolution();
 	
 	XNote[] voicing;
 	
-	XChord(Note base, Chords type) {
-		super(base, type);
-		voicing = new XNote[super.size];
+	public XChord(ChordVoicing chord) {
+		super(chord);
+		voicing = new XNote[super.getSize()];
 		// Recast the Notes into XNotes
-		for (int i=0; i<super.voicing.length; i++) {
-			this.voicing[i] = new XNote(super.voicing[i]);
+		for (int i=0; i<super.voicing().length; i++) {
+			this.voicing[i] = new XNote(super.voicing()[i]);
 		}
 	}
-	XChord(Note base, Chords type, int inversion) {
-		super(base, type, inversion);
-		voicing = new XNote[super.size];
-		// Recast the Notes into XNotes
-		for (int i=0; i<super.voicing.length; i++) {
-			this.voicing[i] = new XNote(super.voicing[i]);
-		}
-	}
-	XChord(Note base, int inversion, Interval... structure) {
-		super(base, inversion, structure);
-		voicing = new XNote[super.size];
-		// Recast the Notes into XNotes
-		for (int i=0; i<super.voicing.length; i++) {
-			this.voicing[i] = new XNote(super.voicing[i]);
-		}
-	}
-	
 	/**
 	 * Plays the chord in the length of one crotchet.<p>
 	 * Constructs a new Sequence object and sends it to the Sound class.
@@ -81,6 +66,4 @@ public class XChord extends Chord {
 			note.addToTrack(track, position, length);
 		}
 	}
-	
-	
 }

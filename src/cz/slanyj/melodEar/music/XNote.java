@@ -1,4 +1,4 @@
-package cz.slanyj.melodEar;
+package cz.slanyj.melodEar.music;
 
 import static javax.sound.midi.ShortMessage.NOTE_OFF;
 import static javax.sound.midi.ShortMessage.NOTE_ON;
@@ -8,16 +8,17 @@ import javax.sound.midi.MidiEvent;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
+import cz.slanyj.melodEar.Sound;
 import cz.slanyj.music.*;
 
-class XNote extends Note {
+public class XNote extends Note {
 	
-	int channel = Sound.channel;
-	int velocity = Sound.velocity;
-	static int crotchet = Sound.resolution;
+	int channel = Sound.getChannel();
+	int velocity = Sound.getVelocity();
+	static int crotchet = Sound.getResolution();
 
 	// Own constructor
-	XNote(Note note) {
+	public XNote(Note note) {
 		super(note.tone, note.octave);
 	}
 	
@@ -37,7 +38,7 @@ class XNote extends Note {
 	 * 
 	 * @throws InvalidMidiDataException
 	 */
-	void addToTrack(Track track, int position, int length) throws InvalidMidiDataException {
+	public void addToTrack(Track track, int position, int length) throws InvalidMidiDataException {
 		// Create the Note On and Note Off events
 		MidiEvent noteOn = new MidiEvent(new ShortMessage(NOTE_ON, channel, pitch, velocity), position);
 		MidiEvent noteOff = new MidiEvent(new ShortMessage(NOTE_OFF, channel, pitch, velocity), position+length);
