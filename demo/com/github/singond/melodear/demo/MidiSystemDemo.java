@@ -31,6 +31,10 @@ public class MidiSystemDemo {
 		return sequence;
 	}
 	
+	public static void play(Sequence sequence, MidiDevice device, Soundbank soundbank, int tempo) {
+		playWithSoundbank(sequence, device, soundbank, tempo, false);
+	}
+	
 	public static void play(Sequence sequence, MidiDevice device, int tempo) {
 		playWithSettings(sequence, device, tempo, false);
 	}
@@ -43,34 +47,72 @@ public class MidiSystemDemo {
 		playWithSettings(sequence, null, 120, false);
 	}
 	
-	private static void playWithSettings(Sequence sequence, MidiDevice device, int tempo, boolean log) {
+	private static void playWithSettings(Sequence sequence, MidiDevice device, int tempo, boolean dbg) {
 		try (Sequencer seq = MidiSystem.getSequencer()) {
 			if (device != null) {
 				if (!device.isOpen()) {
 					System.out.println("Opening device " + device.getDeviceInfo().getName());
+					System.out.println(device.getClass());
 					device.open();
 				}
 				seq.getTransmitter().setReceiver(device.getReceiver());
 			}
 			seq.setTempoInBPM(tempo);
-			playSequence(sequence, seq, log);
+			playSequence(sequence, seq, dbg);
+		} catch (MidiUnavailableException e) {
+			System.out.println("No MIDI sequencer available");
+			e.printStackTrace();
+		}
+	}
+	
+	private static void playWithSoundbank(Sequence sequence, MidiDevice device, Soundbank sb,
+	                                      int tempo, boolean dbg) {
+		try (Sequencer seq = MidiSystem.getSequencer()) {
+			Synthesizer synth = null;
+			if (device != null) {
+				if (!device.isOpen()) {
+					System.out.println("Opening device " + device.getDeviceInfo().getName());
+					System.out.println(device.getClass());
+					device.open();
+				}
+    			if (device instanceof Synthesizer) {
+    				synth = (Synthesizer) device;
+    				synth.open();
+    				System.out.println("Unloading default instruments...");
+    				synth.unloadAllInstruments(synth.getDefaultSoundbank());
+    				System.out.println("Loading instruments from the soundbank...");
+    				synth.loadAllInstruments(sb);
+    			} else {
+    				System.out.println("The device is not a synthesizer: cannot change sound bank");
+    				synth = MidiSystem.getSynthesizer();
+    			}
+    			seq.getTransmitter().setReceiver(device.getReceiver());
+			}
+			seq.setTempoInBPM(tempo);
+			playSequence(sequence, seq, dbg);
+			if (synth != null) {
+    			synth.close();
+    		}
 		} catch (MidiUnavailableException e) {
 			System.out.println("No MIDI sequencer available");
 			e.printStackTrace();
 		}
 	}
 
-	private static void playSequence(Sequence sequence, Sequencer seq, boolean log) {
+	private static void playSequence(Sequence sequence, Sequencer seq, boolean dbg) {
 		try {
 			seq.open();
+			System.out.println("Opening sequencer...");
+			Thread.sleep(300);
 			seq.setSequence(sequence);
 			EndOfTrackListener l = new EndOfTrackListener(seq);
-			l.useLog(log);
+			l.useLog(dbg);
 			seq.addMetaEventListener(l);
+			System.out.println("Starting playback");
 			seq.start();
 			synchronized (seq) {
 				while (seq.isRunning()) {
-					if (log) System.out.println("Waiting");
+					if (dbg) System.out.println("Waiting");
 					seq.wait();
 				}
 			}
@@ -83,7 +125,7 @@ public class MidiSystemDemo {
 			System.out.println("Sequencer interrupted");
 			e.printStackTrace();
 		}
-		if (log) System.out.println("Finished");
+		if (dbg) System.out.println("Finished");
 	}
 	
 	private static class EndOfTrackListener implements MetaEventListener {

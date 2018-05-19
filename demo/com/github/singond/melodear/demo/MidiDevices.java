@@ -3,6 +3,8 @@ package com.github.singond.melodear.demo;
 import static javax.sound.midi.ShortMessage.NOTE_OFF;
 import static javax.sound.midi.ShortMessage.NOTE_ON;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -13,6 +15,8 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.ShortMessage;
+import javax.sound.midi.Soundbank;
+import javax.sound.midi.Synthesizer;
 import javax.sound.midi.Track;
 
 public class MidiDevices {
@@ -27,9 +31,37 @@ public class MidiDevices {
 		}
 		System.out.print("\nEnter the number of a MIDI device to test: ");
 		MidiDevice.Info deviceInfo = info[scanner.nextInt()];
+		scanner.nextLine(); // Consume the newline after the number input
 		MidiDevice device = MidiSystem.getMidiDevice(deviceInfo);
+		Soundbank sb = null;
+		if (device instanceof Synthesizer) {
+//			Synthesizer synth = (Synthesizer) device;
+			System.out.println("Enter path to sound font file:");
+			String fileString = scanner.nextLine();
+			if (!fileString.isEmpty()) {
+				File sbFile = new File(fileString);
+    			if (sbFile.exists()) {
+    				try {
+    					sb = MidiSystem.getSoundbank(sbFile);
+//    					synth.loadAllInstruments(sb);
+    					System.out.println("Changing soundbank");
+    				} catch (IOException e) {
+    					System.out.println("Error when reading " + sbFile);
+    				}
+    			} else {
+    				System.out.println("The file does not exist");
+    			}
+			} else {
+				System.out.println("Not changing soundbank");
+			}
+		}
 		Sequencer seq = MidiSystem.getSequencer();
-		MidiSystemDemo.play(scale(), device, 120);
+		int tempo = 120;
+		if (sb != null) {
+			MidiSystemDemo.play(scale(), device, sb, tempo);
+		} else {
+			MidiSystemDemo.play(scale(), device, tempo);
+		}
 		seq.close();
 		device.close();
 		scanner.close();
