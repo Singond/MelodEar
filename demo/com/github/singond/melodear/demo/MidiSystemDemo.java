@@ -103,7 +103,7 @@ public class MidiSystemDemo {
 		try {
 			seq.open();
 			System.out.println("Opening sequencer...");
-			Thread.sleep(300);
+			Thread.sleep(2000);
 			seq.setSequence(sequence);
 			EndOfTrackListener l = new EndOfTrackListener(seq);
 			l.useLog(dbg);

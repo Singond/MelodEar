@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
+import javax.sound.midi.Instrument;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiEvent;
@@ -43,6 +44,7 @@ public class MidiDevices {
     			if (sbFile.exists()) {
     				try {
     					sb = MidiSystem.getSoundbank(sbFile);
+    					displayInstruments(sb);
 //    					synth.loadAllInstruments(sb);
     					System.out.println("Changing soundbank");
     				} catch (IOException e) {
@@ -74,11 +76,26 @@ public class MidiDevices {
 		Sequence sequence = new Sequence(Sequence.PPQ, 60);
 		Track tr0 = sequence.createTrack();
 		
+		int step = 60;
 		for (int i = 0; i < 8; i++) {
-    		tr0.add(new MidiEvent(new ShortMessage(NOTE_ON, channel, 60+i, velocity), 60*i));
-    		tr0.add(new MidiEvent(new ShortMessage(NOTE_OFF, channel, 60+i, velocity), 60*(i+1)));
+			if (i == 3 || i == 7) {
+				step += 1;
+			} else if (i != 0) {
+				step += 2;
+			}
+    		tr0.add(new MidiEvent(new ShortMessage(NOTE_ON, channel, step, velocity), 60*i));
+    		tr0.add(new MidiEvent(new ShortMessage(NOTE_OFF, channel, step, velocity), 60*(i+1)));
 		}
 		
 		return sequence;
+	}
+	
+	private static void displayInstruments(Soundbank sb) {
+		Instrument[] instruments = sb.getInstruments();
+		System.out.println("Instruments available in " + sb.getName() + ":");
+		for (Instrument i : instruments) {
+			System.out.format("%03d %03d %s\n", i.getPatch().getBank(),
+			                  i.getPatch().getProgram(), i.getName());
+		}
 	}
 }
