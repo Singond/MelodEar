@@ -31,16 +31,46 @@ public class MidiSystemDemo {
 		return sequence;
 	}
 	
+	public static void play(Sequence sequence, MidiDevice device, int tempo) {
+		playWithSettings(sequence, device, tempo, false);
+	}
+	
+	public static void play(Sequence sequence, int tempo) {
+		playWithSettings(sequence, null, tempo, false);
+	}
+	
 	public static void play(Sequence sequence) {
+		playWithSettings(sequence, null, 120, false);
+	}
+	
+	private static void playWithSettings(Sequence sequence, MidiDevice device, int tempo, boolean log) {
 		try (Sequencer seq = MidiSystem.getSequencer()) {
-			seq.setTempoInBPM(120);
+			if (device != null) {
+				if (!device.isOpen()) {
+					System.out.println("Opening device " + device.getDeviceInfo().getName());
+					device.open();
+				}
+				seq.getTransmitter().setReceiver(device.getReceiver());
+			}
+			seq.setTempoInBPM(tempo);
+			playSequence(sequence, seq, log);
+		} catch (MidiUnavailableException e) {
+			System.out.println("No MIDI sequencer available");
+			e.printStackTrace();
+		}
+	}
+
+	private static void playSequence(Sequence sequence, Sequencer seq, boolean log) {
+		try {
 			seq.open();
 			seq.setSequence(sequence);
-			seq.addMetaEventListener(new EndOfTrackListener(seq));
+			EndOfTrackListener l = new EndOfTrackListener(seq);
+			l.useLog(log);
+			seq.addMetaEventListener(l);
 			seq.start();
 			synchronized (seq) {
 				while (seq.isRunning()) {
-					System.out.println("Waiting");
+					if (log) System.out.println("Waiting");
 					seq.wait();
 				}
 			}
@@ -53,29 +83,34 @@ public class MidiSystemDemo {
 			System.out.println("Sequencer interrupted");
 			e.printStackTrace();
 		}
-		System.out.println("Finished");
+		if (log) System.out.println("Finished");
 	}
 	
 	private static class EndOfTrackListener implements MetaEventListener {
 		
 		private final Sequencer seq;
+		private boolean log = false;
 		
 		private EndOfTrackListener(Sequencer seq) {
 			this.seq = seq;
-			System.out.println("Listening for end of track");
+			if (log) System.out.println("Listening for end of track");
 		}
 		
 		@Override
 		public void meta(MetaMessage meta) {
-			System.out.println("Meta message: 0x"
-					+ Integer.toHexString(meta.getType()));
+			if (log) System.out.println("Meta message: 0x"
+			         + Integer.toHexString(meta.getType()));
 			if (meta.getType() == 0x2F) {
-				System.out.println("End of track");
+				if (log) System.out.println("End of track");
 				synchronized (seq) {
 					seq.stop();
 					seq.notifyAll();
 				}
 			}
+		}
+		
+		public void useLog(boolean log) {
+			this.log = log;
 		}
 	}
 	
