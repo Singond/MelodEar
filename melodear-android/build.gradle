@@ -1,0 +1,47 @@
+apply plugin: 'com.android.application'
+
+android {
+	compileSdkVersion 25
+	buildToolsVersion '25.0.2'
+
+	defaultConfig {
+		applicationId 'com.github.singond.melodear'
+		minSdkVersion 14
+		targetSdkVersion 25
+		versionCode 1
+		versionName '0.0.0'
+	}
+
+	sourceSets {
+		main {
+			//java.srcDirs = ['src']
+		}
+	}
+}
+
+allprojects {
+	repositories {
+		jcenter()
+		maven {url "https://jitpack.io"}
+	}
+}
+
+dependencies {
+	compile 'com.github.billthefarmer:mididriver:v1.14'
+}
+
+// Export the dependencies
+task exportLib(type: Jar) {
+	group "Development"
+	description "Resolves the project's dependencies and exports them"
+	manifest {
+		attributes 'Implementation-Title': 'Java dependencies for use in IDEs'
+	}
+	baseName = 'java-libs'
+	from {
+		configurations.compile.collect {
+			it.isDirectory() ? it : zipTree(it)
+		}
+	}
+	//with jar
+}

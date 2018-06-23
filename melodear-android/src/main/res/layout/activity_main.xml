@@ -1,0 +1,21 @@
+<LinearLayout
+	xmlns:a="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	a:layout_width="match_parent"
+	a:layout_height="match_parent"
+	a:paddingLeft="16dp"
+	a:paddingRight="16dp"
+	a:orientation="vertical"
+	tools:context=".MainActivity">
+	<TextView a:id="@+id/textfield"
+		a:layout_width="match_parent"
+		a:layout_height="30dp"
+		a:text="@string/hello_world"/>
+	<HorizontalScrollView
+		a:layout_width="fill_parent"
+		a:layout_height="400dp">
+		<com.github.singond.melodear.android.MyComponent
+			a:layout_width="600dp"
+			a:layout_height="350dp"/>
+	</HorizontalScrollView>
+</LinearLayout>
