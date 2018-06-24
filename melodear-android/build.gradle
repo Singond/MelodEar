@@ -3,6 +3,12 @@ apply plugin: 'com.android.application'
 android {
 	compileSdkVersion 25
 	buildToolsVersion '25.0.2'
+	
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	}
+	
 
 	defaultConfig {
 		applicationId 'com.github.singond.melodear'
@@ -10,6 +16,10 @@ android {
 		targetSdkVersion 25
 		versionCode 1
 		versionName '0.0.0'
+		jackOptions {
+			enabled true
+		}
+
 	}
 
 	sourceSets {
@@ -21,6 +31,7 @@ android {
 
 allprojects {
 	repositories {
+		mavenLocal()
 		jcenter()
 		maven {url "https://jitpack.io"}
 	}
@@ -28,6 +39,9 @@ allprojects {
 
 dependencies {
 	compile 'com.github.billthefarmer:mididriver:v1.14'
+	compile ('com.github.singond:com.github.singond.music:0.1.0') {
+		changing = true
+	}
 }
 
 // Export the dependencies to be used in IDE
