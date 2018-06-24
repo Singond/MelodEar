@@ -1,9 +1,6 @@
 package com.github.singond.melodear.android;
 
-import java.io.IOException;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -11,12 +8,12 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.billthefarmer.mididriver.MidiDriver;
 
+@Deprecated
 public class MyComponent extends RelativeLayout {
 
 	private static final String TAG = "MyComponent";
