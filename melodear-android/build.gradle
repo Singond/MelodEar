@@ -50,7 +50,13 @@ task exportLib(type: Copy) {
 	description "Resolves the project's compile dependencies and exports them"
 	from {
 		configurations.compile.collect {
-			it.isDirectory() ? it : zipTree(it)
+			println "Exporting " + it
+//			it.isDirectory() ? it : zipTree(it)
+			if (it.getName().endsWith(".aar")) {
+				return zipTree(it);
+			} else {
+				return it;
+			}
 		}
 	}
 	into "$buildDir/libs"
