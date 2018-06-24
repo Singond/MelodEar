@@ -28,79 +28,61 @@ public class MyComponent extends RelativeLayout {
 
 	public MyComponent(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		final TextView text = new TextView(context);
-		LayoutParams p = new LayoutParams(150*dp, 50*dp);
-		p.topMargin = 150*dp;
-		text.setLayoutParams(p);
-		addView(text);
-
-		Button bb = new Button(context);
-		p = new LayoutParams(150*dp, 50*dp);
-		p.topMargin = 100*dp;
-		bb.setLayoutParams(p);
-		bb.setText("Button 3!");
-		bb.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.v(TAG, "Clicked button 3");
-				text.setText("Clicked button 3");
-			}
-		});
-		addView(bb);
+		LayoutParams p;
 
 		midi = new MidiDriver();
 
 		PlayButton pb = new PlayButton(context, 60, midi); // middle C
 		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 200*dp;
+		p.topMargin = 20*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PlayButton(context, 62, midi);
 		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 200*dp;
+		p.topMargin = 20*dp;
 		p.leftMargin = 60*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PlayButton(context, 64, midi);
 		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 200*dp;
+		p.topMargin = 20*dp;
 		p.leftMargin = 120*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PlayButton(context, 65, midi);
 		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 200*dp;
+		p.topMargin = 20*dp;
 		p.leftMargin = 180*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PlayButton(context, 67, midi);
 		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 200*dp;
+		p.topMargin = 20*dp;
 		p.leftMargin = 240*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PlayButton(context, 69, midi);
 		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 200*dp;
+		p.topMargin = 20*dp;
 		p.leftMargin = 300*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PlayButton(context, 71, midi);
 		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 200*dp;
+		p.topMargin = 20*dp;
 		p.leftMargin = 360*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PlayButton(context, 72, midi);
 		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 200*dp;
+		p.topMargin = 20*dp;
 		p.leftMargin = 420*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
@@ -138,20 +120,6 @@ public class MyComponent extends RelativeLayout {
 			pText = new Paint(Paint.ANTI_ALIAS_FLAG);
 			pText.setColor(0xffffffff);
 			initMidi(midi);
-
-//			OnClickListener click = new OnClickListener() {
-//				@Override
-//				public void onClick(View v) {
-//					Log.v(TAG, "Playing pitch 60");
-//					byte[] event = new byte[3];
-//					event[0] = (byte)(0x90 | 0x00); // note on, channel 1
-//					event[1] = (byte)(pitch);
-//					event[2] = (byte)(127); // max velocity
-//					midi.write(event);
-//
-//				}
-//			};
-//			setOnClickListener(click);
 		}
 
 		private void initMidi(MidiDriver midi) {

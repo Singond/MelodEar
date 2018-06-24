@@ -7,15 +7,11 @@
 	a:paddingRight="16dp"
 	a:orientation="vertical"
 	tools:context=".MainActivity">
-	<TextView a:id="@+id/textfield"
-		a:layout_width="match_parent"
-		a:layout_height="30dp"
-		a:text="@string/hello_world"/>
 	<HorizontalScrollView
 		a:layout_width="fill_parent"
-		a:layout_height="400dp">
+		a:layout_height="220dp">
 		<com.github.singond.melodear.android.MyComponent
-			a:layout_width="600dp"
-			a:layout_height="350dp"/>
+			a:layout_width="wrap_content"
+			a:layout_height="170dp"/>
 	</HorizontalScrollView>
 </LinearLayout>
