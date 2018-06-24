@@ -30,18 +30,20 @@ dependencies {
 	compile 'com.github.billthefarmer:mididriver:v1.14'
 }
 
-// Export the dependencies
-task exportLib(type: Jar) {
+// Export the dependencies to be used in IDE
+task exportLib(type: Copy) {
 	group "Development"
-	description "Resolves the project's dependencies and exports them"
-	manifest {
-		attributes 'Implementation-Title': 'Java dependencies for use in IDEs'
-	}
-	baseName = 'java-libs'
+	description "Resolves the project's compile dependencies and exports them"
 	from {
 		configurations.compile.collect {
 			it.isDirectory() ? it : zipTree(it)
 		}
 	}
-	//with jar
+	into "$buildDir/libs"
+}
+
+task cleanExportedLib(type: Delete) {
+	group "Development"
+	description "Removes the dependencies exported by 'exportLib'"
+	delete "$buildDir/libs"
 }
