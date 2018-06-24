@@ -2,6 +2,8 @@
  * MelodEar top-level build file.
  */
 
+apply plugin: 'java'
+
 buildscript {
 	repositories {
 		jcenter()
@@ -12,8 +14,12 @@ buildscript {
 	}
 }
 
-allprojects {
-	repositories {
-		jcenter()
+repositories {
+	mavenLocal()
+//	jcenter()
+}
+dependencies {
+	compile ('com.github.singond:com.github.singond.music:0.1.0') {
+		changing = true
 	}
 }
