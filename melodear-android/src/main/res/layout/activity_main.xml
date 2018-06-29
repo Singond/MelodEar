@@ -12,6 +12,6 @@
 		a:layout_height="220dp">
 		<com.github.singond.android.views.PianoKeyboard
 			a:layout_width="wrap_content"
-			a:layout_height="170dp"/>
+			a:layout_height="wrap_content"/>
 	</HorizontalScrollView>
 </LinearLayout>

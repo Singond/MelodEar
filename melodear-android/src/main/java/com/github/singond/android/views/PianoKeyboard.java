@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.billthefarmer.mididriver.MidiDriver;
+
 import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchClass;
 
@@ -68,7 +70,7 @@ public class PianoKeyboard extends RelativeLayout {
 	}
 
 	/** Rendering scale of the keyboard */
-	private int dp;
+	private int dp = 4;
 
 	/** Note event listener */
 	private Listener listener;
@@ -78,6 +80,8 @@ public class PianoKeyboard extends RelativeLayout {
 
 	/** The highest key to be displayed. */
 	private Pitch highestKey;
+
+	private MidiDriver mainmidi = new MidiDriver();
 
 	private Paint whiteKeyPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	private Paint blackKeyPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -112,8 +116,9 @@ public class PianoKeyboard extends RelativeLayout {
 		pitches.add(Pitch.of(PitchClass.B, 4));
 		pitches.add(Pitch.of(PitchClass.C, 5));
 
-		buildKeyboard(pitches, 0, context);
+		buildKeyboard(pitches, 672, context);
 //		buildKeyboard(lowestKey, highestKey, 0, context);
+//		listener = new TestListener(new MidiDriver());
 	}
 
 	private void buildKeyboard(Pitch from, Pitch to, int leftOffset, Context context) {
@@ -123,16 +128,27 @@ public class PianoKeyboard extends RelativeLayout {
 	}
 
 	private void buildKeyboard(List<Pitch> pitches, int leftOffset, Context context) {
+		List<Key> whites = new ArrayList<>();
+		List<Key> blacks = new ArrayList<>();
 		for (Pitch p : pitches) {
 			Key key;
-			if (whiteKeys.contains(p)) {
+			if (whiteKeys.contains(p.pitchClass())) {
 				key = new WhiteKey(context, p);
-			} else if (blackKeys.contains(p)) {
+				whites.add(key);
+			} else if (blackKeys.contains(p.pitchClass())) {
 				key = new BlackKey(context, p);
+				blacks.add(key);
 			} else {
 				throw new AssertionError("Black keys are designated by the sharp pitch class");
 			}
-			key.setOffset(leftOffset);
+		}
+		for (Key k : whites) {
+			addView(k);
+			k.setOffset(leftOffset);
+		}
+		for (Key k : blacks) {
+			addView(k);
+			k.setOffset(leftOffset);
 		}
 	}
 
@@ -152,8 +168,8 @@ public class PianoKeyboard extends RelativeLayout {
 				throw new NullPointerException("Pitch of a piano key must not be null");
 			}
 			this.pitch = pitch;
-			this.position = pitch.octave() * octaveWidth
-			                + keyOffsets.get(pitch.pitchClass());
+			this.position = pitch.octave() * octaveWidth*dp
+			                + keyOffsets.get(pitch.pitchClass())*dp;
 			this.layout = new LayoutParams(width(), height());
 			setLayoutParams(layout);
 			setOnTouchListener(new KeyListener());
@@ -163,7 +179,7 @@ public class PianoKeyboard extends RelativeLayout {
 		abstract int height();
 
 		void setOffset(int offset) {
-			layout.leftMargin = position + offset;
+			layout.leftMargin = position - offset*dp;
 		}
 
 		private class KeyListener implements OnTouchListener {
@@ -173,11 +189,26 @@ public class PianoKeyboard extends RelativeLayout {
 				switch (event.getAction()) {
 					case MotionEvent.ACTION_DOWN:
 						Log.v(TAG, "Pressed key " + pitch);
-						listener.keyPressed(pitch);
+						byte[] msg;
+						msg = new byte[3];
+						msg[0] = (byte)(0x90); // note on
+						msg[1] = (byte)(pitch.midiNumber());
+						msg[2] = (byte)(127); // max velocity
+						mainmidi.write(msg);
+						if (listener != null) {
+							listener.keyPressed(pitch);
+						}
 						return true;
 					case MotionEvent.ACTION_UP:
 						Log.v(TAG, "Released key " + pitch);
-						listener.keyReleased(pitch);
+						msg = new byte[3];
+						msg[0] = (byte)(0x80); // note off
+						msg[1] = (byte)(pitch.midiNumber());
+						msg[2] = (byte)(0); // max velocity
+						mainmidi.write(msg);
+						if (listener != null) {
+							listener.keyReleased(pitch);
+						}
 						return true;
 				}
 				return false;
@@ -196,18 +227,18 @@ public class PianoKeyboard extends RelativeLayout {
 
 		@Override
 		int width() {
-			return width;
+			return width*dp;
 		}
 
 		@Override
 		int height() {
-			return height;
+			return height*dp;
 		}
 
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			canvas.drawRect(new Rect(0, 0, width, height), whiteKeyPaint);
-			canvas.drawRect(new Rect(0, 0, width, height), keyBorderPaint);
+			canvas.drawRect(new Rect(0, 0, width*dp, height*dp), whiteKeyPaint);
+			canvas.drawRect(new Rect(0, 0, width*dp, height*dp), keyBorderPaint);
 		}
 	}
 
@@ -218,23 +249,23 @@ public class PianoKeyboard extends RelativeLayout {
 
 		public BlackKey(Context context, Pitch pitch) {
 			super(context, pitch);
-			setLayoutParams(new LayoutParams(width, height));
+//			setLayoutParams(new LayoutParams(width, height));
 		}
 
 		@Override
 		int width() {
-			return width;
+			return width*dp;
 		}
 
 		@Override
 		int height() {
-			return height;
+			return height*dp;
 		}
 
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			canvas.drawRect(new Rect(0, 0, width, height), blackKeyPaint);
-			canvas.drawRect(new Rect(0, 0, width, height), keyBorderPaint);
+			canvas.drawRect(new Rect(0, 0, width*dp, height*dp), blackKeyPaint);
+			canvas.drawRect(new Rect(0, 0, width*dp, height*dp), keyBorderPaint);
 		}
 	}
 
@@ -252,5 +283,38 @@ public class PianoKeyboard extends RelativeLayout {
 		 * Invoked when a keyboard key is released.
 		 */
 		public void keyReleased(Pitch pitch);
+	}
+
+
+	private static class TestListener implements Listener {
+
+		private MidiDriver midi;
+
+		public TestListener(MidiDriver midi) {
+			this.midi = midi;
+		}
+
+		@Override
+		public void keyPressed(Pitch pitch) {
+			Log.v(TAG, "Pressed key of pitch " + pitch);
+			byte[] msg;
+			msg = new byte[3];
+			msg[0] = (byte)(0x90); // note on
+			msg[1] = (byte)(pitch.midiNumber());
+			msg[2] = (byte)(127); // max velocity
+			midi.write(msg);
+		}
+
+		@Override
+		public void keyReleased(Pitch pitch) {
+			byte[] msg;
+			Log.v(TAG, "Released key of pitch " + pitch);
+			msg = new byte[3];
+			msg[0] = (byte)(0x80); // note off
+			msg[1] = (byte)(pitch.midiNumber());
+			msg[2] = (byte)(0); // max velocity
+			midi.write(msg);
+		}
+
 	}
 }
