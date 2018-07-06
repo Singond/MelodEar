@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -81,7 +82,7 @@ public class PianoKeyboard extends RelativeLayout {
 	/** The highest key to be displayed. */
 	private Pitch highestKey;
 
-	private MidiDriver mainmidi = new MidiDriver();
+	private final MidiDriver mainmidi;
 
 	private Paint whiteKeyPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	private Paint blackKeyPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -99,6 +100,7 @@ public class PianoKeyboard extends RelativeLayout {
 
 	public PianoKeyboard(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		mainmidi = new MidiDriver();
 
 		// Testing only
 		List<Pitch> pitches = new ArrayList<>(13);
@@ -186,29 +188,33 @@ public class PianoKeyboard extends RelativeLayout {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
+				byte[] msg;
 				switch (event.getAction()) {
 					case MotionEvent.ACTION_DOWN:
 						Log.v(TAG, "Pressed key " + pitch);
-						byte[] msg;
 						msg = new byte[3];
 						msg[0] = (byte)(0x90); // note on
 						msg[1] = (byte)(pitch.midiNumber());
+//						msg[1] = (byte)(60);
 						msg[2] = (byte)(127); // max velocity
 						mainmidi.write(msg);
-						if (listener != null) {
-							listener.keyPressed(pitch);
-						}
+						Log.d(TAG, "MIDI message: " + Arrays.asList(msg[0], msg[1], msg[2]));
+//						if (listener != null) {
+//							listener.keyPressed(pitch);
+//						}
 						return true;
 					case MotionEvent.ACTION_UP:
 						Log.v(TAG, "Released key " + pitch);
 						msg = new byte[3];
 						msg[0] = (byte)(0x80); // note off
 						msg[1] = (byte)(pitch.midiNumber());
+//						msg[1] = (byte)(60);
 						msg[2] = (byte)(0); // max velocity
 						mainmidi.write(msg);
-						if (listener != null) {
-							listener.keyReleased(pitch);
-						}
+						Log.d(TAG, "MIDI message: " + Arrays.asList(msg[0], msg[1], msg[2]));
+//						if (listener != null) {
+//							listener.keyReleased(pitch);
+//						}
 						return true;
 				}
 				return false;
@@ -296,7 +302,7 @@ public class PianoKeyboard extends RelativeLayout {
 
 		@Override
 		public void keyPressed(Pitch pitch) {
-			Log.v(TAG, "Pressed key of pitch " + pitch);
+//			Log.v(TAG, "Playing pitch " + pitch);
 			byte[] msg;
 			msg = new byte[3];
 			msg[0] = (byte)(0x90); // note on
@@ -308,7 +314,7 @@ public class PianoKeyboard extends RelativeLayout {
 		@Override
 		public void keyReleased(Pitch pitch) {
 			byte[] msg;
-			Log.v(TAG, "Released key of pitch " + pitch);
+//			Log.v(TAG, "Stopping pitch " + pitch);
 			msg = new byte[3];
 			msg[0] = (byte)(0x80); // note off
 			msg[1] = (byte)(pitch.midiNumber());
