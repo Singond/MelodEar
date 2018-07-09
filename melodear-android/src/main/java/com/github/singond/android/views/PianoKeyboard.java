@@ -13,8 +13,7 @@ import android.widget.TextView;
 
 import org.billthefarmer.mididriver.MidiDriver;
 
-@Deprecated
-public class MyComponent extends RelativeLayout {
+public class PianoKeyboard extends RelativeLayout {
 
 	private static final String TAG = "MyComponent";
 	private final int dp = (int) getResources().getDisplayMetrics().density;
@@ -23,7 +22,7 @@ public class MyComponent extends RelativeLayout {
 
 	private final MidiDriver midi;
 
-	public MyComponent(Context context, AttributeSet attrs) {
+	public PianoKeyboard(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		LayoutParams p;
 
