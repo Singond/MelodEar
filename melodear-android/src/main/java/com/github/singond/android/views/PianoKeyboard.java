@@ -2,6 +2,9 @@ package com.github.singond.android.views;
 
 import org.billthefarmer.mididriver.MidiDriver;
 
+import com.github.singond.music.Pitch;
+import com.github.singond.music.PitchClass;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -34,13 +37,13 @@ public class PianoKeyboard extends RelativeLayout {
 
 		midi = new MidiDriver();
 
-		PianoKey pb = new PianoKey(context, 60, midi); // middle C
+		PianoKey pb = new PianoKey(context, Pitch.of(PitchClass.C, 4).midiNumber(), midi); // middle C
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PianoKey(context, 62, midi);
+		pb = new PianoKey(context, Pitch.of(PitchClass.D, 4).midiNumber(), midi);
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 60*dp;
