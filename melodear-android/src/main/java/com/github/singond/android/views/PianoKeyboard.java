@@ -103,48 +103,9 @@ public class PianoKeyboard extends RelativeLayout {
 		this.text = text;
 	}
 
-	@Deprecated
-	private class PlayButton extends View {
-
-		private Paint p;
-		private Paint pText;
-		private final int pitch;
-		private Player player;
-
-		public PlayButton(Context context, int pitch, MidiDriver midi) {
-			super(context);
-			this.pitch = pitch;
-			if (midi == null) {
-				throw new NullPointerException("MIDI driver is null");
-			}
-			init(midi);
-		}
-
-		private void init(MidiDriver midi) {
-			p = new Paint(Paint.ANTI_ALIAS_FLAG);
-			p.setColor(0xff7777dd);
-			pText = new Paint(Paint.ANTI_ALIAS_FLAG);
-			pText.setColor(0xffffffff);
-			initMidi(midi);
-		}
-
-		private void initMidi(MidiDriver midi) {
-			player = new Player(pitch, midi);
-			setOnTouchListener(player);
-		}
-
-		@Override
-		protected void onDraw(Canvas canvas) {
-			super.onDraw(canvas);
-			canvas.drawRect(new Rect(0, 0, 50*dp, 150*dp), p);
-//			canvas.drawText(Integer.toHexString(pitch), 10*dp, 70*dp, pText);
-		}
-	}
-
 	private class PianoKey extends View {
 
 		private final int pitch;
-		private Player player;
 
 		private LayoutParams layout;
 		private Paint p;
@@ -206,43 +167,5 @@ public class PianoKeyboard extends RelativeLayout {
 				return false;
 			}
 		}
-	}
-
-	private static class Player implements OnTouchListener {
-
-		private final int pitch;
-		private final MidiDriver midi;
-
-		Player(int pitch, MidiDriver midi) {
-			this.pitch = pitch;
-			this.midi = midi;
-		}
-
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-			byte[] msg;
-			switch (event.getAction()) {
-				case MotionEvent.ACTION_DOWN:
-					Log.v(TAG, "Pressed key of pitch " + pitch);
-					msg = new byte[3];
-					msg[0] = (byte)(0x90); // note on
-					msg[1] = (byte)(pitch);
-					msg[2] = (byte)(127); // max velocity
-					midi.write(msg);
-//					break;
-					return true;
-				case MotionEvent.ACTION_UP:
-					Log.v(TAG, "Released key of pitch " + pitch);
-					msg = new byte[3];
-					msg[0] = (byte)(0x80); // note off
-					msg[1] = (byte)(pitch);
-					msg[2] = (byte)(0); // max velocity
-					midi.write(msg);
-//					break;
-					return true;
-			}
-			return false;
-		}
-
 	}
 }
