@@ -29,8 +29,6 @@ public class PianoKeyboard extends RelativeLayout {
 
 	private Listener listener;
 
-	@Deprecated
-	private final int dp = (int) getResources().getDisplayMetrics().density;
 	/**
 	 * Unit of the keyboard's dimensions.
 	 * This determines the drawing size of the child views.
@@ -41,63 +39,29 @@ public class PianoKeyboard extends RelativeLayout {
 
 	public PianoKeyboard(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		LayoutParams p;
-
-		midi = new MidiDriver();
 
 		PianoKey pb = new PianoKey(context, Pitch.of(PitchClass.C, 4)); // middle C
-//		p = new LayoutParams(50*dp, 150*dp);
-//		p.topMargin = 20*dp;
-//		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PianoKey(context, Pitch.of(PitchClass.D, 4));
-//		p = new LayoutParams(50*dp, 150*dp);
-//		p.topMargin = 20*dp;
-//		p.leftMargin = 60*dp;
-//		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PianoKey(context, Pitch.of(PitchClass.E, 4));
-//		p = new LayoutParams(50*dp, 150*dp);
-//		p.topMargin = 20*dp;
-//		p.leftMargin = 120*dp;
-//		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PianoKey(context, Pitch.of(PitchClass.F, 4));
-//		p = new LayoutParams(50*dp, 150*dp);
-//		p.topMargin = 20*dp;
-//		p.leftMargin = 180*dp;
-//		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PianoKey(context, Pitch.of(PitchClass.G, 4));
-//		p = new LayoutParams(50*dp, 150*dp);
-//		p.topMargin = 20*dp;
-//		p.leftMargin = 240*dp;
-//		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PianoKey(context, Pitch.of(PitchClass.A, 4));
-//		p = new LayoutParams(50*dp, 150*dp);
-//		p.topMargin = 20*dp;
-//		p.leftMargin = 300*dp;
-//		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PianoKey(context, Pitch.of(PitchClass.B, 4));
-//		p = new LayoutParams(50*dp, 150*dp);
-//		p.topMargin = 20*dp;
-//		p.leftMargin = 360*dp;
-//		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PianoKey(context, Pitch.of(PitchClass.C, 5));
-//		p = new LayoutParams(50*dp, 150*dp);
-//		p.topMargin = 20*dp;
-//		p.leftMargin = 420*dp;
-//		pb.setLayoutParams(p);
 		addView(pb);
 
 		/*
@@ -107,6 +71,7 @@ public class PianoKeyboard extends RelativeLayout {
 		 * (The current setup sounds fine at first, but breaks when the
 		 * screen is rotated).
 		 */
+		midi = new MidiDriver();
 		midi.start();
 		setListener(new TestListener(midi));
 	}
@@ -157,7 +122,6 @@ public class PianoKeyboard extends RelativeLayout {
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
 			canvas.drawRect(new Rect(0, 0, 50*unit, 150*unit), p);
-//			canvas.drawText(Integer.toHexString(pitch), 10*dp, 70*dp, pText);
 		}
 
 		private class PianoKeyListener implements OnTouchListener {
