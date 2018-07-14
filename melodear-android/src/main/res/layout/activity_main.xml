@@ -9,9 +9,9 @@
 	tools:context=".MainActivity">
 	<HorizontalScrollView
 		a:layout_width="fill_parent"
-		a:layout_height="220dp">
+		a:layout_height="400dp">
 		<com.github.singond.android.views.PianoKeyboard
 			a:layout_width="wrap_content"
-			a:layout_height="170dp"/>
+			a:layout_height="wrap_content"/>
 	</HorizontalScrollView>
 </LinearLayout>

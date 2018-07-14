@@ -1,5 +1,10 @@
 package com.github.singond.android.views;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.billthefarmer.mididriver.MidiDriver;
 
 import com.github.singond.music.Pitch;
@@ -27,13 +32,56 @@ public class PianoKeyboard extends RelativeLayout {
 	private static final int blackKeyHeight = 103;
 	private static final int octaveWidth = 168;
 
+	/**
+	 * Distances of piano keys from the left edge of the octave.
+	 */
+	private static final Map<PitchClass, Integer> keyOffsets;
+	static {
+		keyOffsets = new HashMap<>();
+		keyOffsets.put(PitchClass.C,         0);
+		keyOffsets.put(PitchClass.C_SHARP,  15);
+		keyOffsets.put(PitchClass.D,        24);
+		keyOffsets.put(PitchClass.D_SHARP,  43);
+		keyOffsets.put(PitchClass.E,        48);
+		keyOffsets.put(PitchClass.F,        72);
+		keyOffsets.put(PitchClass.F_SHARP,  85);
+		keyOffsets.put(PitchClass.G,        96);
+		keyOffsets.put(PitchClass.G_SHARP,  113);
+		keyOffsets.put(PitchClass.A,        120);
+		keyOffsets.put(PitchClass.A_SHARP,  141);
+		keyOffsets.put(PitchClass.B,        144);
+	}
+
+	private static final Set<PitchClass> whiteKeys, blackKeys, allKeys;
+	static {
+		whiteKeys = new HashSet<>();
+		whiteKeys.add(PitchClass.C);
+		whiteKeys.add(PitchClass.D);
+		whiteKeys.add(PitchClass.E);
+		whiteKeys.add(PitchClass.F);
+		whiteKeys.add(PitchClass.G);
+		whiteKeys.add(PitchClass.A);
+		whiteKeys.add(PitchClass.B);
+
+		blackKeys = new HashSet<>();
+		blackKeys.add(PitchClass.C_SHARP);
+		blackKeys.add(PitchClass.D_SHARP);
+		blackKeys.add(PitchClass.F_SHARP);
+		blackKeys.add(PitchClass.G_SHARP);
+		blackKeys.add(PitchClass.A_SHARP);
+
+		allKeys = new HashSet<>();
+		allKeys.addAll(whiteKeys);
+		allKeys.addAll(blackKeys);
+	}
+
 	private Listener listener;
 
 	/**
 	 * Unit of the keyboard's dimensions.
 	 * This determines the drawing size of the child views.
 	 */
-	private int unit = (int) getResources().getDisplayMetrics().density;
+	private int unit = 2 * (int) getResources().getDisplayMetrics().density;
 
 	private final MidiDriver midi;
 
@@ -91,6 +139,7 @@ public class PianoKeyboard extends RelativeLayout {
 
 		private LayoutParams layout;
 		private Paint p;
+		private Paint pBorder;
 		private Paint pText;
 
 		public PianoKey(Context context, Pitch pitch) {
@@ -98,11 +147,14 @@ public class PianoKeyboard extends RelativeLayout {
 			this.pitch = pitch;
 
 			layout = new LayoutParams(width()*unit, height()*unit);
-			layout.leftMargin = position()*unit;
+			layout.leftMargin = (position() - 4*octaveWidth) * unit;
 			setLayoutParams(layout);
 
 			p = new Paint(Paint.ANTI_ALIAS_FLAG);
 			p.setColor(0xff7777dd);
+			pBorder = new Paint(Paint.ANTI_ALIAS_FLAG);
+			pBorder.setStyle(Paint.Style.STROKE);
+			pBorder.setColor(0xff404040);
 			pText = new Paint(Paint.ANTI_ALIAS_FLAG);
 			pText.setColor(0xffffffff);
 
@@ -115,7 +167,7 @@ public class PianoKeyboard extends RelativeLayout {
 		 * @return the width of this key in relative measure
 		 */
 		int width() {
-			return 50;
+			return whiteKeyWidth;
 		}
 
 		/**
@@ -128,7 +180,7 @@ public class PianoKeyboard extends RelativeLayout {
 		 * @return the height of this key in relative measure
 		 */
 		int height() {
-			return 150;
+			return whiteKeyHeight;
 		}
 
 		/**
@@ -142,14 +194,14 @@ public class PianoKeyboard extends RelativeLayout {
 		 * @param the horizontal position of this key in relative measure
 		 */
 		int position() {
-			return 60*pitch.pitchClass().naturalPitchClass().ordinal()
-					+ 420*(pitch.octave() - 4);
+			return keyOffsets.get(pitch.pitchClass()) + octaveWidth * pitch.octave();
 		}
 
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			canvas.drawRect(new Rect(0, 0, 50*unit, 150*unit), p);
+			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit), p);
+			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit), pBorder);
 		}
 
 		private class PianoKeyListener implements OnTouchListener {
