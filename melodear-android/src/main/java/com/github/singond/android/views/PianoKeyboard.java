@@ -37,55 +37,55 @@ public class PianoKeyboard extends RelativeLayout {
 
 		midi = new MidiDriver();
 
-		PianoKey pb = new PianoKey(context, Pitch.of(PitchClass.C, 4).midiNumber(), midi); // middle C
+		PianoKey pb = new PianoKey(context, Pitch.of(PitchClass.C, 4).midiNumber()); // middle C
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PianoKey(context, Pitch.of(PitchClass.D, 4).midiNumber(), midi);
+		pb = new PianoKey(context, Pitch.of(PitchClass.D, 4).midiNumber());
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 60*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PianoKey(context, 64, midi);
+		pb = new PianoKey(context, 64);
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 120*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PianoKey(context, 65, midi);
+		pb = new PianoKey(context, 65);
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 180*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PianoKey(context, 67, midi);
+		pb = new PianoKey(context, 67);
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 240*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PianoKey(context, 69, midi);
+		pb = new PianoKey(context, 69);
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 300*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PianoKey(context, 71, midi);
+		pb = new PianoKey(context, 71);
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 360*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PianoKey(context, 72, midi);
+		pb = new PianoKey(context, 72);
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 420*dp;
@@ -110,20 +110,15 @@ public class PianoKeyboard extends RelativeLayout {
 		private Paint p;
 		private Paint pText;
 
-		public PianoKey(Context context, int pitch, MidiDriver midi) {
+		public PianoKey(Context context, int pitch) {
 			super(context);
 			this.pitch = pitch;
-			if (midi == null) {
-				throw new NullPointerException("MIDI driver is null");
-			}
 
 			p = new Paint(Paint.ANTI_ALIAS_FLAG);
 			p.setColor(0xff7777dd);
 			pText = new Paint(Paint.ANTI_ALIAS_FLAG);
 			pText.setColor(0xffffffff);
 
-//			player = new Player(pitch, midi);
-//			setOnTouchListener(player);
 			setOnTouchListener(new PianoKeyListener());
 		}
 
