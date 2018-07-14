@@ -98,8 +98,7 @@ public class PianoKeyboard extends RelativeLayout {
 			this.pitch = pitch;
 
 			layout = new LayoutParams(width()*unit, height()*unit);
-			layout.leftMargin = 60*unit*pitch.pitchClass().naturalPitchClass().ordinal()
-					+ 420*unit*(pitch.octave() - 4);
+			layout.leftMargin = position()*unit;
 			setLayoutParams(layout);
 
 			p = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -110,12 +109,41 @@ public class PianoKeyboard extends RelativeLayout {
 			setOnTouchListener(new PianoKeyListener());
 		}
 
+		/**
+		 * Returns the unscaled width of this key.
+		 *
+		 * @return the width of this key in relative measure
+		 */
 		int width() {
 			return 50;
 		}
 
+		/**
+		 * Returns the unscaled height of this key.
+		 * <p>
+		 * Note that the word <em>height</em> refers to the display here.
+		 * In real world, this would correspond to the <em>length</em>
+		 * of the key.
+		 *
+		 * @return the height of this key in relative measure
+		 */
 		int height() {
 			return 150;
+		}
+
+		/**
+		 * Returns the position of this key on the keyboard.
+		 *
+		 * More precisely, this method returns the unscaled horizontal
+		 * distance of the left edge of this key from the reference position.
+		 * The reference position is the left edge of the key C0
+		 * (in scientific notation).
+		 *
+		 * @param the horizontal position of this key in relative measure
+		 */
+		int position() {
+			return 60*pitch.pitchClass().naturalPitchClass().ordinal()
+					+ 420*(pitch.octave() - 4);
 		}
 
 		@Override
