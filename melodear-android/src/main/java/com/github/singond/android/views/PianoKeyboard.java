@@ -163,6 +163,21 @@ public class PianoKeyboard extends RelativeLayout {
 		this.listener = listener;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * Although the keyboard is similar to a list, its musical nature
+	 * requires that the response to a key press be as quick as possible,
+	 * therefore this implementation always return false.
+	 *
+	 * @return always {@code false}
+	 */
+	// Can't see much difference though
+	@Override
+	public boolean shouldDelayChildPressedState() {
+		return false;
+	}
+
 	private abstract class PianoKey extends View {
 
 		protected final Pitch pitch;
