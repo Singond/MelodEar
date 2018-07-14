@@ -1,5 +1,7 @@
 package com.github.singond.android.views;
 
+import org.billthefarmer.mididriver.MidiDriver;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -11,12 +13,19 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.billthefarmer.mididriver.MidiDriver;
-
 public class PianoKeyboard extends RelativeLayout {
 
-	private static final String TAG = "MyComponent";
+	private static final String TAG = "PianoKeyboard";
+
+	private static final int whiteKeyWidth = 24;
+	private static final int blackKeyWidth = 14;
+	private static final int whiteKeyHeight = 155;
+	private static final int blackKeyHeight = 103;
+	private static final int octaveWidth = 168;
+
+	@Deprecated
 	private final int dp = (int) getResources().getDisplayMetrics().density;
+	private final int scale = (int) getResources().getDisplayMetrics().density;
 
 	private TextView text;
 
@@ -28,55 +37,55 @@ public class PianoKeyboard extends RelativeLayout {
 
 		midi = new MidiDriver();
 
-		PlayButton pb = new PlayButton(context, 60, midi); // middle C
+		PianoKey pb = new PianoKey(context, 60, midi); // middle C
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PlayButton(context, 62, midi);
+		pb = new PianoKey(context, 62, midi);
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 60*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PlayButton(context, 64, midi);
+		pb = new PianoKey(context, 64, midi);
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 120*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PlayButton(context, 65, midi);
+		pb = new PianoKey(context, 65, midi);
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 180*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PlayButton(context, 67, midi);
+		pb = new PianoKey(context, 67, midi);
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 240*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PlayButton(context, 69, midi);
+		pb = new PianoKey(context, 69, midi);
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 300*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PlayButton(context, 71, midi);
+		pb = new PianoKey(context, 71, midi);
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 360*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PlayButton(context, 72, midi);
+		pb = new PianoKey(context, 72, midi);
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 420*dp;
@@ -94,6 +103,7 @@ public class PianoKeyboard extends RelativeLayout {
 		this.text = text;
 	}
 
+	@Deprecated
 	private class PlayButton extends View {
 
 		private Paint p;
@@ -123,10 +133,78 @@ public class PianoKeyboard extends RelativeLayout {
 			setOnTouchListener(player);
 		}
 
+		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
 			canvas.drawRect(new Rect(0, 0, 50*dp, 150*dp), p);
 //			canvas.drawText(Integer.toHexString(pitch), 10*dp, 70*dp, pText);
+		}
+	}
+
+	private class PianoKey extends View {
+
+		private final int pitch;
+		private Player player;
+
+		private LayoutParams layout;
+		private Paint p;
+		private Paint pText;
+
+		public PianoKey(Context context, int pitch, MidiDriver midi) {
+			super(context);
+			this.pitch = pitch;
+			if (midi == null) {
+				throw new NullPointerException("MIDI driver is null");
+			}
+
+			p = new Paint(Paint.ANTI_ALIAS_FLAG);
+			p.setColor(0xff7777dd);
+			pText = new Paint(Paint.ANTI_ALIAS_FLAG);
+			pText.setColor(0xffffffff);
+
+//			player = new Player(pitch, midi);
+//			setOnTouchListener(player);
+			setOnTouchListener(new PianoKeyListener());
+		}
+
+		@Override
+		protected void onDraw(Canvas canvas) {
+			super.onDraw(canvas);
+			canvas.drawRect(new Rect(0, 0, 50*dp, 150*dp), p);
+//			canvas.drawText(Integer.toHexString(pitch), 10*dp, 70*dp, pText);
+		}
+
+		private class PianoKeyListener implements OnTouchListener {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch (event.getAction()) {
+					case MotionEvent.ACTION_DOWN:
+						Log.d(TAG, "Pressed key " + pitch);
+						byte[] msg;
+						msg = new byte[3];
+						msg[0] = (byte)(0x90); // note on
+						msg[1] = (byte)(pitch);
+						msg[2] = (byte)(127); // max velocity
+						midi.write(msg);
+//						if (listener != null) {
+//							listener.keyPressed(pitch);
+//						}
+						return true;
+					case MotionEvent.ACTION_UP:
+						Log.d(TAG, "Released key " + pitch);
+						msg = new byte[3];
+						msg[0] = (byte)(0x80); // note off
+						msg[1] = (byte)(pitch);
+						msg[2] = (byte)(0); // max velocity
+						midi.write(msg);
+//						if (listener != null) {
+//							listener.keyReleased(pitch);
+//						}
+						return true;
+				}
+				return false;
+			}
 		}
 	}
 
