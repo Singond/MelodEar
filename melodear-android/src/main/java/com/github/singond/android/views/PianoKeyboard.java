@@ -198,8 +198,12 @@ public class PianoKeyboard extends RelativeLayout {
 		}
 
 		@Override
-		protected void onDraw(Canvas canvas) {
+		protected final void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
+			onDraw(canvas, unit);
+		}
+
+		protected void onDraw(Canvas canvas, int unit) {
 			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit), p);
 			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit), pBorder);
 		}
