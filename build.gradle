@@ -9,20 +9,17 @@ buildscript {
 		jcenter()
 	}
 	dependencies {
-		// TODO Move to android sub-project?
 		classpath 'com.android.tools.build:gradle:2.3.3'
 	}
 }
 
 repositories {
 	mavenLocal()
-//	jcenter()
 }
 
 allprojects {
 	ext.versions = ['music': '0.2.+']
 }
-
 
 dependencies {
 	compile group: "com.github.singond", name: "com.github.singond.music",
