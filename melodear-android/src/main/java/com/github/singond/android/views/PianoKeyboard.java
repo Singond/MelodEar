@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 public class PianoKeyboard extends RelativeLayout {
 
@@ -26,8 +25,6 @@ public class PianoKeyboard extends RelativeLayout {
 	@Deprecated
 	private final int dp = (int) getResources().getDisplayMetrics().density;
 	private final int scale = (int) getResources().getDisplayMetrics().density;
-
-	private TextView text;
 
 	private final MidiDriver midi;
 
@@ -100,7 +97,6 @@ public class PianoKeyboard extends RelativeLayout {
 		 * screen is rotated).
 		 */
 		midi.start();
-		this.text = text;
 	}
 
 	private class PianoKey extends View {
