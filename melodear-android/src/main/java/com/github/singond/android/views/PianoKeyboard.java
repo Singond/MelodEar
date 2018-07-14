@@ -85,14 +85,14 @@ public class PianoKeyboard extends RelativeLayout {
 	private int unit = 2 * (int) getResources().getDisplayMetrics().density;
 
 	private Paint whiteKeyFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-	private Paint blackKeyPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint blackKeyFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	private Paint keyBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	{
 		whiteKeyFillPaint.setStyle(Paint.Style.FILL);
 		whiteKeyFillPaint.setColor(0xffffffff);
 
-		blackKeyPaint.setStyle(Paint.Style.FILL);
-		blackKeyPaint.setColor(0xff000000);
+		blackKeyFillPaint.setStyle(Paint.Style.FILL);
+		blackKeyFillPaint.setColor(0xff000000);
 
 		keyBorderPaint.setStyle(Paint.Style.STROKE);
 		keyBorderPaint.setColor(0xff404040);
@@ -125,6 +125,21 @@ public class PianoKeyboard extends RelativeLayout {
 		addView(pb);
 
 		pb = new WhiteKey(context, Pitch.of(PitchClass.C, 5));
+		addView(pb);
+
+		pb = new BlackKey(context, Pitch.of(PitchClass.C_SHARP, 4));
+		addView(pb);
+
+		pb = new BlackKey(context, Pitch.of(PitchClass.D_SHARP, 4));
+		addView(pb);
+
+		pb = new BlackKey(context, Pitch.of(PitchClass.F_SHARP, 4));
+		addView(pb);
+
+		pb = new BlackKey(context, Pitch.of(PitchClass.G_SHARP, 4));
+		addView(pb);
+
+		pb = new BlackKey(context, Pitch.of(PitchClass.A_SHARP, 4));
 		addView(pb);
 
 		/*
@@ -256,6 +271,36 @@ public class PianoKeyboard extends RelativeLayout {
 		}
 	}
 
+	private class BlackKey extends PianoKey {
+
+		BlackKey(Context context, Pitch pitch) {
+			super(context, pitch);
+		}
+
+		@Override
+		protected int width() {
+			return blackKeyWidth;
+		}
+
+		@Override
+		protected int height() {
+			return blackKeyHeight;
+		}
+
+		@Override
+		protected int position() {
+			return keyOffsets.get(pitch.pitchClass()) + octaveWidth * pitch.octave();
+		}
+
+		@Override
+		protected void onDraw(Canvas canvas, int unit) {
+			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
+			                blackKeyFillPaint);
+			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
+			                keyBorderPaint);
+		}
+	}
+
 	/**
 	 * A listener for events occuring on the keyboard.
 	 */
@@ -306,6 +351,5 @@ public class PianoKeyboard extends RelativeLayout {
 			msg[2] = (byte)(0); // max velocity
 			midi.write(msg);
 		}
-
 	}
 }
