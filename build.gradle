@@ -18,8 +18,15 @@ repositories {
 	mavenLocal()
 //	jcenter()
 }
+
+allprojects {
+	ext.versions = ['music': '0.2.+']
+}
+
+
 dependencies {
-	compile ('com.github.singond:com.github.singond.music:0.1.0') {
-		changing = true
-	}
+	compile group: "com.github.singond", name: "com.github.singond.music",
+			version: "${versions.music}", changing: true
+	compile group: "com.github.singond", name: "com.github.singond.music",
+			classifier: "javadoc", version: "${versions.music}", changing: true
 }

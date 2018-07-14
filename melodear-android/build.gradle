@@ -39,9 +39,10 @@ allprojects {
 
 dependencies {
 	compile 'com.github.billthefarmer:mididriver:v1.14'
-	compile ('com.github.singond:com.github.singond.music:0.1.0') {
-		changing = true
-	}
+	compile group: "com.github.singond", name: "com.github.singond.music",
+			version: "${versions.music}", changing: true
+	compile group: "com.github.singond", name: "com.github.singond.music",
+			classifier: "javadoc", version: "${versions.music}", changing: true
 }
 
 // Export the dependencies to be used in IDE
