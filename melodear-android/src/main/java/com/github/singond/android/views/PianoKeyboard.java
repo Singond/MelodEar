@@ -37,55 +37,55 @@ public class PianoKeyboard extends RelativeLayout {
 
 		midi = new MidiDriver();
 
-		PianoKey pb = new PianoKey(context, Pitch.of(PitchClass.C, 4).midiNumber()); // middle C
+		PianoKey pb = new PianoKey(context, Pitch.of(PitchClass.C, 4)); // middle C
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PianoKey(context, Pitch.of(PitchClass.D, 4).midiNumber());
+		pb = new PianoKey(context, Pitch.of(PitchClass.D, 4));
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 60*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PianoKey(context, 64);
+		pb = new PianoKey(context, Pitch.of(PitchClass.E, 4));
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 120*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PianoKey(context, 65);
+		pb = new PianoKey(context, Pitch.of(PitchClass.F, 4));
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 180*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PianoKey(context, 67);
+		pb = new PianoKey(context, Pitch.of(PitchClass.G, 4));
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 240*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PianoKey(context, 69);
+		pb = new PianoKey(context, Pitch.of(PitchClass.A, 4));
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 300*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PianoKey(context, 71);
+		pb = new PianoKey(context, Pitch.of(PitchClass.B, 4));
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 360*dp;
 		pb.setLayoutParams(p);
 		addView(pb);
 
-		pb = new PianoKey(context, 72);
+		pb = new PianoKey(context, Pitch.of(PitchClass.C, 5));
 		p = new LayoutParams(50*dp, 150*dp);
 		p.topMargin = 20*dp;
 		p.leftMargin = 420*dp;
@@ -104,13 +104,13 @@ public class PianoKeyboard extends RelativeLayout {
 
 	private class PianoKey extends View {
 
-		private final int pitch;
+		private final Pitch pitch;
 
 		private LayoutParams layout;
 		private Paint p;
 		private Paint pText;
 
-		public PianoKey(Context context, int pitch) {
+		public PianoKey(Context context, Pitch pitch) {
 			super(context);
 			this.pitch = pitch;
 
@@ -139,7 +139,7 @@ public class PianoKeyboard extends RelativeLayout {
 						byte[] msg;
 						msg = new byte[3];
 						msg[0] = (byte)(0x90); // note on
-						msg[1] = (byte)(pitch);
+						msg[1] = (byte)(pitch.midiNumber());
 						msg[2] = (byte)(127); // max velocity
 						midi.write(msg);
 //						if (listener != null) {
@@ -150,7 +150,7 @@ public class PianoKeyboard extends RelativeLayout {
 						Log.d(TAG, "Released key " + pitch);
 						msg = new byte[3];
 						msg[0] = (byte)(0x80); // note off
-						msg[1] = (byte)(pitch);
+						msg[1] = (byte)(pitch.midiNumber());
 						msg[2] = (byte)(0); // max velocity
 						midi.write(msg);
 //						if (listener != null) {
