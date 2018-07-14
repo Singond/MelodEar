@@ -25,6 +25,8 @@ public class PianoKeyboard extends RelativeLayout {
 	private static final int blackKeyHeight = 103;
 	private static final int octaveWidth = 168;
 
+	private Listener listener;
+
 	@Deprecated
 	private final int dp = (int) getResources().getDisplayMetrics().density;
 	private final int scale = (int) getResources().getDisplayMetrics().density;
@@ -100,6 +102,16 @@ public class PianoKeyboard extends RelativeLayout {
 		 * screen is rotated).
 		 */
 		midi.start();
+		setListener(new TestListener(midi));
+	}
+
+	/**
+	 * Assigns the given object to listen for events in this keyboard.
+	 *
+	 * @param listener the object to listen for keyboard events
+	 */
+	public void setListener(Listener listener) {
+		this.listener = listener;
 	}
 
 	private class PianoKey extends View {
@@ -135,31 +147,73 @@ public class PianoKeyboard extends RelativeLayout {
 			public boolean onTouch(View v, MotionEvent event) {
 				switch (event.getAction()) {
 					case MotionEvent.ACTION_DOWN:
-						Log.d(TAG, "Pressed key " + pitch);
-						byte[] msg;
-						msg = new byte[3];
-						msg[0] = (byte)(0x90); // note on
-						msg[1] = (byte)(pitch.midiNumber());
-						msg[2] = (byte)(127); // max velocity
-						midi.write(msg);
-//						if (listener != null) {
-//							listener.keyPressed(pitch);
-//						}
+//						Log.d(TAG, "Pressed key " + pitch);
+						if (listener != null) {
+							listener.keyPressed(pitch);
+						}
 						return true;
 					case MotionEvent.ACTION_UP:
-						Log.d(TAG, "Released key " + pitch);
-						msg = new byte[3];
-						msg[0] = (byte)(0x80); // note off
-						msg[1] = (byte)(pitch.midiNumber());
-						msg[2] = (byte)(0); // max velocity
-						midi.write(msg);
-//						if (listener != null) {
-//							listener.keyReleased(pitch);
-//						}
+//						Log.d(TAG, "Released key " + pitch);
+						if (listener != null) {
+							listener.keyReleased(pitch);
+						}
 						return true;
 				}
 				return false;
 			}
 		}
+	}
+
+	/**
+	 * A listener for events occuring on the keyboard.
+	 */
+	public interface Listener {
+
+		/**
+		 * Invoked when a keyboard key is pressed.
+		 *
+		 * @param pitch the pitch of the key which was depressed
+		 */
+		public void keyPressed(Pitch pitch);
+
+		/**
+		 * Invoked when a keyboard key is released.
+		 *
+		 * @param pitch the pitch of the key which was released
+		 */
+		public void keyReleased(Pitch pitch);
+	}
+
+
+	private static class TestListener implements Listener {
+
+		private MidiDriver midi;
+
+		public TestListener(MidiDriver midi) {
+			this.midi = midi;
+		}
+
+		@Override
+		public void keyPressed(Pitch pitch) {
+			Log.v(TAG, "Listener: pressed key " + pitch);
+			byte[] msg;
+			msg = new byte[3];
+			msg[0] = (byte)(0x90); // note on
+			msg[1] = (byte)(pitch.midiNumber());
+			msg[2] = (byte)(127); // max velocity
+			midi.write(msg);
+		}
+
+		@Override
+		public void keyReleased(Pitch pitch) {
+			byte[] msg;
+			Log.v(TAG, "Listener: released key " + pitch);
+			msg = new byte[3];
+			msg[0] = (byte)(0x80); // note off
+			msg[1] = (byte)(pitch.midiNumber());
+			msg[2] = (byte)(0); // max velocity
+			midi.write(msg);
+		}
+
 	}
 }
