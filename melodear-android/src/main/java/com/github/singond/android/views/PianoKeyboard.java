@@ -75,6 +75,7 @@ public class PianoKeyboard extends RelativeLayout {
 		allKeys.addAll(blackKeys);
 	}
 
+
 	private Listener listener;
 
 	/**
@@ -83,33 +84,47 @@ public class PianoKeyboard extends RelativeLayout {
 	 */
 	private int unit = 2 * (int) getResources().getDisplayMetrics().density;
 
+	private Paint whiteKeyFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint blackKeyPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint keyBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	{
+		whiteKeyFillPaint.setStyle(Paint.Style.FILL);
+		whiteKeyFillPaint.setColor(0xffffffff);
+
+		blackKeyPaint.setStyle(Paint.Style.FILL);
+		blackKeyPaint.setColor(0xff000000);
+
+		keyBorderPaint.setStyle(Paint.Style.STROKE);
+		keyBorderPaint.setColor(0xff404040);
+	}
+
 	private final MidiDriver midi;
 
 	public PianoKeyboard(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-		PianoKey pb = new PianoKey(context, Pitch.of(PitchClass.C, 4)); // middle C
+		PianoKey pb = new WhiteKey(context, Pitch.of(PitchClass.C, 4)); // middle C
 		addView(pb);
 
-		pb = new PianoKey(context, Pitch.of(PitchClass.D, 4));
+		pb = new WhiteKey(context, Pitch.of(PitchClass.D, 4));
 		addView(pb);
 
-		pb = new PianoKey(context, Pitch.of(PitchClass.E, 4));
+		pb = new WhiteKey(context, Pitch.of(PitchClass.E, 4));
 		addView(pb);
 
-		pb = new PianoKey(context, Pitch.of(PitchClass.F, 4));
+		pb = new WhiteKey(context, Pitch.of(PitchClass.F, 4));
 		addView(pb);
 
-		pb = new PianoKey(context, Pitch.of(PitchClass.G, 4));
+		pb = new WhiteKey(context, Pitch.of(PitchClass.G, 4));
 		addView(pb);
 
-		pb = new PianoKey(context, Pitch.of(PitchClass.A, 4));
+		pb = new WhiteKey(context, Pitch.of(PitchClass.A, 4));
 		addView(pb);
 
-		pb = new PianoKey(context, Pitch.of(PitchClass.B, 4));
+		pb = new WhiteKey(context, Pitch.of(PitchClass.B, 4));
 		addView(pb);
 
-		pb = new PianoKey(context, Pitch.of(PitchClass.C, 5));
+		pb = new WhiteKey(context, Pitch.of(PitchClass.C, 5));
 		addView(pb);
 
 		/*
@@ -133,14 +148,11 @@ public class PianoKeyboard extends RelativeLayout {
 		this.listener = listener;
 	}
 
-	private class PianoKey extends View {
+	private abstract class PianoKey extends View {
 
-		private final Pitch pitch;
+		protected final Pitch pitch;
 
 		private LayoutParams layout;
-		private Paint p;
-		private Paint pBorder;
-		private Paint pText;
 
 		public PianoKey(Context context, Pitch pitch) {
 			super(context);
@@ -150,14 +162,6 @@ public class PianoKeyboard extends RelativeLayout {
 			layout.leftMargin = (position() - 4*octaveWidth) * unit;
 			setLayoutParams(layout);
 
-			p = new Paint(Paint.ANTI_ALIAS_FLAG);
-			p.setColor(0xff7777dd);
-			pBorder = new Paint(Paint.ANTI_ALIAS_FLAG);
-			pBorder.setStyle(Paint.Style.STROKE);
-			pBorder.setColor(0xff404040);
-			pText = new Paint(Paint.ANTI_ALIAS_FLAG);
-			pText.setColor(0xffffffff);
-
 			setOnTouchListener(new PianoKeyListener());
 		}
 
@@ -166,9 +170,7 @@ public class PianoKeyboard extends RelativeLayout {
 		 *
 		 * @return the width of this key in relative measure
 		 */
-		int width() {
-			return whiteKeyWidth;
-		}
+		protected abstract int width();
 
 		/**
 		 * Returns the unscaled height of this key.
@@ -179,9 +181,7 @@ public class PianoKeyboard extends RelativeLayout {
 		 *
 		 * @return the height of this key in relative measure
 		 */
-		int height() {
-			return whiteKeyHeight;
-		}
+		protected abstract int height();
 
 		/**
 		 * Returns the position of this key on the keyboard.
@@ -193,9 +193,7 @@ public class PianoKeyboard extends RelativeLayout {
 		 *
 		 * @param the horizontal position of this key in relative measure
 		 */
-		int position() {
-			return keyOffsets.get(pitch.pitchClass()) + octaveWidth * pitch.octave();
-		}
+		protected abstract int position();
 
 		@Override
 		protected final void onDraw(Canvas canvas) {
@@ -203,10 +201,7 @@ public class PianoKeyboard extends RelativeLayout {
 			onDraw(canvas, unit);
 		}
 
-		protected void onDraw(Canvas canvas, int unit) {
-			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit), p);
-			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit), pBorder);
-		}
+		protected abstract void onDraw(Canvas canvas, int unit);
 
 		private class PianoKeyListener implements OnTouchListener {
 
@@ -228,6 +223,36 @@ public class PianoKeyboard extends RelativeLayout {
 				}
 				return false;
 			}
+		}
+	}
+
+	private class WhiteKey extends PianoKey {
+
+		WhiteKey(Context context, Pitch pitch) {
+			super(context, pitch);
+		}
+
+		@Override
+		protected int width() {
+			return whiteKeyWidth;
+		}
+
+		@Override
+		protected int height() {
+			return whiteKeyHeight;
+		}
+
+		@Override
+		protected int position() {
+			return keyOffsets.get(pitch.pitchClass()) + octaveWidth * pitch.octave();
+		}
+
+		@Override
+		protected void onDraw(Canvas canvas, int unit) {
+			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
+			                whiteKeyFillPaint);
+			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
+			                keyBorderPaint);
 		}
 	}
 
