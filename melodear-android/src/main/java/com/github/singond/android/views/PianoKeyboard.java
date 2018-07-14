@@ -213,10 +213,10 @@ public class PianoKeyboard extends RelativeLayout {
 		@Override
 		protected final void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			onDraw(canvas, unit);
+			draw(canvas, unit);
 		}
 
-		protected abstract void onDraw(Canvas canvas, int unit);
+		protected abstract void draw(Canvas canvas, int unit);
 
 		private class PianoKeyListener implements OnTouchListener {
 
@@ -263,7 +263,7 @@ public class PianoKeyboard extends RelativeLayout {
 		}
 
 		@Override
-		protected void onDraw(Canvas canvas, int unit) {
+		protected void draw(Canvas canvas, int unit) {
 			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
 			                whiteKeyFillPaint);
 			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
@@ -293,7 +293,7 @@ public class PianoKeyboard extends RelativeLayout {
 		}
 
 		@Override
-		protected void onDraw(Canvas canvas, int unit) {
+		protected void draw(Canvas canvas, int unit) {
 			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
 			                blackKeyFillPaint);
 			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
