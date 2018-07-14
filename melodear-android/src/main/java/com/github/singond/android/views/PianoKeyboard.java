@@ -19,6 +19,8 @@ public class PianoKeyboard extends RelativeLayout {
 
 	private static final String TAG = "PianoKeyboard";
 
+	/* Generic keyboard parametres in relative measure */
+
 	private static final int whiteKeyWidth = 24;
 	private static final int blackKeyWidth = 14;
 	private static final int whiteKeyHeight = 155;
@@ -29,7 +31,11 @@ public class PianoKeyboard extends RelativeLayout {
 
 	@Deprecated
 	private final int dp = (int) getResources().getDisplayMetrics().density;
-	private final int scale = (int) getResources().getDisplayMetrics().density;
+	/**
+	 * Unit of the keyboard's dimensions.
+	 * This determines the drawing size of the child views.
+	 */
+	private int unit = (int) getResources().getDisplayMetrics().density;
 
 	private final MidiDriver midi;
 
@@ -40,58 +46,58 @@ public class PianoKeyboard extends RelativeLayout {
 		midi = new MidiDriver();
 
 		PianoKey pb = new PianoKey(context, Pitch.of(PitchClass.C, 4)); // middle C
-		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 20*dp;
-		pb.setLayoutParams(p);
+//		p = new LayoutParams(50*dp, 150*dp);
+//		p.topMargin = 20*dp;
+//		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PianoKey(context, Pitch.of(PitchClass.D, 4));
-		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 20*dp;
-		p.leftMargin = 60*dp;
-		pb.setLayoutParams(p);
+//		p = new LayoutParams(50*dp, 150*dp);
+//		p.topMargin = 20*dp;
+//		p.leftMargin = 60*dp;
+//		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PianoKey(context, Pitch.of(PitchClass.E, 4));
-		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 20*dp;
-		p.leftMargin = 120*dp;
-		pb.setLayoutParams(p);
+//		p = new LayoutParams(50*dp, 150*dp);
+//		p.topMargin = 20*dp;
+//		p.leftMargin = 120*dp;
+//		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PianoKey(context, Pitch.of(PitchClass.F, 4));
-		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 20*dp;
-		p.leftMargin = 180*dp;
-		pb.setLayoutParams(p);
+//		p = new LayoutParams(50*dp, 150*dp);
+//		p.topMargin = 20*dp;
+//		p.leftMargin = 180*dp;
+//		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PianoKey(context, Pitch.of(PitchClass.G, 4));
-		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 20*dp;
-		p.leftMargin = 240*dp;
-		pb.setLayoutParams(p);
+//		p = new LayoutParams(50*dp, 150*dp);
+//		p.topMargin = 20*dp;
+//		p.leftMargin = 240*dp;
+//		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PianoKey(context, Pitch.of(PitchClass.A, 4));
-		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 20*dp;
-		p.leftMargin = 300*dp;
-		pb.setLayoutParams(p);
+//		p = new LayoutParams(50*dp, 150*dp);
+//		p.topMargin = 20*dp;
+//		p.leftMargin = 300*dp;
+//		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PianoKey(context, Pitch.of(PitchClass.B, 4));
-		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 20*dp;
-		p.leftMargin = 360*dp;
-		pb.setLayoutParams(p);
+//		p = new LayoutParams(50*dp, 150*dp);
+//		p.topMargin = 20*dp;
+//		p.leftMargin = 360*dp;
+//		pb.setLayoutParams(p);
 		addView(pb);
 
 		pb = new PianoKey(context, Pitch.of(PitchClass.C, 5));
-		p = new LayoutParams(50*dp, 150*dp);
-		p.topMargin = 20*dp;
-		p.leftMargin = 420*dp;
-		pb.setLayoutParams(p);
+//		p = new LayoutParams(50*dp, 150*dp);
+//		p.topMargin = 20*dp;
+//		p.leftMargin = 420*dp;
+//		pb.setLayoutParams(p);
 		addView(pb);
 
 		/*
@@ -126,6 +132,11 @@ public class PianoKeyboard extends RelativeLayout {
 			super(context);
 			this.pitch = pitch;
 
+			layout = new LayoutParams(width()*unit, height()*unit);
+			layout.leftMargin = 60*unit*pitch.pitchClass().naturalPitchClass().ordinal()
+					+ 420*unit*(pitch.octave() - 4);
+			setLayoutParams(layout);
+
 			p = new Paint(Paint.ANTI_ALIAS_FLAG);
 			p.setColor(0xff7777dd);
 			pText = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -134,10 +145,18 @@ public class PianoKeyboard extends RelativeLayout {
 			setOnTouchListener(new PianoKeyListener());
 		}
 
+		int width() {
+			return 50;
+		}
+
+		int height() {
+			return 150;
+		}
+
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			canvas.drawRect(new Rect(0, 0, 50*dp, 150*dp), p);
+			canvas.drawRect(new Rect(0, 0, 50*unit, 150*unit), p);
 //			canvas.drawText(Integer.toHexString(pitch), 10*dp, 70*dp, pText);
 		}
 
