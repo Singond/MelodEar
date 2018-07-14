@@ -86,13 +86,17 @@ public class PianoKeyboard extends RelativeLayout {
 
 	private Paint whiteKeyFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	private Paint blackKeyFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint pressedKeyFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	private Paint keyBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	{
 		whiteKeyFillPaint.setStyle(Paint.Style.FILL);
 		whiteKeyFillPaint.setColor(0xffffffff);
 
 		blackKeyFillPaint.setStyle(Paint.Style.FILL);
-		blackKeyFillPaint.setColor(0xff000000);
+		blackKeyFillPaint.setColor(0xff202020);
+
+		pressedKeyFillPaint.setStyle(Paint.Style.FILL);
+		pressedKeyFillPaint.setColor(0xff606060);
 
 		keyBorderPaint.setStyle(Paint.Style.STROKE);
 		keyBorderPaint.setColor(0xff404040);
@@ -184,6 +188,8 @@ public class PianoKeyboard extends RelativeLayout {
 
 		private LayoutParams layout;
 
+		private boolean pressed = false;
+
 		public PianoKey(Context context, Pitch pitch) {
 			super(context);
 			this.pitch = pitch;
@@ -225,6 +231,10 @@ public class PianoKeyboard extends RelativeLayout {
 		 */
 		protected abstract int position();
 
+		protected final boolean pressed() {
+			return pressed;
+		}
+
 		@Override
 		protected final void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
@@ -240,15 +250,19 @@ public class PianoKeyboard extends RelativeLayout {
 				switch (event.getAction()) {
 					case MotionEvent.ACTION_DOWN:
 //						Log.d(TAG, "Pressed key " + pitch);
+						pressed = true;
 						if (listener != null) {
 							listener.keyPressed(pitch);
 						}
+						invalidate();
 						return true;
 					case MotionEvent.ACTION_UP:
 //						Log.d(TAG, "Released key " + pitch);
+						pressed = false;
 						if (listener != null) {
 							listener.keyReleased(pitch);
 						}
+						invalidate();
 						return true;
 				}
 				return false;
@@ -280,9 +294,9 @@ public class PianoKeyboard extends RelativeLayout {
 		@Override
 		protected void draw(Canvas canvas, int unit) {
 			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
-			                whiteKeyFillPaint);
+					pressed() ? pressedKeyFillPaint : whiteKeyFillPaint);
 			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
-			                keyBorderPaint);
+					keyBorderPaint);
 		}
 	}
 
@@ -310,9 +324,9 @@ public class PianoKeyboard extends RelativeLayout {
 		@Override
 		protected void draw(Canvas canvas, int unit) {
 			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
-			                blackKeyFillPaint);
+					pressed() ? pressedKeyFillPaint : blackKeyFillPaint);
 			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
-			                keyBorderPaint);
+					keyBorderPaint);
 		}
 	}
 
