@@ -2,6 +2,7 @@ package com.github.singond.android.views;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -9,6 +10,7 @@ import org.billthefarmer.mididriver.MidiDriver;
 
 import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchClass;
+import com.github.singond.music.Pitches;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -75,8 +77,10 @@ public class PianoKeyboard extends RelativeLayout {
 		allKeys.addAll(blackKeys);
 	}
 
-
 	private Listener listener;
+
+	/** Horizontal offset of the start key and C0. */
+	private int startOffset;
 
 	/**
 	 * Unit of the keyboard's dimensions.
@@ -107,44 +111,10 @@ public class PianoKeyboard extends RelativeLayout {
 	public PianoKeyboard(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-		PianoKey pb = new WhiteKey(context, Pitch.of(PitchClass.C, 4)); // middle C
-		addView(pb);
-
-		pb = new WhiteKey(context, Pitch.of(PitchClass.D, 4));
-		addView(pb);
-
-		pb = new WhiteKey(context, Pitch.of(PitchClass.E, 4));
-		addView(pb);
-
-		pb = new WhiteKey(context, Pitch.of(PitchClass.F, 4));
-		addView(pb);
-
-		pb = new WhiteKey(context, Pitch.of(PitchClass.G, 4));
-		addView(pb);
-
-		pb = new WhiteKey(context, Pitch.of(PitchClass.A, 4));
-		addView(pb);
-
-		pb = new WhiteKey(context, Pitch.of(PitchClass.B, 4));
-		addView(pb);
-
-		pb = new WhiteKey(context, Pitch.of(PitchClass.C, 5));
-		addView(pb);
-
-		pb = new BlackKey(context, Pitch.of(PitchClass.C_SHARP, 4));
-		addView(pb);
-
-		pb = new BlackKey(context, Pitch.of(PitchClass.D_SHARP, 4));
-		addView(pb);
-
-		pb = new BlackKey(context, Pitch.of(PitchClass.F_SHARP, 4));
-		addView(pb);
-
-		pb = new BlackKey(context, Pitch.of(PitchClass.G_SHARP, 4));
-		addView(pb);
-
-		pb = new BlackKey(context, Pitch.of(PitchClass.A_SHARP, 4));
-		addView(pb);
+		Pitch start = Pitch.of(PitchClass.C, 3);
+		Pitch end = Pitch.of(PitchClass.C, 5);
+		startOffset = keyOffset(start);
+		populate(start, end, context);
 
 		/*
 		 * Make sure to create only one MidiDriver and start it only once
@@ -156,6 +126,19 @@ public class PianoKeyboard extends RelativeLayout {
 		midi = new MidiDriver();
 		midi.start();
 		setListener(new TestListener(midi));
+	}
+
+	private void populate(Pitch start, Pitch end, Context context) {
+		// TODO Ensure the endpoints are white keys
+		// Draw white keys first to make them draw below the black keys
+		List<Pitch> keyPitches = Pitches.allBetween(start, end, whiteKeys);
+		for (Pitch pitch : keyPitches) {
+			addView(new WhiteKey(context, pitch));
+		}
+		keyPitches = Pitches.allBetween(start, end, blackKeys);
+		for (Pitch pitch : keyPitches) {
+			addView(new BlackKey(context, pitch));
+		}
 	}
 
 	/**
@@ -182,6 +165,18 @@ public class PianoKeyboard extends RelativeLayout {
 		return false;
 	}
 
+	/**
+	 * Returns the unscaled horizontal offset of a piano key of the
+	 * given pitch from the C0 key.
+	 *
+	 * @param pitch the pitch of the key
+	 * @return offset of key {@code pitch} and C0
+	 */
+	private int keyOffset(Pitch pitch) {
+		return keyOffsets.get(pitch.pitchClass())
+				+ octaveWidth * pitch.octave();
+	}
+
 	private abstract class PianoKey extends View {
 
 		protected final Pitch pitch;
@@ -195,7 +190,7 @@ public class PianoKeyboard extends RelativeLayout {
 			this.pitch = pitch;
 
 			layout = new LayoutParams(width()*unit, height()*unit);
-			layout.leftMargin = (position() - 4*octaveWidth) * unit;
+			layout.leftMargin = (position() - startOffset) * unit;
 			setLayoutParams(layout);
 
 			setOnTouchListener(new PianoKeyListener());
@@ -288,7 +283,7 @@ public class PianoKeyboard extends RelativeLayout {
 
 		@Override
 		protected int position() {
-			return keyOffsets.get(pitch.pitchClass()) + octaveWidth * pitch.octave();
+			return keyOffset(pitch);
 		}
 
 		@Override
@@ -318,7 +313,7 @@ public class PianoKeyboard extends RelativeLayout {
 
 		@Override
 		protected int position() {
-			return keyOffsets.get(pitch.pitchClass()) + octaveWidth * pitch.octave();
+			return keyOffset(pitch);
 		}
 
 		@Override
