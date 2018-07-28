@@ -32,7 +32,7 @@ repositories {
 }
 
 allprojects {
-	ext.versions = ['music': '0.2.+']
+	ext.versions = ['music': '0.3.0']
 }
 
 dependencies {
