@@ -3,6 +3,7 @@
  */
 
 apply plugin: 'java'
+apply plugin: 'eclipse'
 
 sourceSets {
 	main {
@@ -39,4 +40,10 @@ dependencies {
 			version: "${versions.music}", changing: true
 	compile group: "com.github.singond", name: "com.github.singond.music",
 			classifier: "javadoc", version: "${versions.music}", changing: true
+}
+
+eclipse {
+	classpath {
+		downloadJavadoc = true
+	}
 }
