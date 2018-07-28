@@ -5,6 +5,7 @@ build/
 
 .classpath
 .project
+local.properties
 EarTrainer.jar
 melodear.jar
 out.midi
