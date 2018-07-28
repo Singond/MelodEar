@@ -1,0 +1,70 @@
+apply plugin: 'com.android.application'
+
+android {
+	compileSdkVersion 25
+	buildToolsVersion '25.0.2'
+	
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	}
+	
+
+	defaultConfig {
+		applicationId 'com.github.singond.melodear'
+		minSdkVersion 14
+		targetSdkVersion 25
+		versionCode 1
+		versionName '0.0.0'
+		jackOptions {
+			enabled true
+		}
+
+	}
+
+	sourceSets {
+		main {
+			//java.srcDirs = ['src']
+		}
+	}
+}
+
+allprojects {
+	repositories {
+		mavenLocal()
+		jcenter()
+		maven {url "https://jitpack.io"}
+	}
+}
+
+dependencies {
+	compile 'com.github.billthefarmer:mididriver:v1.14'
+	compile group: "com.github.singond", name: "com.github.singond.music",
+			version: "${versions.music}", changing: true
+	compile group: "com.github.singond", name: "com.github.singond.music",
+			classifier: "javadoc", version: "${versions.music}", changing: true
+}
+
+// Export the dependencies to be used in IDE
+task exportLib(type: Copy) {
+	group "Development"
+	description "Resolves the project's compile dependencies and exports them"
+	from {
+		configurations.compile.collect {
+			println "Exporting " + it
+//			it.isDirectory() ? it : zipTree(it)
+			if (it.getName().endsWith(".aar")) {
+				return zipTree(it);
+			} else {
+				return it;
+			}
+		}
+	}
+	into "$buildDir/libs"
+}
+
+task cleanExportedLib(type: Delete) {
+	group "Development"
+	description "Removes the dependencies exported by 'exportLib'"
+	delete "$buildDir/libs"
+}

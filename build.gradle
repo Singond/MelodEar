@@ -1,0 +1,29 @@
+/*
+ * MelodEar top-level build file.
+ */
+
+apply plugin: 'java'
+
+buildscript {
+	repositories {
+		jcenter()
+	}
+	dependencies {
+		classpath 'com.android.tools.build:gradle:2.3.3'
+	}
+}
+
+repositories {
+	mavenLocal()
+}
+
+allprojects {
+	ext.versions = ['music': '0.2.+']
+}
+
+dependencies {
+	compile group: "com.github.singond", name: "com.github.singond.music",
+			version: "${versions.music}", changing: true
+	compile group: "com.github.singond", name: "com.github.singond.music",
+			classifier: "javadoc", version: "${versions.music}", changing: true
+}
