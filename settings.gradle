@@ -1,2 +1,2 @@
-rootProject.name = 'melodear'
+rootProject.name = 'MelodEar'
 include ':melodear-android'
