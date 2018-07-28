@@ -83,10 +83,16 @@ public class PianoKeyboard extends RelativeLayout {
 	private int startOffset;
 
 	/**
-	 * Unit of the keyboard's dimensions.
-	 * This determines the drawing size of the child views.
+	 * Horizontal unit of the keyboard's dimensions.
+	 * This determines the horizontal drawing size of the child views.
 	 */
-	private int unit = 2 * (int) getResources().getDisplayMetrics().density;
+	private float hunit = 2 * getResources().getDisplayMetrics().density;
+
+	/**
+	 * Vertical unit of the keyboard's dimensions.
+	 * This determines the vertical drawing size of the child views.
+	 */
+	private float vunit = 1.5f * getResources().getDisplayMetrics().density;
 
 	private Paint whiteKeyFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	private Paint blackKeyFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -189,8 +195,9 @@ public class PianoKeyboard extends RelativeLayout {
 			super(context);
 			this.pitch = pitch;
 
-			layout = new LayoutParams(width()*unit, height()*unit);
-			layout.leftMargin = (position() - startOffset) * unit;
+			layout = new LayoutParams(Math.round(width() * hunit),
+			                          Math.round(height() * vunit));
+			layout.leftMargin = Math.round((position() - startOffset) * hunit);
 			setLayoutParams(layout);
 
 			setOnTouchListener(new PianoKeyListener());
@@ -233,10 +240,10 @@ public class PianoKeyboard extends RelativeLayout {
 		@Override
 		protected final void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			draw(canvas, unit);
+			draw(canvas, hunit, vunit);
 		}
 
-		protected abstract void draw(Canvas canvas, int unit);
+		protected abstract void draw(Canvas canvas, float hunit, float vunit);
 
 		private class PianoKeyListener implements OnTouchListener {
 
@@ -287,11 +294,12 @@ public class PianoKeyboard extends RelativeLayout {
 		}
 
 		@Override
-		protected void draw(Canvas canvas, int unit) {
-			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
+		protected void draw(Canvas canvas, float hunit, float vunit) {
+			canvas.drawRect(new Rect(0, 0, Math.round(width() * hunit),
+					Math.round(height() * vunit)),
 					pressed() ? pressedKeyFillPaint : whiteKeyFillPaint);
-			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
-					keyBorderPaint);
+			canvas.drawRect(new Rect(0, 0, Math.round(width() * hunit),
+					Math.round(height() * vunit)), keyBorderPaint);
 		}
 	}
 
@@ -317,11 +325,12 @@ public class PianoKeyboard extends RelativeLayout {
 		}
 
 		@Override
-		protected void draw(Canvas canvas, int unit) {
-			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
+		protected void draw(Canvas canvas, float hunit, float vunit) {
+			canvas.drawRect(new Rect(0, 0, Math.round(width() * hunit),
+					Math.round(height() * vunit)),
 					pressed() ? pressedKeyFillPaint : blackKeyFillPaint);
-			canvas.drawRect(new Rect(0, 0, width()*unit, height()*unit),
-					keyBorderPaint);
+			canvas.drawRect(new Rect(0, 0, Math.round(width()*hunit),
+					Math.round(height()*vunit)), keyBorderPaint);
 		}
 	}
 
