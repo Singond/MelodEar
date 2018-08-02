@@ -22,9 +22,11 @@ public class PitchParsing {
 		System.out.println("Scientific pitch names:");
 		scientific("C4", Pitch.of(C, 4));
 		scientific("Cb4", Pitch.of(C_FLAT, 4));
+		scientific("Cbb4", Pitch.of(C_DBL_FLAT, 4));
 		scientific("D#4", Pitch.of(D_SHARP, 4));
 		scientific("G3", Pitch.of(G, 3));
 		scientific("Bb4", Pitch.of(B_FLAT, 4));
+		scientific("B##4", Pitch.of(B_DBL_SHARP, 4));
 		scientific("Bx4", Pitch.of(B_DBL_SHARP, 4));
 		System.out.println();
 	}
