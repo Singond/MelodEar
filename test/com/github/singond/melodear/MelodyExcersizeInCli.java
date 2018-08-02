@@ -63,7 +63,7 @@ public class MelodyExcersizeInCli {
 		}
 
 		private void newExcersize() {
-			excersize = MelodyExcersize.randomWithPitchClasses(pitchClasses, lowest, highest, length);
+			excersize = KeyedMelodyExcersize.randomWithPitchClasses(pitchClasses, lowest, highest, length, null);
 			System.out.println("You hear: " + excersize);
 			status = Status.IDENTIFYING;
 		}

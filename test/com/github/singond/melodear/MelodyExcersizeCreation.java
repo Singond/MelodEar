@@ -18,7 +18,7 @@ public class MelodyExcersizeCreation {
 		Set<PitchClass> pcs = new HashSet<>(Arrays.asList(D, E, F_SHARP, G, A, B, C_SHARP));
 		Pitch lowest = Pitch.of(C, 3);
 		Pitch highest = Pitch.of(C, 5);
-		MelodyExcersize exc = MelodyExcersize.randomWithPitchClasses(pcs, lowest, highest, 4);
+		MelodyExcersize exc = KeyedMelodyExcersize.randomWithPitchClasses(pcs, lowest, highest, 4, null);
 		System.out.format("Created random melody excersize: %s", exc);
 	}
 }

@@ -1,6 +1,7 @@
 package com.github.singond.melodear;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -29,7 +30,7 @@ import com.github.singond.music.Pitches;
  *
  * @author Singon
  */
-public class MelodyExcersize {
+public abstract class MelodyExcersize {
 
 	/** The sequence of pitches comprising this melody. */
 	private final List<Pitch> melody;
@@ -37,18 +38,12 @@ public class MelodyExcersize {
 	/** The current note to be identified. */
 	private int identify;
 
-	private MelodyExcersize(List<Pitch> pitches) {
+	protected MelodyExcersize(List<Pitch> pitches) {
 		this.melody = new ArrayList<>(pitches);
 		identify = 0;
 	}
 
-	public static MelodyExcersize randomWithPitchClasses(
-			Set<PitchClass> pitchClasses, Pitch lBound, Pitch uBound,
-			int length) {
-		return new MelodyExcersize(randomMelody(pitchClasses, lBound, uBound, length));
-	}
-
-	private static List<Pitch> randomMelody(Set<PitchClass> pitchClasses,
+	protected static final List<Pitch> randomMelody(Set<PitchClass> pitchClasses,
 			Pitch lowerBound, Pitch upperBound, int length) {
 		Random rnd = new Random();
 		List<Pitch> pitches = Pitches.allBetween(lowerBound, upperBound, pitchClasses);
@@ -61,13 +56,27 @@ public class MelodyExcersize {
 	}
 
 	/**
+	 * Returns the sequence of pitches to be identified.
+	 * The resulting list cannot be modified.
+	 *
+	 * @return an unmodifiable copy of the list of pitches to be identified
+	 */
+	protected final List<Pitch> melody() {
+		return Collections.unmodifiableList(melody);
+	}
+
+	protected final int nextNoteIndex() {
+		return identify;
+	}
+
+	/**
 	 * Restarts the excersize.
 	 */
-	public void reset() {
+	public final void reset() {
 		identify = 0;
 	}
 
-	public NoteEvaluationStatus evaluate(Pitch pitch) {
+	public final NoteEvaluationStatus evaluate(Pitch pitch) {
 		if (melody.get(identify).equals(pitch)) {
 			if (++identify < melody.size()) {
 				return NoteEvaluationStatus.NOTE_CORRECT;
