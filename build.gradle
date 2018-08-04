@@ -29,6 +29,7 @@ buildscript {
 
 repositories {
 	mavenLocal()
+	mavenCentral()
 }
 
 allprojects {
@@ -40,6 +41,7 @@ dependencies {
 			version: "${versions.music}", changing: true
 	compile group: "com.github.singond", name: "com.github.singond.music",
 			classifier: "javadoc", version: "${versions.music}", changing: true
+	testCompile group: "junit", name: "junit", version: "4.12"
 }
 
 eclipse {
