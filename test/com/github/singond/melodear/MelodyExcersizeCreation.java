@@ -8,12 +8,16 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.singond.music.Keys;
 import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchClass;
 
 public class MelodyExcersizeCreation {
+
+	private static Logger logger = LoggerFactory.getLogger(MelodyExcersizeCreation.class);
 
 	public KeyedMelodyExcersizeFactory factory;
 
@@ -24,52 +28,58 @@ public class MelodyExcersizeCreation {
 
 	@Test
 	public void createMelody() {
+		logger.info("Creating dummy melody excersize without any key:");
 		Set<PitchClass> pcs = new HashSet<>(Arrays.asList(D, E, F_SHARP, G, A, B, C_SHARP));
 		Pitch lowest = Pitch.of(C, 3);
 		Pitch highest = Pitch.of(C, 5);
 		MelodyExcersize exc = KeyedMelodyExcersize.randomWithPitchClasses(pcs, lowest, highest, 4, null);
-		System.out.format("Created random melody excersize: %s", exc);
+		logger.info("Created random melody excersize: {}", exc);
+		logger.info("");
 	}
 
 	@Test
 	public void keyedExcFactory() {
-		System.out.println("Setting the available keys to: C, G, c");
+		logger.info("Using factory to generate melody excersizes in key:");
+		logger.info("Setting the available keys to: C, G, c");
 		factory.setKeysAvailable(Arrays.asList(Keys.C_MAJOR, Keys.G_MAJOR, Keys.C_MINOR));
-		System.out.println("Setting the lower bound to C3");
+		logger.info("Setting the lower bound to C3");
 		factory.setLowerBound(Pitch.C3);
-		System.out.println("Setting the upper bound to C5");
+		logger.info("Setting the upper bound to C5");
 		factory.setUpperBound(Pitch.C5);
-		System.out.println("Setting the length to 4");
+		logger.info("Setting the length to 4");
 		factory.setLength(4);
+		logger.info("Generating key");
+		factory.newKey();
 		MelodyExcersize exc;
 
-		exc = factory.allNew();
-		System.out.println(exc);
-		exc = factory.allNew();
-		System.out.println(exc);
-		exc = factory.allNew();
-		System.out.println(exc);
-		exc = factory.allNew();
-		System.out.println(exc);
+		exc = factory.make();
+		logger.info(exc.toString());
+		exc = factory.make();
+		logger.info(exc.toString());
+		exc = factory.make();
+		logger.info(exc.toString());
+		exc = factory.make();
+		logger.info(exc.toString());
 
-		System.out.println("Setting the length to 5");
+		logger.info("Setting the length to 5");
 		factory.setLength(5);
 
-		exc = factory.allNew();
-		System.out.println(exc);
-		exc = factory.allNew();
-		System.out.println(exc);
-		exc = factory.allNew();
-		System.out.println(exc);
+		exc = factory.make();
+		logger.info(exc.toString());
+		exc = factory.make();
+		logger.info(exc.toString());
+		exc = factory.make();
+		logger.info(exc.toString());
 
-		System.out.println("Setting the available keys to: E");
+		logger.info("Setting the available keys to: E");
 		factory.setKeysAvailable(Arrays.asList(Keys.E_MAJOR));
+		factory.newKey();
 
-		exc = factory.allNew();
-		System.out.println(exc);
-		exc = factory.allNew();
-		System.out.println(exc);
+		exc = factory.make();
+		logger.info(exc.toString());
+		exc = factory.make();
+		logger.info(exc.toString());
 
-		System.out.println();
+		logger.info("");
 	}
 }
