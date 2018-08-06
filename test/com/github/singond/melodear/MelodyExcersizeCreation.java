@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.singond.music.Degree;
 import com.github.singond.music.Keys;
 import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchClass;
@@ -71,6 +72,17 @@ public class MelodyExcersizeCreation {
 		exc = factory.make();
 		logger.info(exc.toString());
 
+		logger.info("Setting lower bound to C4");
+		factory.setLowerBound(Pitch.C4);
+
+		exc = factory.make();
+		logger.info(exc.toString());
+		exc = factory.make();
+		logger.info(exc.toString());
+		exc = factory.make();
+		logger.info(exc.toString());
+		logger.info(exc.toString());
+
 		logger.info("Setting the available keys to: E");
 		factory.setKeysAvailable(Arrays.asList(Keys.E_MAJOR));
 		factory.newKey();
@@ -79,6 +91,20 @@ public class MelodyExcersizeCreation {
 		logger.info(exc.toString());
 		exc = factory.make();
 		logger.info(exc.toString());
+
+		logger.info("Setting available degrees to I, III and V for major keys");
+		factory.setDegreesAvailable(Keys.MAJOR, new HashSet<>(
+				Arrays.asList(Degree.I, Degree.III, Degree.V)));
+
+		exc = factory.make();
+		logger.info(exc.toString());
+		exc = factory.make();
+		logger.info(exc.toString());
+		exc = factory.make();
+		logger.info(exc.toString());
+		exc = factory.make();
+		logger.info(exc.toString());
+		exc = factory.make();
 
 		logger.info("");
 	}

@@ -28,7 +28,7 @@ import com.github.singond.music.Pitches;
  *
  * @author Singon
  */
-public class KeyedMelodyExcersizeFactory {
+public final class KeyedMelodyExcersizeFactory {
 
 	private static Logger logger = LoggerFactory.getLogger(KeyedMelodyExcersizeFactory.class);
 
@@ -90,6 +90,21 @@ public class KeyedMelodyExcersizeFactory {
 		pitchClassesAvailableValid = false;
 	}
 
+	/**
+	 * Invalidates pitch classes cache and all dependent fields.
+	 */
+	private void invalidatePitchClassesAvailable() {
+		pitchClassesAvailableValid = false;
+		pitchesAvailableValid = false;
+	}
+
+	/**
+	 * Invalidates pitches cache and all dependent fields.
+	 */
+	private void invalidatePitchesAvailable() {
+		pitchesAvailableValid = false;
+	}
+
 	public void setKeysAvailable(List<Key> keysAvailable) {
 		this.keysAvailable = keysAvailable;
 	}
@@ -99,18 +114,18 @@ public class KeyedMelodyExcersizeFactory {
 		// If the degrees for the current key changed, update the pitch
 		// classes cache now, otherwise leave it for the next key change
 		if (key != null && key.type().equals(keyType)) {
-			pitchClassesAvailableValid = false;
+			invalidatePitchClassesAvailable();
 		}
 	}
 
 	public void setLowerBound(Pitch lowerBound) {
 		this.lowerBound = lowerBound;
-		pitchesAvailableValid = false;
+		invalidatePitchesAvailable();
 	}
 
 	public void setUpperBound(Pitch upperBound) {
 		this.upperBound = upperBound;
-		pitchesAvailableValid = false;
+		invalidatePitchesAvailable();
 	}
 
 	public void setLength(int length) {
@@ -124,8 +139,7 @@ public class KeyedMelodyExcersizeFactory {
 	 */
 	public void setKey(Key key) {
 		this.key = key;
-		pitchClassesAvailableValid = false;
-		pitchesAvailableValid = false;
+		invalidatePitchClassesAvailable();
 	}
 
 	/**
@@ -208,11 +222,4 @@ public class KeyedMelodyExcersizeFactory {
 	public KeyedMelodyExcersize make() {
 		return new KeyedMelodyExcersize(newMelody(), key);
 	}
-
-//	public KeyedMelodyExcersize allNew() {
-//		newKey();
-//		updatePitchClasses();
-//		updatePitches();
-//		return new KeyedMelodyExcersize(newMelody(), key);
-//	}
 }
