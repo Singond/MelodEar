@@ -118,8 +118,6 @@ public class PianoKeyboard extends RelativeLayout {
 		keyBorderPaint.setColor(0xff404040);
 	}
 
-	private final MidiDriver midi;
-
 	public PianoKeyboard(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
@@ -139,17 +137,6 @@ public class PianoKeyboard extends RelativeLayout {
 
 		startOffset = keyOffset(start);
 		populate(start, end, context);
-
-		/*
-		 * Make sure to create only one MidiDriver and start it only once
-		 * since its creation or last call to stop().
-		 * Otherwise the MIDI sound will stutter.
-		 * (The current setup sounds fine at first, but breaks when the
-		 * screen is rotated).
-		 */
-		midi = new MidiDriver();
-		midi.start();
-		setListener(new TestListener(midi));
 	}
 
 	private static Pitch parsePitch(String string) {

@@ -12,6 +12,7 @@
 		a:layout_width="fill_parent"
 		a:layout_height="400dp">
 		<com.github.singond.melodear.android.views.PianoKeyboard
+		    a:id="@+id/melodict_keyboard"
 			a:layout_width="wrap_content"
 			a:layout_height="wrap_content"
 			my:lowestKey="C3"
