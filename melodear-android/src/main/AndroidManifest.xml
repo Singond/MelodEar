@@ -17,7 +17,8 @@
 		<!-- Melodic dictation trainer -->
 		<activity
 			android:name=".MelodicDictationActivity"
-			android:label="@string/melodict_title">
+			android:label="@string/melodict_title"
+			android:parentActivityName=".MainActivity">
 		</activity>
 
 	</application>
