@@ -10,7 +10,7 @@
 	<HorizontalScrollView
 		a:layout_width="fill_parent"
 		a:layout_height="400dp">
-		<com.github.singond.android.views.PianoKeyboard
+		<com.github.singond.melodear.android.views.PianoKeyboard
 			a:layout_width="wrap_content"
 			a:layout_height="wrap_content"/>
 	</HorizontalScrollView>

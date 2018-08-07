@@ -1,4 +1,4 @@
-package com.github.singond.android.views;
+package com.github.singond.melodear.android.views;
 
 import java.util.HashMap;
 import java.util.HashSet;
