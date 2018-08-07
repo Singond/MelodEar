@@ -8,11 +8,13 @@ import java.util.Set;
 
 import org.billthefarmer.mididriver.MidiDriver;
 
+import com.github.singond.melodear.android.R;
 import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchClass;
 import com.github.singond.music.Pitches;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -116,6 +118,26 @@ public class PianoKeyboard extends RelativeLayout {
 
 	public PianoKeyboard(Context context, AttributeSet attrs) {
 		super(context, attrs);
+
+//		int[] attarr = new int[] {
+//				android.R.attr.id,
+//				android.R.attr.background,
+//				android.R.attr.layout_width,
+//				android.R.attr.layout_height
+//		};
+//		TypedArray ta = context.obtainStyledAttributes(attrs, attarr);
+//		int id = ta.getResourceId(0, View.NO_ID);
+
+		TypedArray ta = context.getTheme().obtainStyledAttributes(
+				attrs, R.styleable.PianoKeyboard, 0, 0);
+		String startPitch = null, endPitch = null;
+		try {
+			startPitch = ta.getString(R.styleable.PianoKeyboard_lowestKey);
+			endPitch = ta.getString(R.styleable.PianoKeyboard_highestKey);
+		} finally {
+			ta.recycle();
+		}
+		Log.d(TAG, "Start pitch: " + startPitch + ", end pitch: " + endPitch);
 
 		Pitch start = Pitch.of(PitchClass.C, 3);
 		Pitch end = Pitch.of(PitchClass.C, 5);
