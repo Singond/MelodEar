@@ -2,7 +2,8 @@
 		package="com.github.singond.melodear.android">
 	<uses-sdk android:minSdkVersion="14"/>
 
-	<application android:label="@string/app_name">
+	<application android:label="@string/app_name"
+	    android:theme="@style/MelodEarTheme">
 
 		<!-- Main screen -->
 		<activity
