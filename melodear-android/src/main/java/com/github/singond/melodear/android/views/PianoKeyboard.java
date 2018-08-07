@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.billthefarmer.mididriver.MidiDriver;
 
+import com.github.singond.melodear.PitchParser;
+import com.github.singond.melodear.ScientificPitchParser;
 import com.github.singond.melodear.android.R;
 import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchClass;
@@ -79,6 +81,8 @@ public class PianoKeyboard extends RelativeLayout {
 		allKeys.addAll(blackKeys);
 	}
 
+	private static final PitchParser pitchParser = new ScientificPitchParser();
+
 	private Listener listener;
 
 	/** Horizontal offset of the start key and C0. */
@@ -119,28 +123,20 @@ public class PianoKeyboard extends RelativeLayout {
 	public PianoKeyboard(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-//		int[] attarr = new int[] {
-//				android.R.attr.id,
-//				android.R.attr.background,
-//				android.R.attr.layout_width,
-//				android.R.attr.layout_height
-//		};
-//		TypedArray ta = context.obtainStyledAttributes(attrs, attarr);
-//		int id = ta.getResourceId(0, View.NO_ID);
-
 		TypedArray ta = context.getTheme().obtainStyledAttributes(
 				attrs, R.styleable.PianoKeyboard, 0, 0);
-		String startPitch = null, endPitch = null;
+		Pitch start, end;
 		try {
+			String startPitch = null, endPitch = null;
 			startPitch = ta.getString(R.styleable.PianoKeyboard_lowestKey);
 			endPitch = ta.getString(R.styleable.PianoKeyboard_highestKey);
+			start = parsePitch(startPitch);
+			end = parsePitch(endPitch);
 		} finally {
 			ta.recycle();
 		}
-		Log.d(TAG, "Start pitch: " + startPitch + ", end pitch: " + endPitch);
+		Log.d(TAG, "Keyboard range: " + start + "-" + end);
 
-		Pitch start = Pitch.of(PitchClass.C, 3);
-		Pitch end = Pitch.of(PitchClass.C, 5);
 		startOffset = keyOffset(start);
 		populate(start, end, context);
 
@@ -154,6 +150,12 @@ public class PianoKeyboard extends RelativeLayout {
 		midi = new MidiDriver();
 		midi.start();
 		setListener(new TestListener(midi));
+	}
+
+	private static Pitch parsePitch(String string) {
+		// TODO Consider not depending on MelodEar internals here
+		// (implement pitch parsing privately here)
+		return pitchParser.parse(string);
 	}
 
 	private void populate(Pitch start, Pitch end, Context context) {

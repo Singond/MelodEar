@@ -38,6 +38,7 @@ allprojects {
 }
 
 dependencies {
+	compile project(":")
 	compile 'com.github.billthefarmer:mididriver:v1.14'
 	compile group: "com.github.singond", name: "com.github.singond.music",
 			version: "${versions.music}", changing: true
