@@ -11,7 +11,7 @@ android {
 
 	defaultConfig {
 		applicationId 'com.github.singond.melodear'
-		minSdkVersion 14
+		minSdkVersion 15
 		targetSdkVersion 25
 		versionCode 1
 		versionName '0.0.0'
@@ -29,12 +29,16 @@ allprojects {
 		mavenLocal()
 		jcenter()
 		maven {url "https://jitpack.io"}
+		flatDir {
+		    dirs '/home/sorondil/Java/Archives'
+		}
 	}
 }
 
 dependencies {
 	implementation project(":")
 	implementation 'com.github.billthefarmer:mididriver:v1.14'
+	implementation name: 'sherlockmidi-release', ext: 'aar'
 	implementation group: "com.github.singond", name: "com.github.singond.music",
 			version: "${versions.music}", changing: true
 	implementation group: "com.github.singond", name: "com.github.singond.music",
