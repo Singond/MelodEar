@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.billthefarmer.mididriver.MidiDriver;
-
 import com.github.singond.melodear.PitchParser;
 import com.github.singond.melodear.ScientificPitchParser;
 import com.github.singond.melodear.android.R;
@@ -363,37 +361,5 @@ public class PianoKeyboard extends RelativeLayout {
 		 * @param pitch the pitch of the key which was released
 		 */
 		public void keyReleased(Pitch pitch);
-	}
-
-
-	private static class TestListener implements Listener {
-
-		private MidiDriver midi;
-
-		public TestListener(MidiDriver midi) {
-			this.midi = midi;
-		}
-
-		@Override
-		public void keyPressed(Pitch pitch) {
-			Log.v(TAG, "Listener: pressed key " + pitch);
-			byte[] msg;
-			msg = new byte[3];
-			msg[0] = (byte)(0x90); // note on
-			msg[1] = (byte)(pitch.midiNumber());
-			msg[2] = (byte)(127); // max velocity
-			midi.write(msg);
-		}
-
-		@Override
-		public void keyReleased(Pitch pitch) {
-			byte[] msg;
-			Log.v(TAG, "Listener: released key " + pitch);
-			msg = new byte[3];
-			msg[0] = (byte)(0x80); // note off
-			msg[1] = (byte)(pitch.midiNumber());
-			msg[2] = (byte)(0); // max velocity
-			midi.write(msg);
-		}
 	}
 }
