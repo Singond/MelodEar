@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
 	compileSdkVersion 25
-	buildToolsVersion '25.0.2'
 	
 	compileOptions {
 		sourceCompatibility JavaVersion.VERSION_1_8
@@ -16,10 +15,6 @@ android {
 		targetSdkVersion 25
 		versionCode 1
 		versionName '0.0.0'
-		jackOptions {
-			enabled true
-		}
-
 	}
 
 	sourceSets {
@@ -38,11 +33,11 @@ allprojects {
 }
 
 dependencies {
-	compile project(":")
-	compile 'com.github.billthefarmer:mididriver:v1.14'
-	compile group: "com.github.singond", name: "com.github.singond.music",
+	implementation project(":")
+	implementation 'com.github.billthefarmer:mididriver:v1.14'
+	implementation group: "com.github.singond", name: "com.github.singond.music",
 			version: "${versions.music}", changing: true
-	compile group: "com.github.singond", name: "com.github.singond.music",
+	implementation group: "com.github.singond", name: "com.github.singond.music",
 			classifier: "javadoc", version: "${versions.music}", changing: true
 }
 
