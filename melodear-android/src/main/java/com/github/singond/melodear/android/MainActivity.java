@@ -46,7 +46,8 @@ public class MainActivity extends DebugActivity {
 	}
 
 	public void soundTest(@SuppressWarnings("unused") View view) {
-		Log.d(TAG, "Sound test: playing note C4");
+		Log.d(TAG, "Sound test: playing C major chord");
+		long start = System.currentTimeMillis();
 		try {
 			ShortMessage msg = new ShortMessage();
 			msg.setMessage(ShortMessage.NOTE_ON, 0, 60, 127);
@@ -58,5 +59,7 @@ public class MainActivity extends DebugActivity {
 		} catch (InvalidMidiDataException e) {
 			e.printStackTrace();
 		}
+		long end = System.currentTimeMillis();
+		Log.d(TAG, "Sound test: finished playing C major chord in " + (end - start) + " ms");
 	}
 }
