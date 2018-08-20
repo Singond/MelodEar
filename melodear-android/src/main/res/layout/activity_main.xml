@@ -1,11 +1,11 @@
-<RelativeLayout
+<LinearLayout
 	xmlns:a="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	xmlns:my="http://schemas.android.com/apk/res-auto"
 	a:layout_width="match_parent"
 	a:layout_height="match_parent"
 	a:paddingLeft="16dp"
 	a:paddingRight="16dp"
+	a:orientation="vertical"
 	tools:context=".MainActivity">
 	<Button
 		a:id="@+id/melodict_btn"
@@ -14,4 +14,11 @@
 		a:layout_width="wrap_content"
 		a:layout_height="wrap_content"
 		a:layout_centerHorizontal="true"/>
-</RelativeLayout>
+	<Button
+		a:id="@+id/soundtest_btn"
+		a:text="@string/soundtest_title"
+		a:onClick="soundTest"
+		a:layout_width="wrap_content"
+		a:layout_height="wrap_content"
+		a:layout_centerHorizontal="true"/>
+</LinearLayout>

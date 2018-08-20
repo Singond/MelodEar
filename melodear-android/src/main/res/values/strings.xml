@@ -2,4 +2,5 @@
   <string name="app_name">MelodEar</string>
   <string name="main_title">MelodEar</string>
   <string name="melodict_title">Melodic Dictation</string>
+  <string name="soundtest_title">Test Sound</string>
 </resources>
