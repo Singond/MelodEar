@@ -49,6 +49,7 @@ public class MainActivity extends DebugActivity {
 		Log.d(TAG, "Sound test: playing C major chord");
 		long start = System.currentTimeMillis();
 		try {
+			Log.d(TAG, "Synth latency: " + synth.getLatency());
 			ShortMessage msg = new ShortMessage();
 			msg.setMessage(ShortMessage.NOTE_ON, 0, 60, 127);
 			recv.send(msg, -1);
