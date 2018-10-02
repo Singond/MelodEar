@@ -12,6 +12,7 @@ import jp.kshoji.javax.sound.midi.InvalidMidiDataException;
 import jp.kshoji.javax.sound.midi.MidiUnavailableException;
 import jp.kshoji.javax.sound.midi.Receiver;
 import jp.kshoji.javax.sound.midi.ShortMessage;
+import jp.kshoji.javax.sound.midi.SysexMessage;
 
 public class MainActivity extends DebugActivity {
 
@@ -19,6 +20,9 @@ public class MainActivity extends DebugActivity {
 
 	private SoftSynthesizer synth;
 	private Receiver recv;
+
+	private static final int CONTROLLER_EXPRESSION = 11;
+	private static final int CONTROLLER_CHANNEL_VOLUME = 7;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +36,19 @@ public class MainActivity extends DebugActivity {
 			synth.loadAllInstruments(sf);
 			synth.getChannels()[0].programChange(0);
 			recv = synth.getReceiver();
+			ShortMessage msg = new ShortMessage();
+			msg.setMessage(ShortMessage.CONTROL_CHANGE, 0, CONTROLLER_EXPRESSION, 127);
+			msg.setMessage(ShortMessage.CONTROL_CHANGE, 0, CONTROLLER_CHANNEL_VOLUME, 127);
+			recv.send(msg, -1);
+			SysexMessage msg2 = new SysexMessage();
+			byte[] volumeChange = {(byte) 0x70, 0x7F, 0x7F, 0x04, 0x01, (byte) 0xFF, (byte) 0xFF, (byte) 0xF7};
+			msg2.setMessage(volumeChange, volumeChange.length);
+			recv.send(msg2, -1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (MidiUnavailableException e) {
+			e.printStackTrace();
+		} catch (InvalidMidiDataException e) {
 			e.printStackTrace();
 		}
 
