@@ -5,19 +5,6 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-sourceSets {
-	main {
-		java {
-			srcDirs = ['src']
-		}
-	}
-	test {
-		java {
-			srcDirs = ['test', 'etc']
-		}
-	}
-}
-
 buildscript {
 	repositories {
 		jcenter()
@@ -49,6 +36,7 @@ dependencies {
 }
 
 eclipse {
+	project.name = 'MelodEar'
 	classpath {
 		downloadJavadoc = true
 	}
