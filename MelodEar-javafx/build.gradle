@@ -1,0 +1,13 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+dependencies {
+	compile group: "com.github.singond", name: "com.github.singond.music",
+			version: "${versions.music}", changing: true
+	compile group: "com.github.singond", name: "com.github.singond.music",
+			classifier: "javadoc", version: "${versions.music}", changing: true
+}
+
+eclipse {
+	project.name = 'MelodEar-javafx'
+}
