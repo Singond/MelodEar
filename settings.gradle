@@ -1,2 +1,5 @@
-rootProject.name = 'MelodEar'
-include ':melodear-android'
+rootProject.name = name
+include ':MelodEar-android'
+project(':MelodEar-android').name = "melodear-android"
+include ':MelodEar-javafx'
+project(':MelodEar-javafx').name = "melodear-javafx"

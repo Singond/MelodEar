@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'eclipse'
 
 android {
 	compileSdkVersion 25
@@ -7,7 +8,6 @@ android {
 		sourceCompatibility JavaVersion.VERSION_1_8
 		targetCompatibility JavaVersion.VERSION_1_8
 	}
-	
 
 	defaultConfig {
 		applicationId 'com.github.singond.melodear'
@@ -15,12 +15,6 @@ android {
 		targetSdkVersion 25
 		versionCode 1
 		versionName '0.0.0'
-	}
-
-	sourceSets {
-		main {
-			//java.srcDirs = ['src']
-		}
 	}
 }
 
@@ -39,6 +33,10 @@ dependencies {
 			version: "${versions.music}", changing: true
 	implementation group: "com.github.singond", name: "com.github.singond.music",
 			classifier: "javadoc", version: "${versions.music}", changing: true
+}
+
+eclipse {
+	project.name = 'MelodEar-android'
 }
 
 // Export the dependencies to be used in IDE
