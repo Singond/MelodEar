@@ -2,6 +2,8 @@ package com.github.singond.melodear.desktop;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.BiFunction;
 
 import org.apache.logging.log4j.LogManager;
@@ -9,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchClass;
+import com.github.singond.music.Pitches;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -19,6 +22,23 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Keyboard extends Region {
+
+	private static final Set<PitchClass> PITCH_CLASSES;
+	static {
+		PITCH_CLASSES = new TreeSet<PitchClass>();
+		PITCH_CLASSES.add(PitchClass.C);
+//		PITCH_CLASSES.add(PitchClass.C_SHARP);
+		PITCH_CLASSES.add(PitchClass.D);
+//		PITCH_CLASSES.add(PitchClass.D_SHARP);
+		PITCH_CLASSES.add(PitchClass.E);
+		PITCH_CLASSES.add(PitchClass.F);
+//		PITCH_CLASSES.add(PitchClass.F_SHARP);
+		PITCH_CLASSES.add(PitchClass.G);
+//		PITCH_CLASSES.add(PitchClass.G_SHARP);
+		PITCH_CLASSES.add(PitchClass.A);
+//		PITCH_CLASSES.add(PitchClass.A_SHARP);
+		PITCH_CLASSES.add(PitchClass.B);
+	}
 
 	private static final Map<PitchClass, KeyDef> KEY_DEFS;
 	static {
@@ -52,15 +72,22 @@ public class Keyboard extends Region {
 
 	private static Logger logger = LogManager.getLogger(Keyboard.class);
 
+	private Pitch lowestPitch;
+	private Pitch highestPitch;
+
 	public Keyboard() {
+		lowestPitch = Pitch.C0;
+		highestPitch = Pitch.B0;
+		populate();
+	}
+
+	private void populate() {
 		ObservableList<Node> children = getChildren();
-		children.add(new Key(Pitch.C0));
-//		children.add(new Key(Pitch.D0));
-//		children.add(new Key(Pitch.E0));
-//		children.add(new Key(Pitch.F0));
-//		children.add(new Key(Pitch.G0));
-//		children.add(new Key(Pitch.A0));
-//		children.add(new Key(Pitch.B0));
+		children.clear();
+		for(Pitch p : Pitches.allBetween(
+				lowestPitch, highestPitch, PITCH_CLASSES)) {
+			children.add(new Key(p));
+		}
 	}
 
 	private double scale(double dimension) {
@@ -75,9 +102,34 @@ public class Keyboard extends Region {
 		return position;
 	}
 
+	@Override
+	protected double computeMinWidth(double h) {
+		double w = totalKeysWidth();
+		logger.debug("Min width = {}", w);
+		return w;
+	}
+
+	@Override
+	protected double computePrefWidth(double h) {
+		double w = totalKeysWidth();
+		logger.debug("Pref width = {}", w);
+		return w;
+	}
+
+	private double totalKeysWidth() {
+		ObservableList<Node> kids = getChildren();
+		if (kids.isEmpty()) {
+			return 0;
+		} else {
+			double left = ((Key)kids.get(0)).leftExtent();
+			double right = ((Key)kids.get(kids.size() -1)).rightExtent();
+			return scale(right - left);
+		}
+	}
+
 	private class Key extends Control {
 		private final Pitch pitch;
-//		private final KeySkin skin;
+		private final KeySkin skin;
 
 		Key(Pitch p) {
 			this.pitch = p;
@@ -85,17 +137,29 @@ public class Keyboard extends Region {
 			if (keydef == null) {
 				throw new AssertionError("Bad pitch for piano key: " + p);
 			}
-			this.setSkin(keydef.skin().apply(Keyboard.this, this));
+			this.skin = keydef.skin().apply(Keyboard.this, this);
+			this.setSkin(skin);
 		}
 
 		@Override
 		public String toString() {
 			return pitch.toString();
 		}
+
+		public double leftExtent() {
+			return skin.leftExtent();
+		}
+
+		public double rightExtent() {
+			return skin.rightExtent();
+		}
 	}
 
 	private interface KeySkin extends Skin<Key> {
 
+		public double leftExtent();
+
+		public double rightExtent();
 	}
 
 	private class WhiteKeySkin implements KeySkin {
@@ -119,6 +183,16 @@ public class Keyboard extends Region {
 //			if (root == null)
 				return root = draw();
 //			return root;
+		}
+
+		@Override
+		public double leftExtent() {
+			return xposition;
+		}
+
+		@Override
+		public double rightExtent() {
+			return xposition + WHITE_WIDTH;
 		}
 
 		private Node draw() {
