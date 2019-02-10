@@ -20,7 +20,9 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 
 public class Keyboard extends Region {
 
@@ -193,9 +195,11 @@ public class Keyboard extends Region {
 	private interface KeySkin extends Skin<Key> {
 	}
 
-	private abstract class AbstractKeySkin implements KeySkin {
+	private static abstract class AbstractKeySkin implements KeySkin {
 		protected final Key control;
 		protected Node root;
+
+		protected static final Paint BORDER_COLOR = Color.gray(0.6);
 
 		public AbstractKeySkin(Key control) {
 			this.control = control;
@@ -235,7 +239,8 @@ public class Keyboard extends Region {
 			rect.setWidth(scale(WHITE_WIDTH));
 			rect.setHeight(scale(WHITE_HEIGHT));
 			rect.setFill(Color.WHITE);
-			rect.setStroke(Color.gray(0.3));
+			rect.setStroke(BORDER_COLOR);
+			rect.setStrokeType(StrokeType.INSIDE);
 			rect.setOnMousePressed((e) -> logger.debug("Clicked {}", control));
 			return rect;
 		}
@@ -254,7 +259,8 @@ public class Keyboard extends Region {
 			rect.setWidth(scale(BLACK_WIDTH));
 			rect.setHeight(scale(BLACK_HEIGHT));
 			rect.setFill(Color.BLACK);
-			rect.setStroke(Color.gray(0.3));
+			rect.setStroke(BORDER_COLOR);
+			rect.setStrokeType(StrokeType.INSIDE);
 			rect.setOnMousePressed((e) -> logger.debug("Clicked {}", control));
 			return rect;
 		}
