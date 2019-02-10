@@ -76,6 +76,7 @@ public class Keyboard extends Region {
 	private double leftEdge;
 
 	public Keyboard() {
+		// TODO Enable setting custom range
 		construct(Pitch.G4, Pitch.E6);
 	}
 
@@ -143,16 +144,7 @@ public class Keyboard extends Region {
 			}
 			leftExtent = p.octave() * OCTAVE_WIDTH + keydef.offset;
 			rightExtent = leftExtent + WHITE_WIDTH;
-			switch (keydef.type) {
-				case BLACK:
-					throw new IllegalArgumentException();
-//					break;
-				case WHITE:
-					this.skin = new WhiteKeySkin(this);
-					break;
-				default:
-					throw new AssertionError(keydef.type);
-			}
+			this.skin = keydef.newSkin(Keyboard.this, this);
 			this.relocate(scale(offset(leftExtent)), 0);
 			this.setSkin(skin);
 		}
@@ -214,12 +206,25 @@ public class Keyboard extends Region {
 			this.type = type;
 		}
 
-//		KeySkin newSkin(Keyboard kbd, Key control) {
-//			return kbd.new WhiteKeySkin(control, offset);
-//		}
+		KeySkin newSkin(Keyboard kbd, Key control) {
+			return type.newSkin(kbd, control);
+		}
 	}
 
 	private enum KeyType {
-		WHITE, BLACK;
+		WHITE {
+			@Override
+			KeySkin newSkin(Keyboard kbd, Key control) {
+				return kbd.new WhiteKeySkin(control);
+			}
+		},
+		BLACK {
+			@Override
+			KeySkin newSkin(Keyboard kbd, Key control) {
+				throw new UnsupportedOperationException("Not implemented yet");
+			}
+		};
+
+		abstract KeySkin newSkin(Keyboard kbd, Key control);
 	}
 }
