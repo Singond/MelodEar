@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.function.BiFunction;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,18 +41,18 @@ public class Keyboard extends Region {
 
 	private static final Map<PitchClass, KeyDef> KEY_DEFS;
 	static {
-		KeyDef c =  new KeyDef((kbd, k) -> kbd.new WhiteKeySkin(k, 0  ));
-//		KeyDef cd = new KeyDef((kbd, k) -> kbd.new BlackKeySkin(k, 15 ));
-		KeyDef d =  new KeyDef((kbd, k) -> kbd.new WhiteKeySkin(k, 24 ));
-//		KeyDef de = new KeyDef((kbd, k) -> kbd.new BlackKeySkin(k, 43 ));
-		KeyDef e =  new KeyDef((kbd, k) -> kbd.new WhiteKeySkin(k, 48 ));
-		KeyDef f =  new KeyDef((kbd, k) -> kbd.new WhiteKeySkin(k, 72 ));
-//		KeyDef fg = new KeyDef((kbd, k) -> kbd.new BlackKeySkin(k, 85 ));
-		KeyDef g =  new KeyDef((kbd, k) -> kbd.new WhiteKeySkin(k, 96 ));
-//		KeyDef ga = new KeyDef((kbd, k) -> kbd.new BlackKeySkin(k, 113));
-		KeyDef a =  new KeyDef((kbd, k) -> kbd.new WhiteKeySkin(k, 120));
-//		KeyDef ab = new KeyDef((kbd, k) -> kbd.new BlackKeySkin(k, 141));
-		KeyDef b =  new KeyDef((kbd, k) -> kbd.new WhiteKeySkin(k, 144));
+		KeyDef c =  new KeyDef(0,   KeyType.WHITE);
+//		KeyDef cd = new KeyDef(15,  KeyType.BLACK);
+		KeyDef d =  new KeyDef(24,  KeyType.WHITE);
+//		KeyDef de = new KeyDef(43,  KeyType.BLACK);
+		KeyDef e =  new KeyDef(48,  KeyType.WHITE);
+		KeyDef g =  new KeyDef(96,  KeyType.WHITE);
+		KeyDef f =  new KeyDef(72,  KeyType.WHITE);
+//		KeyDef fg = new KeyDef(85,  KeyType.BLACK);
+//		KeyDef ga = new KeyDef(113, KeyType.BLACK);
+		KeyDef a =  new KeyDef(120, KeyType.WHITE);
+//		KeyDef ab = new KeyDef(141, KeyType.BLACK);
+		KeyDef b =  new KeyDef(144, KeyType.WHITE);
 		KEY_DEFS = new HashMap<>();
 		KEY_DEFS.put(PitchClass.C, c);
 		KEY_DEFS.put(PitchClass.D, d);
@@ -74,14 +73,17 @@ public class Keyboard extends Region {
 
 	private Pitch lowestPitch;
 	private Pitch highestPitch;
+	private double leftEdge;
 
 	public Keyboard() {
-		lowestPitch = Pitch.C0;
-		highestPitch = Pitch.B0;
-		populate();
+		construct(Pitch.G4, Pitch.E6);
 	}
 
-	private void populate() {
+	private void construct(Pitch low, Pitch high) {
+		this.lowestPitch = low;
+		this.highestPitch = high;
+		KeyDef lowDef = KEY_DEFS.get(low.pitchClass());
+		this.leftEdge = lowDef.offset + low.octave() * OCTAVE_WIDTH;
 		ObservableList<Node> children = getChildren();
 		children.clear();
 		for(Pitch p : Pitches.allBetween(
@@ -99,7 +101,7 @@ public class Keyboard extends Region {
 	}
 
 	private double offset(double position) {
-		return position;
+		return position - leftEdge;
 	}
 
 	@Override
@@ -121,8 +123,8 @@ public class Keyboard extends Region {
 		if (kids.isEmpty()) {
 			return 0;
 		} else {
-			double left = ((Key)kids.get(0)).leftExtent();
-			double right = ((Key)kids.get(kids.size() -1)).rightExtent();
+			double left = ((Key)kids.get(0)).leftExtent;
+			double right = ((Key)kids.get(kids.size() -1)).rightExtent;
 			return scale(right - left);
 		}
 	}
@@ -130,6 +132,8 @@ public class Keyboard extends Region {
 	private class Key extends Control {
 		private final Pitch pitch;
 		private final KeySkin skin;
+		private double leftExtent;
+		private double rightExtent;
 
 		Key(Pitch p) {
 			this.pitch = p;
@@ -137,7 +141,19 @@ public class Keyboard extends Region {
 			if (keydef == null) {
 				throw new AssertionError("Bad pitch for piano key: " + p);
 			}
-			this.skin = keydef.skin().apply(Keyboard.this, this);
+			leftExtent = p.octave() * OCTAVE_WIDTH + keydef.offset;
+			rightExtent = leftExtent + WHITE_WIDTH;
+			switch (keydef.type) {
+				case BLACK:
+					throw new IllegalArgumentException();
+//					break;
+				case WHITE:
+					this.skin = new WhiteKeySkin(this);
+					break;
+				default:
+					throw new AssertionError(keydef.type);
+			}
+			this.relocate(scale(offset(leftExtent)), 0);
 			this.setSkin(skin);
 		}
 
@@ -145,32 +161,18 @@ public class Keyboard extends Region {
 		public String toString() {
 			return pitch.toString();
 		}
-
-		public double leftExtent() {
-			return skin.leftExtent();
-		}
-
-		public double rightExtent() {
-			return skin.rightExtent();
-		}
 	}
 
 	private interface KeySkin extends Skin<Key> {
-
-		public double leftExtent();
-
-		public double rightExtent();
 	}
 
 	private class WhiteKeySkin implements KeySkin {
 
 		private final Key control;
-		private final double xposition;
 		private Node root;
 
-		public WhiteKeySkin(Key control, double xpos) {
+		public WhiteKeySkin(Key control) {
 			this.control = control;
-			this.xposition = xpos;
 		}
 
 		@Override
@@ -185,20 +187,9 @@ public class Keyboard extends Region {
 //			return root;
 		}
 
-		@Override
-		public double leftExtent() {
-			return xposition;
-		}
-
-		@Override
-		public double rightExtent() {
-			return xposition + WHITE_WIDTH;
-		}
-
 		private Node draw() {
 			logger.debug("Creating skin for key {}", control);
 			Rectangle rect = new Rectangle();
-			rect.setX(scale(offset(xposition)));
 			rect.setWidth(scale(WHITE_WIDTH));
 			rect.setHeight(scale(WHITE_HEIGHT));
 			rect.setFill(Color.WHITE);
@@ -215,15 +206,20 @@ public class Keyboard extends Region {
 	}
 
 	private static class KeyDef {
-		private final BiFunction<Keyboard, Key, KeySkin> skin;
+		final double offset;
+		final KeyType type;
 
-		public KeyDef(BiFunction<Keyboard, Key, KeySkin> skin) {
-			super();
-			this.skin = skin;
+		KeyDef(double offset, KeyType type) {
+			this.offset = offset;
+			this.type = type;
 		}
 
-		BiFunction<Keyboard, Key, KeySkin> skin() {
-			return skin;
-		}
+//		KeySkin newSkin(Keyboard kbd, Key control) {
+//			return kbd.new WhiteKeySkin(control, offset);
+//		}
+	}
+
+	private enum KeyType {
+		WHITE, BLACK;
 	}
 }
