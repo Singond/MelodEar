@@ -1,6 +1,8 @@
 package com.github.singond.melodear.desktop;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -26,41 +28,59 @@ public class Keyboard extends Region {
 	static {
 		PITCH_CLASSES = new TreeSet<PitchClass>();
 		PITCH_CLASSES.add(PitchClass.C);
-//		PITCH_CLASSES.add(PitchClass.C_SHARP);
+		PITCH_CLASSES.add(PitchClass.C_SHARP);
 		PITCH_CLASSES.add(PitchClass.D);
-//		PITCH_CLASSES.add(PitchClass.D_SHARP);
+		PITCH_CLASSES.add(PitchClass.D_SHARP);
 		PITCH_CLASSES.add(PitchClass.E);
 		PITCH_CLASSES.add(PitchClass.F);
-//		PITCH_CLASSES.add(PitchClass.F_SHARP);
+		PITCH_CLASSES.add(PitchClass.F_SHARP);
 		PITCH_CLASSES.add(PitchClass.G);
-//		PITCH_CLASSES.add(PitchClass.G_SHARP);
+		PITCH_CLASSES.add(PitchClass.G_SHARP);
 		PITCH_CLASSES.add(PitchClass.A);
-//		PITCH_CLASSES.add(PitchClass.A_SHARP);
+		PITCH_CLASSES.add(PitchClass.A_SHARP);
 		PITCH_CLASSES.add(PitchClass.B);
 	}
 
 	private static final Map<PitchClass, KeyDef> KEY_DEFS;
 	static {
-		KeyDef c =  new KeyDef(0,   KeyType.WHITE);
-//		KeyDef cd = new KeyDef(15,  KeyType.BLACK);
-		KeyDef d =  new KeyDef(24,  KeyType.WHITE);
-//		KeyDef de = new KeyDef(43,  KeyType.BLACK);
-		KeyDef e =  new KeyDef(48,  KeyType.WHITE);
-		KeyDef g =  new KeyDef(96,  KeyType.WHITE);
-		KeyDef f =  new KeyDef(72,  KeyType.WHITE);
-//		KeyDef fg = new KeyDef(85,  KeyType.BLACK);
-//		KeyDef ga = new KeyDef(113, KeyType.BLACK);
-		KeyDef a =  new KeyDef(120, KeyType.WHITE);
-//		KeyDef ab = new KeyDef(141, KeyType.BLACK);
-		KeyDef b =  new KeyDef(144, KeyType.WHITE);
 		KEY_DEFS = new HashMap<>();
-		KEY_DEFS.put(PitchClass.C, c);
-		KEY_DEFS.put(PitchClass.D, d);
-		KEY_DEFS.put(PitchClass.E, e);
-		KEY_DEFS.put(PitchClass.F, f);
-		KEY_DEFS.put(PitchClass.G, g);
-		KEY_DEFS.put(PitchClass.A, a);
-		KEY_DEFS.put(PitchClass.B, b);
+		KeyDef def;
+
+		def = new KeyDef(0,   KeyType.WHITE);
+		KEY_DEFS.put(PitchClass.C, def);
+
+		def = new KeyDef(15,  KeyType.BLACK);
+		KEY_DEFS.put(PitchClass.C_SHARP, def);
+
+		def = new KeyDef(24,  KeyType.WHITE);
+		KEY_DEFS.put(PitchClass.D, def);
+
+		def = new KeyDef(43,  KeyType.BLACK);
+		KEY_DEFS.put(PitchClass.D_SHARP, def);
+
+		def = new KeyDef(48,  KeyType.WHITE);
+		KEY_DEFS.put(PitchClass.E, def);
+
+		def = new KeyDef(72,  KeyType.WHITE);
+		KEY_DEFS.put(PitchClass.F, def);
+
+		def = new KeyDef(85,  KeyType.BLACK);
+		KEY_DEFS.put(PitchClass.F_SHARP, def);
+
+		def = new KeyDef(96,  KeyType.WHITE);
+		KEY_DEFS.put(PitchClass.G, def);
+
+		def = new KeyDef(113, KeyType.BLACK);
+		KEY_DEFS.put(PitchClass.G_SHARP, def);
+
+		def = new KeyDef(120, KeyType.WHITE);
+		KEY_DEFS.put(PitchClass.A, def);
+
+		def = new KeyDef(141, KeyType.BLACK);
+		KEY_DEFS.put(PitchClass.A_SHARP, def);
+
+		def = new KeyDef(144, KeyType.WHITE);
+		KEY_DEFS.put(PitchClass.B, def);
 	}
 
 	private static final int WHITE_WIDTH = 24;
@@ -85,12 +105,27 @@ public class Keyboard extends Region {
 		this.highestPitch = high;
 		KeyDef lowDef = KEY_DEFS.get(low.pitchClass());
 		this.leftEdge = lowDef.offset + low.octave() * OCTAVE_WIDTH;
-		ObservableList<Node> children = getChildren();
-		children.clear();
+		List<Key> whites = new ArrayList<>();
+		List<Key> blacks = new ArrayList<>();
 		for(Pitch p : Pitches.allBetween(
 				lowestPitch, highestPitch, PITCH_CLASSES)) {
-			children.add(new Key(p));
+			KeyDef def = KEY_DEFS.get(p.pitchClass());
+			Key key = new Key(p);
+			switch (def.type) {
+				case WHITE:
+					whites.add(key);
+					break;
+				case BLACK:
+					blacks.add(key);
+					break;
+				default:
+					throw new AssertionError(def.type);
+			}
 		}
+		ObservableList<Node> children = getChildren();
+		children.clear();
+		children.addAll(whites);
+		children.addAll(blacks);
 	}
 
 	private double scale(double dimension) {
@@ -158,12 +193,11 @@ public class Keyboard extends Region {
 	private interface KeySkin extends Skin<Key> {
 	}
 
-	private class WhiteKeySkin implements KeySkin {
+	private abstract class AbstractKeySkin implements KeySkin {
+		protected final Key control;
+		protected Node root;
 
-		private final Key control;
-		private Node root;
-
-		public WhiteKeySkin(Key control) {
+		public AbstractKeySkin(Key control) {
 			this.control = control;
 		}
 
@@ -175,11 +209,27 @@ public class Keyboard extends Region {
 		@Override
 		public Node getNode() {
 //			if (root == null)
-				return root = draw();
+			return root = draw();
 //			return root;
 		}
 
-		private Node draw() {
+		protected abstract Node draw();
+
+		@Override
+		public void dispose() {
+			// TODO Auto-generated method stub
+		}
+
+	}
+
+	private class WhiteKeySkin extends AbstractKeySkin implements KeySkin {
+
+		public WhiteKeySkin(Key control) {
+			super(control);
+		}
+
+		@Override
+		protected final Node draw() {
 			logger.debug("Creating skin for key {}", control);
 			Rectangle rect = new Rectangle();
 			rect.setWidth(scale(WHITE_WIDTH));
@@ -189,12 +239,25 @@ public class Keyboard extends Region {
 			rect.setOnMousePressed((e) -> logger.debug("Clicked {}", control));
 			return rect;
 		}
+	}
 
-		@Override
-		public void dispose() {
-			// TODO Auto-generated method stub
+	private class BlackKeySkin extends AbstractKeySkin implements KeySkin {
+
+		public BlackKeySkin(Key control) {
+			super(control);
 		}
 
+		@Override
+		protected final Node draw() {
+			logger.debug("Creating skin for key {}", control);
+			Rectangle rect = new Rectangle();
+			rect.setWidth(scale(BLACK_WIDTH));
+			rect.setHeight(scale(BLACK_HEIGHT));
+			rect.setFill(Color.BLACK);
+			rect.setStroke(Color.gray(0.3));
+			rect.setOnMousePressed((e) -> logger.debug("Clicked {}", control));
+			return rect;
+		}
 	}
 
 	private static class KeyDef {
@@ -221,7 +284,7 @@ public class Keyboard extends Region {
 		BLACK {
 			@Override
 			KeySkin newSkin(Keyboard kbd, Key control) {
-				throw new UnsupportedOperationException("Not implemented yet");
+				return kbd.new BlackKeySkin(control);
 			}
 		};
 
