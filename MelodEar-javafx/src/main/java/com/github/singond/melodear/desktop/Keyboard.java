@@ -18,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -184,6 +185,7 @@ public class Keyboard extends Region {
 			this.skin = keydef.newSkin(Keyboard.this, this);
 			this.relocate(scale(offset(leftExtent)), 0);
 			this.setSkin(skin);
+			this.setTooltip(new Tooltip(p.toString()));
 		}
 
 		@Override
