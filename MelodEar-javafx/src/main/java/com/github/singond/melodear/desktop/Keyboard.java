@@ -96,6 +96,8 @@ public class Keyboard extends Region {
 
 	private Pitch lowestPitch;
 	private Pitch highestPitch;
+	private Key lowestKey;
+	private Key highestKey;
 	private double leftEdge;
 
 	public Keyboard() {
@@ -110,6 +112,7 @@ public class Keyboard extends Region {
 		this.leftEdge = lowDef.offset + low.octave() * OCTAVE_WIDTH;
 		List<Key> whites = new ArrayList<>();
 		List<Key> blacks = new ArrayList<>();
+		Key lowKey = null, highKey = null;
 		for(Pitch p : Pitches.allBetween(
 				lowestPitch, highestPitch, PITCH_CLASSES)) {
 			KeyDef def = KEY_DEFS.get(p.pitchClass());
@@ -124,11 +127,19 @@ public class Keyboard extends Region {
 				default:
 					throw new AssertionError(def.type);
 			}
+			if (lowKey == null) {
+				lowKey = key;
+			}
+			if (highKey == null || highKey.pitch.compareTo(key.pitch) < 0) {
+				highKey = key;
+			}
 		}
 		ObservableList<Node> children = getChildren();
 		children.clear();
 		children.addAll(whites);
 		children.addAll(blacks);
+		lowestKey = lowKey;
+		highestKey = highKey;
 	}
 
 	private double scale(double dimension) {
@@ -158,12 +169,11 @@ public class Keyboard extends Region {
 	}
 
 	private double totalKeysWidth() {
-		ObservableList<Node> kids = getChildren();
-		if (kids.isEmpty()) {
+		if (lowestKey == null || highestKey == null) {
 			return 0;
 		} else {
-			double left = ((Key)kids.get(0)).leftExtent;
-			double right = ((Key)kids.get(kids.size() -1)).rightExtent;
+			double left = lowestKey.leftExtent;
+			double right = highestKey.rightExtent;
 			return scale(right - left);
 		}
 	}
@@ -181,7 +191,7 @@ public class Keyboard extends Region {
 				throw new AssertionError("Bad pitch for piano key: " + p);
 			}
 			leftExtent = p.octave() * OCTAVE_WIDTH + keydef.offset;
-			rightExtent = leftExtent + WHITE_WIDTH;
+			rightExtent = leftExtent + keydef.type.width;
 			this.skin = keydef.newSkin(Keyboard.this, this);
 			this.relocate(scale(offset(leftExtent)), 0);
 			this.setSkin(skin);
@@ -236,7 +246,7 @@ public class Keyboard extends Region {
 
 		@Override
 		protected final Node draw() {
-			logger.debug("Creating skin for key {}", control);
+//			logger.debug("Creating skin for key {}", control);
 			Rectangle rect = new Rectangle();
 			rect.setWidth(scale(WHITE_WIDTH));
 			rect.setHeight(scale(WHITE_HEIGHT));
@@ -256,7 +266,7 @@ public class Keyboard extends Region {
 
 		@Override
 		protected final Node draw() {
-			logger.debug("Creating skin for key {}", control);
+//			logger.debug("Creating skin for key {}", control);
 			Rectangle rect = new Rectangle();
 			rect.setWidth(scale(BLACK_WIDTH));
 			rect.setHeight(scale(BLACK_HEIGHT));
@@ -283,18 +293,24 @@ public class Keyboard extends Region {
 	}
 
 	private enum KeyType {
-		WHITE {
+		WHITE (WHITE_WIDTH) {
 			@Override
 			KeySkin newSkin(Keyboard kbd, Key control) {
 				return kbd.new WhiteKeySkin(control);
 			}
 		},
-		BLACK {
+		BLACK (BLACK_WIDTH) {
 			@Override
 			KeySkin newSkin(Keyboard kbd, Key control) {
 				return kbd.new BlackKeySkin(control);
 			}
 		};
+
+		final double width;
+
+		private KeyType(double width) {
+			this.width = width;
+		}
 
 		abstract KeySkin newSkin(Keyboard kbd, Key control);
 	}
