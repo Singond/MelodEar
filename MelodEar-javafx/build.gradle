@@ -16,4 +16,5 @@ sourceSets {
 
 eclipse {
 	project.name = 'MelodEar-javafx'
+	classpath.downloadJavadoc = true
 }
