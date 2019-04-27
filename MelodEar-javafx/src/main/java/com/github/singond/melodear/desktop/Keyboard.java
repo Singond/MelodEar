@@ -102,7 +102,8 @@ public class Keyboard extends Region {
 
 	public Keyboard() {
 		// TODO Enable setting custom range
-		construct(Pitch.G4, Pitch.E6);
+		construct(Pitch.G4, Pitch.DS6);
+		getStyleClass().add("piano-keyboard");
 	}
 
 	private void construct(Pitch low, Pitch high) {
@@ -178,6 +179,11 @@ public class Keyboard extends Region {
 		}
 	}
 
+	@Override
+	public String getUserAgentStylesheet() {
+		return Keyboard.class.getResource("keyboard.css").toExternalForm();
+	}
+
 	private class Key extends Control {
 		private final Pitch pitch;
 		private final KeySkin skin;
@@ -196,6 +202,8 @@ public class Keyboard extends Region {
 			this.relocate(scale(offset(leftExtent)), 0);
 			this.setSkin(skin);
 			this.setTooltip(new Tooltip(p.toString()));
+			getStyleClass().add("piano-key");
+			getStyleClass().add("piano-key-" + keydef.type.name);
 		}
 
 		@Override
@@ -293,13 +301,13 @@ public class Keyboard extends Region {
 	}
 
 	private enum KeyType {
-		WHITE (WHITE_WIDTH) {
+		WHITE ("white", WHITE_WIDTH) {
 			@Override
 			KeySkin newSkin(Keyboard kbd, Key control) {
 				return kbd.new WhiteKeySkin(control);
 			}
 		},
-		BLACK (BLACK_WIDTH) {
+		BLACK ("black", BLACK_WIDTH) {
 			@Override
 			KeySkin newSkin(Keyboard kbd, Key control) {
 				return kbd.new BlackKeySkin(control);
@@ -307,8 +315,10 @@ public class Keyboard extends Region {
 		};
 
 		final double width;
+		final String name;
 
-		private KeyType(double width) {
+		private KeyType(String name, double width) {
+			this.name = name;
 			this.width = width;
 		}
 
