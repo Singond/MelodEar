@@ -204,6 +204,7 @@ public class Keyboard extends Region {
 			this.setTooltip(new Tooltip(p.toString()));
 			setPrefWidth(scale(keydef.type.width));
 			setPrefHeight(scale(keydef.type.height));
+			this.setOnMouseClicked((e) -> logger.debug("Clicked {}", pitch));
 			getStyleClass().add("piano-key");
 			getStyleClass().add("piano-key-" + keydef.type.name);
 		}
