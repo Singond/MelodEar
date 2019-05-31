@@ -17,13 +17,8 @@ import com.github.singond.music.Pitches;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Skin;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
 
 public class Keyboard extends Region {
 
@@ -186,7 +181,6 @@ public class Keyboard extends Region {
 
 	private class Key extends Button {
 		private final Pitch pitch;
-//		private final KeySkin skin;
 		private double leftExtent;
 		private double rightExtent;
 
@@ -198,9 +192,7 @@ public class Keyboard extends Region {
 			}
 			leftExtent = p.octave() * OCTAVE_WIDTH + keydef.offset;
 			rightExtent = leftExtent + keydef.type.width;
-//			this.skin = keydef.newSkin(Keyboard.this, this);
 			this.relocate(scale(offset(leftExtent)), 0);
-//			this.setSkin(skin);
 			this.setTooltip(new Tooltip(p.toString()));
 			setPrefWidth(scale(keydef.type.width));
 			setPrefHeight(scale(keydef.type.height));
@@ -215,80 +207,6 @@ public class Keyboard extends Region {
 		}
 	}
 
-	private interface KeySkin extends Skin<Key> {
-	}
-
-	private static abstract class AbstractKeySkin implements KeySkin {
-		protected final Key control;
-		protected Node root;
-
-		protected static final Paint BORDER_COLOR = Color.gray(0.6);
-
-		public AbstractKeySkin(Key control) {
-			this.control = control;
-		}
-
-		@Override
-		public Key getSkinnable() {
-			return control;
-		}
-
-		@Override
-		public Node getNode() {
-//			if (root == null)
-			return root = draw();
-//			return root;
-		}
-
-		protected abstract Node draw();
-
-		@Override
-		public void dispose() {
-			// TODO Auto-generated method stub
-		}
-
-	}
-
-	private class WhiteKeySkin extends AbstractKeySkin implements KeySkin {
-
-		public WhiteKeySkin(Key control) {
-			super(control);
-		}
-
-		@Override
-		protected final Node draw() {
-//			logger.debug("Creating skin for key {}", control);
-			Rectangle rect = new Rectangle();
-			rect.setWidth(scale(WHITE_WIDTH));
-			rect.setHeight(scale(WHITE_HEIGHT));
-			rect.setFill(Color.WHITE);
-			rect.setStroke(BORDER_COLOR);
-			rect.setStrokeType(StrokeType.INSIDE);
-			rect.setOnMousePressed((e) -> logger.debug("Clicked {}", control));
-			return rect;
-		}
-	}
-
-	private class BlackKeySkin extends AbstractKeySkin implements KeySkin {
-
-		public BlackKeySkin(Key control) {
-			super(control);
-		}
-
-		@Override
-		protected final Node draw() {
-//			logger.debug("Creating skin for key {}", control);
-			Rectangle rect = new Rectangle();
-			rect.setWidth(scale(BLACK_WIDTH));
-			rect.setHeight(scale(BLACK_HEIGHT));
-			rect.setFill(Color.BLACK);
-			rect.setStroke(BORDER_COLOR);
-			rect.setStrokeType(StrokeType.INSIDE);
-			rect.setOnMousePressed((e) -> logger.debug("Clicked {}", control));
-			return rect;
-		}
-	}
-
 	private static class KeyDef {
 		final double offset;
 		final KeyType type;
@@ -297,25 +215,11 @@ public class Keyboard extends Region {
 			this.offset = offset;
 			this.type = type;
 		}
-
-		KeySkin newSkin(Keyboard kbd, Key control) {
-			return type.newSkin(kbd, control);
-		}
 	}
 
 	private enum KeyType {
-		WHITE ("white", WHITE_WIDTH, WHITE_HEIGHT) {
-			@Override
-			KeySkin newSkin(Keyboard kbd, Key control) {
-				return kbd.new WhiteKeySkin(control);
-			}
-		},
-		BLACK ("black", BLACK_WIDTH, BLACK_HEIGHT) {
-			@Override
-			KeySkin newSkin(Keyboard kbd, Key control) {
-				return kbd.new BlackKeySkin(control);
-			}
-		};
+		WHITE ("white", WHITE_WIDTH, WHITE_HEIGHT),
+		BLACK ("black", BLACK_WIDTH, BLACK_HEIGHT);
 
 		final double width;
 		final double height;
@@ -326,7 +230,5 @@ public class Keyboard extends Region {
 			this.width = width;
 			this.height = height;
 		}
-
-		abstract KeySkin newSkin(Keyboard kbd, Key control);
 	}
 }
