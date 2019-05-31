@@ -202,6 +202,8 @@ public class Keyboard extends Region {
 			this.relocate(scale(offset(leftExtent)), 0);
 //			this.setSkin(skin);
 			this.setTooltip(new Tooltip(p.toString()));
+			setPrefWidth(scale(keydef.type.width));
+			setPrefHeight(scale(keydef.type.height));
 			getStyleClass().add("piano-key");
 			getStyleClass().add("piano-key-" + keydef.type.name);
 		}
@@ -301,13 +303,13 @@ public class Keyboard extends Region {
 	}
 
 	private enum KeyType {
-		WHITE ("white", WHITE_WIDTH) {
+		WHITE ("white", WHITE_WIDTH, WHITE_HEIGHT) {
 			@Override
 			KeySkin newSkin(Keyboard kbd, Key control) {
 				return kbd.new WhiteKeySkin(control);
 			}
 		},
-		BLACK ("black", BLACK_WIDTH) {
+		BLACK ("black", BLACK_WIDTH, BLACK_HEIGHT) {
 			@Override
 			KeySkin newSkin(Keyboard kbd, Key control) {
 				return kbd.new BlackKeySkin(control);
@@ -315,11 +317,13 @@ public class Keyboard extends Region {
 		};
 
 		final double width;
+		final double height;
 		final String name;
 
-		private KeyType(String name, double width) {
+		private KeyType(String name, double width, double height) {
 			this.name = name;
 			this.width = width;
+			this.height = height;
 		}
 
 		abstract KeySkin newSkin(Keyboard kbd, Key control);
