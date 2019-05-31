@@ -192,11 +192,11 @@ public class Keyboard extends Region {
 			}
 			leftExtent = p.octave() * OCTAVE_WIDTH + keydef.offset;
 			rightExtent = leftExtent + keydef.type.width;
-			this.relocate(scale(offset(leftExtent)), 0);
-			this.setTooltip(new Tooltip(p.toString()));
 			setPrefWidth(scale(keydef.type.width));
 			setPrefHeight(scale(keydef.type.height));
-			this.setOnMouseClicked((e) -> logger.debug("Clicked {}", pitch));
+			relocate(scale(offset(leftExtent)), 0);
+			setTooltip(new Tooltip(p.toString()));
+			setOnMouseClicked((e) -> logger.debug("Clicked {}", pitch));
 			getStyleClass().add("piano-key");
 			getStyleClass().add("piano-key-" + keydef.type.name);
 		}
