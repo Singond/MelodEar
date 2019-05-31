@@ -16,7 +16,7 @@ import com.github.singond.music.Pitches;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Control;
+import javafx.scene.control.Button;
 import javafx.scene.control.Skin;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Region;
@@ -184,9 +184,9 @@ public class Keyboard extends Region {
 		return Keyboard.class.getResource("keyboard.css").toExternalForm();
 	}
 
-	private class Key extends Control {
+	private class Key extends Button {
 		private final Pitch pitch;
-		private final KeySkin skin;
+//		private final KeySkin skin;
 		private double leftExtent;
 		private double rightExtent;
 
@@ -198,9 +198,9 @@ public class Keyboard extends Region {
 			}
 			leftExtent = p.octave() * OCTAVE_WIDTH + keydef.offset;
 			rightExtent = leftExtent + keydef.type.width;
-			this.skin = keydef.newSkin(Keyboard.this, this);
+//			this.skin = keydef.newSkin(Keyboard.this, this);
 			this.relocate(scale(offset(leftExtent)), 0);
-			this.setSkin(skin);
+//			this.setSkin(skin);
 			this.setTooltip(new Tooltip(p.toString()));
 			getStyleClass().add("piano-key");
 			getStyleClass().add("piano-key-" + keydef.type.name);
