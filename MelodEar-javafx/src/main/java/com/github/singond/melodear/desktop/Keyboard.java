@@ -95,10 +95,23 @@ public class Keyboard extends Region {
 	private Key highestKey;
 	private double leftEdge;
 
+	private KeyboardListener listener = NullListener.INSTANCE;
+
 	public Keyboard() {
 		// TODO Enable setting custom range
 		construct(Pitch.G4, Pitch.DS6);
 		getStyleClass().add("piano-keyboard");
+		// A dummy listener for testing
+		setListener(new KeyboardListener() {
+
+			@Override
+			public void keyDown(Pitch pitch) {
+				logger.debug("Pressed {}", pitch);
+			}
+
+			@Override
+			public void keyUp(Pitch pitch) {}
+		});
 	}
 
 	private void construct(Pitch low, Pitch high) {
@@ -196,7 +209,8 @@ public class Keyboard extends Region {
 			setPrefHeight(scale(keydef.type.height));
 			relocate(scale(offset(leftExtent)), 0);
 			setTooltip(new Tooltip(p.toString()));
-			setOnMouseClicked((e) -> logger.debug("Clicked {}", pitch));
+			setOnMousePressed((e) -> listener.keyDown(pitch));
+			setOnMouseReleased((e) -> listener.keyUp(pitch));
 			getStyleClass().add("piano-key");
 			getStyleClass().add("piano-key-" + keydef.type.name);
 		}
@@ -230,5 +244,32 @@ public class Keyboard extends Region {
 			this.width = width;
 			this.height = height;
 		}
+	}
+
+	public final void setListener(KeyboardListener listener) {
+		if (listener == null) {
+			throw new NullPointerException("A listener cannot be null");
+		}
+		this.listener = listener;
+	}
+
+	public final void removeListener() {
+		this.listener = NullListener.INSTANCE;
+	}
+
+	/**
+	 * A default listener with no-op actions.
+	 */
+	private static class NullListener implements KeyboardListener {
+
+		/** The sole instance. */
+		private static final NullListener INSTANCE = new NullListener();
+
+		@Override
+		public void keyDown(Pitch pitch) {}
+
+		@Override
+		public void keyUp(Pitch pitch) {}
+
 	}
 }
