@@ -4,8 +4,7 @@
 }
 
 .piano-keyboard .piano-key {
-	-fx-background-radius: 0 0 8px 8px;
-	-fx-border-radius: 0 0 8px 8px;
+	-fx-background-insets: 0;
 	-fx-border-width: 1px;
 	-fx-border-color: grey;
 }
@@ -15,7 +14,17 @@
 }
 .piano-keyboard .piano-key-white {
 	-fx-background-color: white;
+	-fx-background-radius: 0 0 8px 8px;
+	-fx-border-radius: 0 0 8px 8px;
+}
+.piano-keyboard .piano-key-white:hover {
+	-fx-background-color: #dddddd;
 }
 .piano-keyboard .piano-key-black {
 	-fx-background-color: black;
+	-fx-background-radius: 0 0 6px 6px;
+	-fx-border-radius: 0 0 6px 6px;
+}
+.piano-keyboard .piano-key-black:hover {
+	-fx-background-color: #404040;
 }
