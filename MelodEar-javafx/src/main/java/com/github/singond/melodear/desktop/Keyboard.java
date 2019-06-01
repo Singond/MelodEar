@@ -16,14 +16,9 @@ import com.github.singond.music.Pitches;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Control;
-import javafx.scene.control.Skin;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
 
 public class Keyboard extends Region {
 
@@ -100,9 +95,23 @@ public class Keyboard extends Region {
 	private Key highestKey;
 	private double leftEdge;
 
+	private KeyboardListener listener = NullListener.INSTANCE;
+
 	public Keyboard() {
 		// TODO Enable setting custom range
-		construct(Pitch.G4, Pitch.E6);
+		construct(Pitch.G4, Pitch.DS6);
+		getStyleClass().add("piano-keyboard");
+		// A dummy listener for testing
+		setListener(new KeyboardListener() {
+
+			@Override
+			public void keyDown(Pitch pitch) {
+				logger.debug("Pressed {}", pitch);
+			}
+
+			@Override
+			public void keyUp(Pitch pitch) {}
+		});
 	}
 
 	private void construct(Pitch low, Pitch high) {
@@ -178,9 +187,13 @@ public class Keyboard extends Region {
 		}
 	}
 
-	private class Key extends Control {
+	@Override
+	public String getUserAgentStylesheet() {
+		return Keyboard.class.getResource("keyboard.css").toExternalForm();
+	}
+
+	private class Key extends Button {
 		private final Pitch pitch;
-		private final KeySkin skin;
 		private double leftExtent;
 		private double rightExtent;
 
@@ -192,89 +205,19 @@ public class Keyboard extends Region {
 			}
 			leftExtent = p.octave() * OCTAVE_WIDTH + keydef.offset;
 			rightExtent = leftExtent + keydef.type.width;
-			this.skin = keydef.newSkin(Keyboard.this, this);
-			this.relocate(scale(offset(leftExtent)), 0);
-			this.setSkin(skin);
-			this.setTooltip(new Tooltip(p.toString()));
+			setPrefWidth(scale(keydef.type.width));
+			setPrefHeight(scale(keydef.type.height));
+			relocate(scale(offset(leftExtent)), 0);
+			setTooltip(new Tooltip(p.toString()));
+			setOnMousePressed((e) -> listener.keyDown(pitch));
+			setOnMouseReleased((e) -> listener.keyUp(pitch));
+			getStyleClass().add("piano-key");
+			getStyleClass().add("piano-key-" + keydef.type.name);
 		}
 
 		@Override
 		public String toString() {
 			return pitch.toString();
-		}
-	}
-
-	private interface KeySkin extends Skin<Key> {
-	}
-
-	private static abstract class AbstractKeySkin implements KeySkin {
-		protected final Key control;
-		protected Node root;
-
-		protected static final Paint BORDER_COLOR = Color.gray(0.6);
-
-		public AbstractKeySkin(Key control) {
-			this.control = control;
-		}
-
-		@Override
-		public Key getSkinnable() {
-			return control;
-		}
-
-		@Override
-		public Node getNode() {
-//			if (root == null)
-			return root = draw();
-//			return root;
-		}
-
-		protected abstract Node draw();
-
-		@Override
-		public void dispose() {
-			// TODO Auto-generated method stub
-		}
-
-	}
-
-	private class WhiteKeySkin extends AbstractKeySkin implements KeySkin {
-
-		public WhiteKeySkin(Key control) {
-			super(control);
-		}
-
-		@Override
-		protected final Node draw() {
-//			logger.debug("Creating skin for key {}", control);
-			Rectangle rect = new Rectangle();
-			rect.setWidth(scale(WHITE_WIDTH));
-			rect.setHeight(scale(WHITE_HEIGHT));
-			rect.setFill(Color.WHITE);
-			rect.setStroke(BORDER_COLOR);
-			rect.setStrokeType(StrokeType.INSIDE);
-			rect.setOnMousePressed((e) -> logger.debug("Clicked {}", control));
-			return rect;
-		}
-	}
-
-	private class BlackKeySkin extends AbstractKeySkin implements KeySkin {
-
-		public BlackKeySkin(Key control) {
-			super(control);
-		}
-
-		@Override
-		protected final Node draw() {
-//			logger.debug("Creating skin for key {}", control);
-			Rectangle rect = new Rectangle();
-			rect.setWidth(scale(BLACK_WIDTH));
-			rect.setHeight(scale(BLACK_HEIGHT));
-			rect.setFill(Color.BLACK);
-			rect.setStroke(BORDER_COLOR);
-			rect.setStrokeType(StrokeType.INSIDE);
-			rect.setOnMousePressed((e) -> logger.debug("Clicked {}", control));
-			return rect;
 		}
 	}
 
@@ -286,32 +229,47 @@ public class Keyboard extends Region {
 			this.offset = offset;
 			this.type = type;
 		}
-
-		KeySkin newSkin(Keyboard kbd, Key control) {
-			return type.newSkin(kbd, control);
-		}
 	}
 
 	private enum KeyType {
-		WHITE (WHITE_WIDTH) {
-			@Override
-			KeySkin newSkin(Keyboard kbd, Key control) {
-				return kbd.new WhiteKeySkin(control);
-			}
-		},
-		BLACK (BLACK_WIDTH) {
-			@Override
-			KeySkin newSkin(Keyboard kbd, Key control) {
-				return kbd.new BlackKeySkin(control);
-			}
-		};
+		WHITE ("white", WHITE_WIDTH, WHITE_HEIGHT),
+		BLACK ("black", BLACK_WIDTH, BLACK_HEIGHT);
 
 		final double width;
+		final double height;
+		final String name;
 
-		private KeyType(double width) {
+		private KeyType(String name, double width, double height) {
+			this.name = name;
 			this.width = width;
+			this.height = height;
 		}
+	}
 
-		abstract KeySkin newSkin(Keyboard kbd, Key control);
+	public final void setListener(KeyboardListener listener) {
+		if (listener == null) {
+			throw new NullPointerException("A listener cannot be null");
+		}
+		this.listener = listener;
+	}
+
+	public final void removeListener() {
+		this.listener = NullListener.INSTANCE;
+	}
+
+	/**
+	 * A default listener with no-op actions.
+	 */
+	private static class NullListener implements KeyboardListener {
+
+		/** The sole instance. */
+		private static final NullListener INSTANCE = new NullListener();
+
+		@Override
+		public void keyDown(Pitch pitch) {}
+
+		@Override
+		public void keyUp(Pitch pitch) {}
+
 	}
 }
