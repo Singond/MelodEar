@@ -8,14 +8,14 @@
 <?import com.github.singond.melodear.desktop.Keyboard?>
 
 <VBox fx:controller="com.github.singond.melodear.desktop.MainView"
-          xmlns:fx="http://javafx.com/fxml"
-          alignment="center">
+		xmlns:fx="http://javafx.com/fxml"
+		alignment="center">
 	<padding>
 		<Insets top="25" right="25" bottom="10" left="25" />
 	</padding>
 
 	<Text text="MelodEar" id="title"/>
-	
-	<Keyboard id="keyboard"/>
+
+	<Keyboard id="keyboard" from="A0" to="C8"/>
 
 </VBox>

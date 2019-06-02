@@ -20,7 +20,7 @@ allprojects {
 		mavenLocal()
 		jcenter()
 	}
-	ext.versions = ['music': '0.4.0']
+	ext.versions = ['music': '0.5.0']
 }
 
 repositories {
@@ -28,9 +28,9 @@ repositories {
 }
 
 dependencies {
-	compile group: 'com.github.singond', name: 'com.github.singond.music',
+	compile group: 'com.github.singond', name: 'music',
 			version: "${versions.music}", changing: true
-	compile group: 'com.github.singond', name: 'com.github.singond.music',
+	compile group: 'com.github.singond', name: 'music',
 			classifier: 'javadoc', version: "${versions.music}", changing: true
 	compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.25'
 

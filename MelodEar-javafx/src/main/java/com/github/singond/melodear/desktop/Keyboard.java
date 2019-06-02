@@ -14,6 +14,8 @@ import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchClass;
 import com.github.singond.music.Pitches;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -89,8 +91,10 @@ public class Keyboard extends Region {
 
 	private static Logger logger = LogManager.getLogger(Keyboard.class);
 
-	private Pitch lowestPitch;
-	private Pitch highestPitch;
+	private ObjectProperty<Pitch> lowestPitch
+			= new SimpleObjectProperty<>(Pitch.C4);
+	private ObjectProperty<Pitch> highestPitch
+			= new SimpleObjectProperty<>(Pitch.C5);
 	private Key lowestKey;
 	private Key highestKey;
 	private double leftEdge;
@@ -98,8 +102,8 @@ public class Keyboard extends Region {
 	private KeyboardListener listener = NullListener.INSTANCE;
 
 	public Keyboard() {
-		// TODO Enable setting custom range
-		construct(Pitch.G4, Pitch.DS6);
+		lowestPitch.addListener(o -> construct());
+		highestPitch.addListener(o -> construct());
 		getStyleClass().add("piano-keyboard");
 		// A dummy listener for testing
 		setListener(new KeyboardListener() {
@@ -114,16 +118,74 @@ public class Keyboard extends Region {
 		});
 	}
 
+	/**
+	 * Returns the value of the {@code from} property.
+	 *
+	 * @return the value of the property
+	 */
+	public Pitch getFrom() {
+		return lowestPitch.get();
+	}
+
+	/**
+	 * Sets the value of the {@code from} property.
+	 *
+	 * @param pitch the new value of the property
+	 */
+	public void setFrom(Pitch pitch) {
+		lowestPitch.set(pitch);
+	}
+
+	/**
+	 * Returns the {@code from} property.
+	 *
+	 * @return the property itself
+	 */
+	public ObjectProperty<Pitch> fromProperty() {
+		return lowestPitch;
+	}
+
+	/**
+	 * Returns the value of the {@code to} property.
+	 *
+	 * @return the value of the property
+	 */
+	public Pitch getTo() {
+		return highestPitch.get();
+	}
+
+	/**
+	 * Sets the value of the {@code to} property.
+	 *
+	 * @param pitch the new value of the property
+	 */
+	public void setTo(Pitch pitch) {
+		highestPitch.set(pitch);
+	}
+
+	/**
+	 * Returns the {@code to} property.
+	 *
+	 * @return the property itself
+	 */
+	public ObjectProperty<Pitch> toProperty() {
+		return highestPitch;
+	}
+
+	private void construct() {
+		construct(lowestPitch.get(), highestPitch.get());
+	}
+
 	private void construct(Pitch low, Pitch high) {
-		this.lowestPitch = low;
-		this.highestPitch = high;
+		if (logger.isDebugEnabled()) {
+			logger.debug("Building keyboard from {} to {}", low, high);
+		}
 		KeyDef lowDef = KEY_DEFS.get(low.pitchClass());
 		this.leftEdge = lowDef.offset + low.octave() * OCTAVE_WIDTH;
 		List<Key> whites = new ArrayList<>();
 		List<Key> blacks = new ArrayList<>();
 		Key lowKey = null, highKey = null;
-		for(Pitch p : Pitches.allBetween(
-				lowestPitch, highestPitch, PITCH_CLASSES)) {
+		for(Pitch p : Pitches.allBetween(low, high, PITCH_CLASSES)) {
 			KeyDef def = KEY_DEFS.get(p.pitchClass());
 			Key key = new Key(p);
 			switch (def.type) {
