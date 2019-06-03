@@ -16,6 +16,6 @@
 
 	<Text text="MelodEar" id="title"/>
 
-	<Keyboard id="keyboard" from="A0" to="C8"/>
+	<Keyboard id="keyboard" from="C3" to="C6"/>
 
 </VBox>
