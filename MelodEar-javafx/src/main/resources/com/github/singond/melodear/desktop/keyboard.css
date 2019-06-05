@@ -27,8 +27,8 @@
 		derive(bkey, -100%),
 		derive(bkey, 30%) derive(bkey, -100%) derive(bkey, 40%) derive(bkey, 80%),
 		bkey derive(bkey, 15%) derive(bkey, 20%) derive(bkey, 40%);
-	-fx-border-width: 0 1px 1px 1px, 1px, 0 2px 0 2px;
-	-fx-border-insets: 0, 0 1px 1px 1px, 0 2px 5px 2px;
+	-fx-border-width: 0 3px 3px 3px, 1px, 0 2px 0 2px;
+	-fx-border-insets: 0, 0 3px 3px 3px, 0 4px 7px 4px;
 	-fx-border-radius: 0 0 6px 6px, 0 0 5px 5px, 0;
 }
 .piano-keyboard .piano-key-black:hover {
