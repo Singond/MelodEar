@@ -95,6 +95,7 @@ public class Keyboard extends Region {
 			= new SimpleObjectProperty<>(Pitch.C4);
 	private ObjectProperty<Pitch> highestPitch
 			= new SimpleObjectProperty<>(Pitch.C5);
+
 	private Key lowestKey;
 	private Key highestKey;
 	private double leftEdge;
@@ -102,8 +103,8 @@ public class Keyboard extends Region {
 	private KeyboardListener listener = NullListener.INSTANCE;
 
 	public Keyboard() {
-		lowestPitch.addListener(o -> construct());
-		highestPitch.addListener(o -> construct());
+		lowestPitch.addListener(o -> {logger.debug("Setting low key");});
+		highestPitch.addListener(o -> {logger.debug("Setting high key");});
 		getStyleClass().add("piano-keyboard");
 		// A dummy listener for testing
 		setListener(new KeyboardListener() {
@@ -172,11 +173,29 @@ public class Keyboard extends Region {
 		return highestPitch;
 	}
 
-	private void construct() {
-		construct(lowestPitch.get(), highestPitch.get());
+	/**
+	 * Indicates that the current layout is valid.
+	 *
+	 * @return {@code true} if the current keys on the keyboard match the
+	 *         pitch range given by {@code from} and {@code to} properties
+	 */
+	private boolean valid() {
+		return lowestKey != null && lowestPitch != null
+				&& lowestKey.pitch.equals(lowestPitch.get())
+				&& highestKey != null && highestPitch != null
+				&& highestKey.pitch.equals(highestPitch.get());
 	}
 
-	private void construct(Pitch low, Pitch high) {
+	/**
+	 * Ensures the child nodes are up to date.
+	 */
+	private void updateLayout() {
+		if (!valid()) {
+			layoutKeys(lowestPitch.get(), highestPitch.get());
+		}
+	}
+
+	private void layoutKeys(Pitch low, Pitch high) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Building keyboard from {} to {}", low, high);
 		}
@@ -205,7 +224,7 @@ public class Keyboard extends Region {
 				highKey = key;
 			}
 		}
-		ObservableList<Node> children = getChildren();
+		ObservableList<Node> children = super.getChildren();
 		children.clear();
 		children.addAll(whites);
 		children.addAll(blacks);
@@ -227,6 +246,7 @@ public class Keyboard extends Region {
 
 	@Override
 	protected double computeMinWidth(double h) {
+		updateLayout();
 		double w = totalKeysWidth();
 		logger.debug("Min width = {}", w);
 		return w;
@@ -234,9 +254,26 @@ public class Keyboard extends Region {
 
 	@Override
 	protected double computePrefWidth(double h) {
+		updateLayout();
 		double w = totalKeysWidth();
 		logger.debug("Pref width = {}", w);
 		return w;
+	}
+
+	@Override
+	protected double computeMinHeight(double w) {
+		updateLayout();
+		double h = keysHeight();
+		logger.debug("Min height = {}", h);
+		return h;
+	}
+
+	@Override
+	protected double computePrefHeight(double w) {
+		updateLayout();
+		double h = keysHeight();
+		logger.debug("Pref height = {}", h);
+		return h;
 	}
 
 	private double totalKeysWidth() {
@@ -247,6 +284,16 @@ public class Keyboard extends Region {
 			double right = highestKey.rightExtent;
 			return scale(right - left);
 		}
+	}
+
+	private double keysHeight() {
+		return scale(WHITE_HEIGHT);
+	}
+
+	@Override
+	protected void layoutChildren() {
+		updateLayout();
+		super.layoutChildren();
 	}
 
 	@Override
@@ -260,6 +307,9 @@ public class Keyboard extends Region {
 		private double rightExtent;
 
 		Key(Pitch p) {
+			if (p == null) {
+				throw new NullPointerException("Key pitch must not be null");
+			}
 			this.pitch = p;
 			KeyDef keydef = KEY_DEFS.get(p.pitchClass());
 			if (keydef == null) {
