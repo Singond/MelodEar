@@ -7,14 +7,12 @@
 <?import javafx.scene.text.*?>
 <?import com.github.singond.melodear.desktop.Keyboard?>
 
-<VBox fx:controller="com.github.singond.melodear.desktop.MainView"
+<VBox fx:controller="com.github.singond.melodear.desktop.piano.PianoController"
 		xmlns:fx="http://javafx.com/fxml"
 		alignment="center">
 	<padding>
 		<Insets top="25" right="25" bottom="25" left="25" />
 	</padding>
-
-	<Text text="MelodEar" id="title"/>
 
 	<Keyboard id="keyboard" from="C3" to="C6"/>
 

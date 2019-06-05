@@ -1,9 +1,0 @@
-.root {
-	-fx-background-color: linear-gradient(to bottom, darkblue, mediumblue);
-}
-
-#title {
-	-fx-font-size: 32px;
-	-fx-font-family: "Arial Black";
-	-fx-fill: white;
-}
