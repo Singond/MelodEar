@@ -246,7 +246,6 @@ public class Keyboard extends Region {
 
 	@Override
 	protected double computeMinWidth(double h) {
-		updateLayout();
 		double w = totalKeysWidth();
 		logger.debug("Min width = {}", w);
 		return w;
@@ -254,7 +253,6 @@ public class Keyboard extends Region {
 
 	@Override
 	protected double computePrefWidth(double h) {
-		updateLayout();
 		double w = totalKeysWidth();
 		logger.debug("Pref width = {}", w);
 		return w;
@@ -262,7 +260,6 @@ public class Keyboard extends Region {
 
 	@Override
 	protected double computeMinHeight(double w) {
-		updateLayout();
 		double h = keysHeight();
 		logger.debug("Min height = {}", h);
 		return h;
@@ -270,20 +267,34 @@ public class Keyboard extends Region {
 
 	@Override
 	protected double computePrefHeight(double w) {
-		updateLayout();
 		double h = keysHeight();
 		logger.debug("Pref height = {}", h);
 		return h;
 	}
 
+	/*
+	 * XXX: Calling 'new Key(Pitch)' while computing dimensions causes
+	 * the height used in VBox layout to be slightly less than the actual
+	 * computed height. Have absolutely no idea why.
+	 */
+
 	private double totalKeysWidth() {
-		if (lowestKey == null || highestKey == null) {
-			return 0;
-		} else {
-			double left = lowestKey.leftExtent;
-			double right = highestKey.rightExtent;
-			return scale(right - left);
-		}
+//		updateLayout();
+//		if (lowestKey == null || highestKey == null) {
+//			return 0;
+//		} else {
+//			double left = lowestKey.leftExtent;
+//			double right = highestKey.rightExtent;
+//			return scale(right - left);
+//		}
+		Pitch p = lowestPitch.get();
+		KeyDef keydef = KEY_DEFS.get(p.pitchClass());
+		double leftExtent = p.octave() * OCTAVE_WIDTH + keydef.offset;
+		p = highestPitch.get();
+		keydef = KEY_DEFS.get(p.pitchClass());
+		double rightExtent = p.octave() * OCTAVE_WIDTH + keydef.offset;
+		rightExtent += keydef.type.width;
+		return scale(rightExtent - leftExtent);
 	}
 
 	private double keysHeight() {
