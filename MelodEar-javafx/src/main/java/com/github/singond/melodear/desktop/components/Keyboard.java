@@ -1,4 +1,4 @@
-package com.github.singond.melodear.desktop;
+package com.github.singond.melodear.desktop.components;
 
 import java.util.ArrayList;
 import java.util.HashMap;

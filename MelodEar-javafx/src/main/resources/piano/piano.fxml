@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import com.github.singond.melodear.desktop.Keyboard?>
+<?import com.github.singond.melodear.desktop.components.Keyboard?>
 
 <VBox fx:controller="com.github.singond.melodear.desktop.piano.PianoController"
 		xmlns:fx="http://javafx.com/fxml"
