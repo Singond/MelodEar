@@ -36,6 +36,7 @@ public class MidiDevices {
 		MidiDevice device = MidiSystem.getMidiDevice(deviceInfo);
 		Soundbank sb = null;
 		if (device instanceof Synthesizer) {
+			System.out.println("The device is a synthesizer: prompting to change soundbank");
 //			Synthesizer synth = (Synthesizer) device;
 			System.out.println("Enter path to sound font file:");
 			String fileString = scanner.nextLine();
@@ -56,6 +57,8 @@ public class MidiDevices {
 			} else {
 				System.out.println("Not changing soundbank");
 			}
+		} else {
+			System.out.println("The device is not a synthesizer: using default soundbank");
 		}
 		Sequencer seq = MidiSystem.getSequencer();
 		int tempo = 120;
@@ -68,14 +71,14 @@ public class MidiDevices {
 		device.close();
 		scanner.close();
     }
-	
+
 	private static Sequence scale() throws InvalidMidiDataException {
 		int channel = 0;
 		int velocity = 93;
-		
+
 		Sequence sequence = new Sequence(Sequence.PPQ, 60);
 		Track tr0 = sequence.createTrack();
-		
+
 		int step = 60;
 		for (int i = 0; i < 8; i++) {
 			if (i == 3 || i == 7) {
@@ -86,10 +89,10 @@ public class MidiDevices {
     		tr0.add(new MidiEvent(new ShortMessage(NOTE_ON, channel, step, velocity), 60*i));
     		tr0.add(new MidiEvent(new ShortMessage(NOTE_OFF, channel, step, velocity), 60*(i+1)));
 		}
-		
+
 		return sequence;
 	}
-	
+
 	private static void displayInstruments(Soundbank sb) {
 		Instrument[] instruments = sb.getInstruments();
 		System.out.println("Instruments available in " + sb.getName() + ":");
