@@ -15,6 +15,9 @@ public class KeyboardAudio implements KeyboardListener {
 	private MidiAudioDevice audio;
 
 	public KeyboardAudio(MidiAudioDevice audio) {
+		if (audio == null) {
+			throw new NullPointerException("Audio device must not be null");
+		}
 		this.audio = audio;
 	}
 

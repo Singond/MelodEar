@@ -3,6 +3,7 @@
 bin/
 build/
 
+*.md.backup
 .classpath
 .project
 local.properties

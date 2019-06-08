@@ -1,5 +1,6 @@
 package com.github.singond.melodear.desktop;
 
+import javax.inject.Inject;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
@@ -17,8 +18,14 @@ public class MidiAudioDevice {
 
 	private Receiver receiver;
 
-	public MidiAudioDevice() throws MidiUnavailableException {
-		receiver = MidiSystem.getReceiver();
+	@Inject
+	public MidiAudioDevice() {
+		try {
+			receiver = MidiSystem.getReceiver();
+		} catch (MidiUnavailableException e) {
+			logger.error("Error obtaining MIDI receiver from system", e);
+			throw new RuntimeException("Error constructing MidiAudioDevice", e);
+		}
 	}
 
 	/**
