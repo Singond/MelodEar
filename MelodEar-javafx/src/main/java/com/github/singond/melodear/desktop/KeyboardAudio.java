@@ -12,9 +12,9 @@ public class KeyboardAudio implements KeyboardListener {
 
 	private static Logger logger = LogManager.getLogger(KeyboardAudio.class);
 
-	private MidiAudioDevice audio;
+	private AudioDevice audio;
 
-	public KeyboardAudio(MidiAudioDevice audio) {
+	public KeyboardAudio(AudioDevice audio) {
 		if (audio == null) {
 			throw new NullPointerException("Audio device must not be null");
 		}

@@ -1,6 +1,5 @@
 package com.github.singond.melodear.desktop;
 
-import javax.inject.Inject;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
@@ -12,20 +11,14 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.singond.music.Pitch;
 
-public class MidiAudioDevice {
+public class MidiAudioDevice implements AudioDevice {
 
 	private static Logger logger = LogManager.getLogger(MidiAudioDevice.class);
 
 	private Receiver receiver;
 
-	@Inject
-	public MidiAudioDevice() {
-		try {
-			receiver = MidiSystem.getReceiver();
-		} catch (MidiUnavailableException e) {
-			logger.error("Error obtaining MIDI receiver from system", e);
-			throw new RuntimeException("Error constructing MidiAudioDevice", e);
-		}
+	public MidiAudioDevice() throws MidiUnavailableException {
+		receiver = MidiSystem.getReceiver();
 	}
 
 	/**
@@ -36,6 +29,7 @@ public class MidiAudioDevice {
 	 *
 	 * @param pitch the pitch of the note to be played
 	 */
+	@Override
 	public void playNote(Pitch pitch) throws InvalidMidiDataException {
 		int channel = 0;
 		int velocity = 93;
@@ -50,6 +44,7 @@ public class MidiAudioDevice {
 	 *
 	 * @param pitch the pitch of the note to be stopped
 	 */
+	@Override
 	public void stopNote(Pitch pitch) throws InvalidMidiDataException {
 		int channel = 0;
 		int velocity = 93;
