@@ -8,6 +8,12 @@ import org.apache.logging.log4j.Logger;
 import com.github.singond.melodear.desktop.components.KeyboardListener;
 import com.github.singond.music.Pitch;
 
+/**
+ * Sound module for the piano keyboard which captures key strokes
+ * and plays sounds in response.
+ *
+ * @author Singon
+ */
 public class KeyboardAudio implements KeyboardListener {
 
 	private static Logger logger = LogManager.getLogger(KeyboardAudio.class);
