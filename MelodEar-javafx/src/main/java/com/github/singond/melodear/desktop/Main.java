@@ -10,12 +10,6 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	private static MidiAudioDevice audio;
-
-	public static MidiAudioDevice getAudioDevice() {
-		return audio;
-	}
-
 	@Override
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("MelodEar");

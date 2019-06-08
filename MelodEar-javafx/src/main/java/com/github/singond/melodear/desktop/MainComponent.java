@@ -8,4 +8,5 @@ import dagger.Component;
 public interface MainComponent {
 
 	PianoController getPianoController();
+
 }
