@@ -8,7 +8,7 @@ import dagger.Component;
 
 @Singleton
 @Component(modules = AudioModule.class)
-public interface MainComponent {
+interface MainComponent {
 
 	PianoController getPianoController();
 
