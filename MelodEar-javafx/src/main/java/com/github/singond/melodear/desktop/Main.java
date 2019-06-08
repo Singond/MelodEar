@@ -19,12 +19,12 @@ public class Main extends Application {
 
 	private Scene pianoScene() throws IOException {
 		FXMLLoader loader = new FXMLLoader(
-				getClass().getResource("/piano/piano.fxml"));
+				getClass().getResource("/view/piano/piano.fxml"));
 		loader.setController(DaggerMainComponent.create().getPianoController());
 		Parent root = loader.load();
 
 		Scene scene = new Scene(root);
-		scene.getStylesheets().add("/piano/piano.css");
+		scene.getStylesheets().add("/view/piano/piano.css");
 		return scene;
 	}
 
