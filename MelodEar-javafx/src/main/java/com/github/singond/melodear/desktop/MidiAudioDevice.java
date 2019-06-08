@@ -23,8 +23,8 @@ public class MidiAudioDevice {
 		try {
 			receiver = MidiSystem.getReceiver();
 		} catch (MidiUnavailableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error obtaining MIDI receiver from system", e);
+			throw new RuntimeException("Error constructing MidiAudioDevice", e);
 		}
 	}
 
