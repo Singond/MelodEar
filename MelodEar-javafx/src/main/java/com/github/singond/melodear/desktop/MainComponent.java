@@ -10,6 +10,7 @@ import dagger.Component;
 @Component(modules = AudioModule.class)
 interface MainComponent {
 
+	MainController getMainController();
 	PianoController getPianoController();
 
 }

@@ -13,11 +13,18 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+	private MainComponent component;
+
+	public Main() {
+		component = DaggerMainComponent.create();
+	}
+
 	@Override
 	public void start(Stage stage) throws Exception {
 		URL fxml = getClass().getResource("/view/main.fxml");
 		ResourceBundle bundle = ResourceBundle.getBundle("loc/main");
 		FXMLLoader loader = new FXMLLoader(fxml, bundle);
+		loader.setController(component.getMainController());
 		BorderPane root = (BorderPane) loader.load();
 		Scene scene = new Scene(root);
 		root.setCenter(pianoPane());
@@ -30,7 +37,7 @@ public class Main extends Application {
 	private Parent pianoPane() throws IOException {
 		FXMLLoader loader = new FXMLLoader(
 				getClass().getResource("/view/piano/piano.fxml"));
-		loader.setController(DaggerMainComponent.create().getPianoController());
+		loader.setController(component.getPianoController());
 		Parent pane = loader.load();
 		pane.getStylesheets().add("/view/piano/piano.css");
 		return pane;

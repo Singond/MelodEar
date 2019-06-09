@@ -3,13 +3,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.control.MenuItem?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1"
-	minWidth="600" minHeight="400">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="main"
+		minWidth="600" minHeight="400">
 	<top>
 		<MenuBar fx:id="menubar">
 			<menus>
-				<Menu text="%menu.main"/>
+				<Menu text="%menu.main">
+					<items>
+						<MenuItem text="%menu.main.exit" onAction="#exit"/>
+					</items>
+				</Menu>
 			</menus>
 		</MenuBar>
 	</top>
