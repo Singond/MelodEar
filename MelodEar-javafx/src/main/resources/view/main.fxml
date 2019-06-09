@@ -9,7 +9,7 @@
 	<top>
 		<MenuBar fx:id="menubar">
 			<menus>
-				<Menu text="File"/>
+				<Menu text="%menu.main"/>
 			</menus>
 		</MenuBar>
 	</top>

@@ -1,6 +1,8 @@
 package com.github.singond.melodear.desktop;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,8 +15,9 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		FXMLLoader loader = new FXMLLoader(
-				getClass().getResource("/view/main.fxml"));
+		URL fxml = getClass().getResource("/view/main.fxml");
+		ResourceBundle bundle = ResourceBundle.getBundle("loc/main");
+		FXMLLoader loader = new FXMLLoader(fxml, bundle);
 		BorderPane root = (BorderPane) loader.load();
 		Scene scene = new Scene(root);
 		root.setCenter(pianoPane());
