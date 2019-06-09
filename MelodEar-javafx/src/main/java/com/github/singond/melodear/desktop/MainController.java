@@ -8,9 +8,13 @@ import javax.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.github.singond.melodear.desktop.piano.PianoController;
+
+import dagger.Lazy;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
@@ -24,7 +28,32 @@ public class MainController {
 	private BorderPane main;
 
 	@Inject
+	Lazy<PianoController> pianoController;
+
+	@Inject
 	public MainController() {}
+
+	public void initialize() {
+		// Activate the default pane
+		switchToPiano();
+	}
+
+	public void switchToPiano() {
+		try {
+			main.setCenter(pianoPane());
+		} catch (IOException e) {
+			logger.error("Error loading piano pane", e);
+		}
+	}
+
+	private final Parent pianoPane() throws IOException {
+		FXMLLoader loader = new FXMLLoader(
+				getClass().getResource("/view/piano/piano.fxml"));
+		loader.setController(pianoController.get());
+		Parent pane = loader.load();
+		pane.getStylesheets().add("/view/piano/piano.css");
+		return pane;
+	}
 
 	public void openSettings() {
 		logger.debug("Opening settings");
@@ -43,8 +72,7 @@ public class MainController {
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error loading settings", e);
 		}
 	}
 
