@@ -32,6 +32,9 @@ public class MainController {
 	Lazy<PianoController> pianoController;
 
 	@Inject
+	Lazy<SettingsController> settingsController;
+
+	@Inject
 	public MainController() {}
 
 	public void initialize() {
@@ -60,6 +63,7 @@ public class MainController {
 		logger.debug("Opening settings");
 		FXMLLoader loader = new FXMLLoader(
 				getClass().getResource("/view/settings.fxml"));
+		loader.setController(settingsController);
 		try {
 			Dialog<ButtonType> dlg = new Dialog<>();
 			DialogPane dlgPane = loader.load();
