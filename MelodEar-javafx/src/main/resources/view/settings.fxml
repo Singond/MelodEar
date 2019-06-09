@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<DialogPane xmlns:fx="http://javafx.com/fxml/1">
+	<content>
+		<Label text="xxx"/>
+	</content>
+	<buttonTypes>
+		<ButtonType fx:constant="APPLY"/>
+		<ButtonType fx:constant="CANCEL"/>
+	</buttonTypes>
+</DialogPane>
