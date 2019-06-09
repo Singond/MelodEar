@@ -9,11 +9,16 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+/**
+ * The main class of the application.
+ *
+ * @author Singon
+ */
+public class MelodEarApplication extends Application {
 
 	private MainComponent component;
 
-	public Main() {
+	public MelodEarApplication() {
 		component = DaggerMainComponent.create();
 	}
 
