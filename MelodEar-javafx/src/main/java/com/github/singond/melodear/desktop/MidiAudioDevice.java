@@ -18,6 +18,7 @@ public class MidiAudioDevice implements AudioDevice {
 	private Receiver receiver;
 
 	public MidiAudioDevice() throws MidiUnavailableException {
+		logger.debug("Obtaining default MIDI receiver from system");
 		receiver = MidiSystem.getReceiver();
 	}
 
