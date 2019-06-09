@@ -5,12 +5,6 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.github.singond.melodear.desktop.piano.PianoController;
-
-import dagger.Lazy;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +13,13 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.layout.BorderPane;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import dagger.Lazy;
+
+import com.github.singond.melodear.desktop.piano.PianoController;
 
 public class MainController {
 

@@ -2,14 +2,14 @@ package com.github.singond.melodear.desktop.piano;
 
 import javax.inject.Inject;
 
+import javafx.fxml.FXML;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.github.singond.melodear.desktop.AudioDevice;
 import com.github.singond.melodear.desktop.KeyboardAudio;
 import com.github.singond.melodear.desktop.components.Keyboard;
-
-import javafx.fxml.FXML;
 
 public class PianoController {
 

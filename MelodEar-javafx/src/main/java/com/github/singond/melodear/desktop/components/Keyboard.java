@@ -7,13 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.github.singond.music.Pitch;
-import com.github.singond.music.PitchClass;
-import com.github.singond.music.Pitches;
-
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -21,6 +14,13 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Region;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.github.singond.music.Pitch;
+import com.github.singond.music.PitchClass;
+import com.github.singond.music.Pitches;
 
 public class Keyboard extends Region {
 
