@@ -1,7 +1,7 @@
 package com.github.singond.melodear.desktop;
 
 /**
- * Specifies how long does a keyboard key produce sound after being clicked.
+ * Specifies how long a keyboard key produces sound after being clicked.
  * <p>
  * More precisely, this specifies when the Note Off event occurs after
  * pressing a key. Note that a Note Off event may not be the only way
