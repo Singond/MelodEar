@@ -2,6 +2,7 @@ package com.github.singond.melodear.desktop;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 import javax.inject.Inject;
 
@@ -62,11 +63,13 @@ public class MainController {
 	public void openSettings() {
 		logger.debug("Opening settings");
 		FXMLLoader loader = new FXMLLoader(
-				getClass().getResource("/view/settings.fxml"));
+				getClass().getResource("/view/settings.fxml"),
+				ResourceBundle.getBundle("loc/settings"));
 		loader.setController(settingsController.get());
 		try {
 			Dialog<ButtonType> dlg = new Dialog<>();
 			DialogPane dlgPane = loader.load();
+			dlgPane.getStylesheets().add("/view/settings.css");
 			dlg.setDialogPane(dlgPane);
 			Optional<ButtonType> result = dlg.showAndWait();
 			if (result.isPresent()) {

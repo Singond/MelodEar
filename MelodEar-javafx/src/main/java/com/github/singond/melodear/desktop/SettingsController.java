@@ -4,7 +4,7 @@ import javax.inject.Inject;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
+import javafx.scene.control.ChoiceBox;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +17,7 @@ public class SettingsController {
 	KeyboardSettings kbdSettings;
 
 	@FXML
-	ListView<KeyPlayDuration> keyDuration;
+	ChoiceBox<KeyPlayDuration> keyDuration;
 
 	@Inject
 	public SettingsController() {
@@ -26,10 +26,11 @@ public class SettingsController {
 
 	public void initialize() {
 		logger.debug("Initializing key duration list");
-		keyDuration.setItems(FXCollections.observableArrayList(
-				KeyPlayDuration.values()));
 		kbdSettings.keyDurationProperty().bind(
 				keyDuration.getSelectionModel().selectedItemProperty());
+		keyDuration.setItems(FXCollections.observableArrayList(
+				KeyPlayDuration.values()));
+		keyDuration.setConverter(new KeyPlayDuration.Converter());
 	}
 
 }

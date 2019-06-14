@@ -1,5 +1,9 @@
 package com.github.singond.melodear.desktop;
 
+import java.util.ResourceBundle;
+
+import javafx.util.StringConverter;
+
 /**
  * Specifies how long a keyboard key produces sound after being clicked.
  * <p>
@@ -19,4 +23,22 @@ public enum KeyPlayDuration {
 	/** The note sounds indefinitely long. */
 	INDEFINITE;
 
+	public static class Converter extends StringConverter<KeyPlayDuration> {
+
+		private static final ResourceBundle bundle
+				= ResourceBundle.getBundle("loc/settings");
+
+		@Override
+		public String toString(KeyPlayDuration obj) {
+			return bundle.getString(
+					"keyboard.key_duration." + obj.toString().toLowerCase());
+		}
+
+		@Override
+		public KeyPlayDuration fromString(String string) {
+			// TODO Will not be called?
+			throw new UnsupportedOperationException();
+		}
+
+	}
 }
