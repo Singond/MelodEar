@@ -26,3 +26,7 @@ eclipse {
 	project.name = 'MelodEar-javafx'
 	classpath.downloadJavadoc = true
 }
+
+tasks.eclipse.dependsOn tasks.eclipseJdt
+tasks.eclipseJdt.dependsOn tasks.eclipseFactorypath
+tasks.eclipseFactorypath.dependsOn tasks.eclipseJdtApt

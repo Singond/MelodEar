@@ -14,10 +14,8 @@ them.
 
 ### Eclipse
 Annotation processors are not properly integrated with the Buildship plugin,
-therefore one has to run some Gradle tasks manually before updating the
-Eclipse project configuration.
-
-In the `MelodEar-javafx` project directory, run:
+therefore one has to run some Gradle tasks before updating the Eclipse
+project configuration. These tasks are:
 
 ```
 gradle eclipseJdtApt
@@ -25,5 +23,9 @@ gradle eclipseFactoryPath
 gradle eclipseJdt
 ```
 
-Then update the Eclipse project normally, either by `gradle eclipse`
-or by clicking _Gradle_ > _Refresh Gradle Project_ within Eclipse.
+These tasks are now dependencies of the `eclipse` task and are expected
+to be executed automatically by Buildship.
+
+#### Known issues
+Currently, editing source files causes errors to be displayed in the
+Project View, which can be removed by cleaning the project.
