@@ -34,12 +34,6 @@ public class KeyboardAudio implements KeyboardListener {
 		this.settings = settings;
 	}
 
-	public void initialize() {
-		logger.debug("Initializing KeyboardAudio");
-		settings.keyDurationProperty().addListener((v, o, n)
-				-> logger.debug("Key duration changed to {}", n));
-	}
-
 	@Override
 	public void keyDown(Pitch pitch) {
 		try {
