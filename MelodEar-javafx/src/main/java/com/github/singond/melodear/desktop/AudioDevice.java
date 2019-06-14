@@ -25,4 +25,9 @@ public interface AudioDevice {
 	 */
 	void stopNote(Pitch pitch) throws InvalidMidiDataException;
 
+	/**
+	 * Stops playing all notes.
+	 */
+	public void stopAllNotes() throws InvalidMidiDataException;
+
 }

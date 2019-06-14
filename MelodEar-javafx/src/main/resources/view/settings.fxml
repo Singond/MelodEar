@@ -6,7 +6,7 @@
 
 <DialogPane xmlns:fx="http://javafx.com/fxml/1">
 	<content>
-		<Label text="xxx"/>
+		<ListView fx:id="keyDuration"/>
 	</content>
 	<buttonTypes>
 		<ButtonType fx:constant="APPLY"/>

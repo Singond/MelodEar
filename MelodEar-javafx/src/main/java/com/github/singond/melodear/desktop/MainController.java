@@ -63,7 +63,7 @@ public class MainController {
 		logger.debug("Opening settings");
 		FXMLLoader loader = new FXMLLoader(
 				getClass().getResource("/view/settings.fxml"));
-		loader.setController(settingsController);
+		loader.setController(settingsController.get());
 		try {
 			Dialog<ButtonType> dlg = new Dialog<>();
 			DialogPane dlgPane = loader.load();

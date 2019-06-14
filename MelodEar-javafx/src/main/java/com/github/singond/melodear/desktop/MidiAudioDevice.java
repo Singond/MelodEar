@@ -1,5 +1,7 @@
 package com.github.singond.melodear.desktop;
 
+import static javax.sound.midi.ShortMessage.CONTROL_CHANGE;
+
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
@@ -51,5 +53,10 @@ public class MidiAudioDevice implements AudioDevice {
 		int velocity = 93;
 		receiver.send(new ShortMessage(ShortMessage.NOTE_OFF, channel,
 				pitch.midiNumber(), velocity), -1);
+	}
+
+	@Override
+	public void stopAllNotes() throws InvalidMidiDataException {
+		receiver.send(new ShortMessage(CONTROL_CHANGE, 0x78, 0), -1);
 	}
 }
