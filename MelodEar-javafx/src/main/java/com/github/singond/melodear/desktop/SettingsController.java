@@ -26,6 +26,7 @@ public class SettingsController {
 
 	public void initialize() {
 		logger.debug("Initializing key duration list");
+		keyDuration.getSelectionModel().select(kbdSettings.getKeyDuration());
 		kbdSettings.keyDurationProperty().bind(
 				keyDuration.getSelectionModel().selectedItemProperty());
 		keyDuration.setItems(FXCollections.observableArrayList(
