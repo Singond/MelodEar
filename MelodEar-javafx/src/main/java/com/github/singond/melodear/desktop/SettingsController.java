@@ -9,6 +9,9 @@ import javafx.scene.control.ChoiceBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.github.singond.melodear.desktop.keyboard.KeyPlayDuration;
+import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
+
 public class SettingsController {
 
 	private static Logger logger = LogManager.getLogger(SettingsController.class);

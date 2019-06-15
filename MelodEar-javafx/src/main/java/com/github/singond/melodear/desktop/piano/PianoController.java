@@ -7,8 +7,8 @@ import javafx.fxml.FXML;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.singond.melodear.desktop.KeyboardAudio;
 import com.github.singond.melodear.desktop.components.Keyboard;
+import com.github.singond.melodear.desktop.keyboard.KeyboardAudio;
 
 public class PianoController {
 
