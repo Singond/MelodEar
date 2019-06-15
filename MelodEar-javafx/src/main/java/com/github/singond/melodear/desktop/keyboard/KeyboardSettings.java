@@ -19,6 +19,10 @@ public class KeyboardSettings {
 				logger.debug("Key duration changed from {} to {}", o, n));
 	}
 
+	public KeyboardSettings(KeyboardSettings src) {
+		copyFields(src, this);
+	}
+
 	public KeyPlayDuration getKeyDuration() {
 		return keyDuration.get();
 	}
@@ -31,4 +35,11 @@ public class KeyboardSettings {
 		return keyDuration;
 	}
 
+	private static void copyFields(KeyboardSettings src, KeyboardSettings tgt) {
+		tgt.keyDuration = new SimpleObjectProperty<>(src.keyDuration.get());
+	}
+
+	public void updateFrom(KeyboardSettings src) {
+		copyFields(src, this);
+	}
 }

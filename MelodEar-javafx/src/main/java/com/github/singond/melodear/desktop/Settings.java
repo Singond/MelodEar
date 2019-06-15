@@ -18,12 +18,25 @@ public class Settings {
 
 	private static Logger logger = LogManager.getLogger(Settings.class);
 
-	private KeyboardSettings keyboard;
+	private final KeyboardSettings keyboard;
 
 	@Inject
 	public Settings() {
 		logger.debug("Creating Settings");
 		keyboard = new KeyboardSettings();
+	}
+
+	/**
+	 * A copy constructor.
+	 *
+	 * @param src source object
+	 */
+	public Settings(Settings src) {
+		keyboard = new KeyboardSettings(src.keyboard);
+	}
+
+	public void updateFrom(Settings src) {
+		keyboard.updateFrom(src.keyboard);
 	}
 
 	/**
