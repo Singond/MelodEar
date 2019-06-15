@@ -1,15 +1,11 @@
 package com.github.singond.melodear.desktop.keyboard;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Singleton
 public class KeyboardSettings {
 
 	private static Logger logger = LogManager.getLogger(KeyboardSettings.class);
@@ -17,7 +13,6 @@ public class KeyboardSettings {
 	private ObjectProperty<KeyPlayDuration> keyDuration
 			= new SimpleObjectProperty<>(KeyPlayDuration.KEY_HELD);
 
-	@Inject
 	public KeyboardSettings() {
 		logger.debug("Creating KeyboardSettings");
 		keyDuration.addListener((v, o, n) ->

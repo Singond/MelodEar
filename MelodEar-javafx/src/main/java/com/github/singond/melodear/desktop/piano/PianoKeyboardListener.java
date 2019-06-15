@@ -3,15 +3,15 @@ package com.github.singond.melodear.desktop.piano;
 import javax.inject.Inject;
 
 import com.github.singond.melodear.desktop.AudioDevice;
+import com.github.singond.melodear.desktop.Settings;
 import com.github.singond.melodear.desktop.keyboard.AbstractKeyboardListener;
-import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
 import com.github.singond.music.Pitch;
 
 public class PianoKeyboardListener extends AbstractKeyboardListener {
 
 	@Inject
-	public PianoKeyboardListener(AudioDevice audio, KeyboardSettings settings) {
-		super(audio, settings);
+	public PianoKeyboardListener(AudioDevice audio, Settings settings) {
+		super(audio, settings.keyboard());
 	}
 
 	@Override

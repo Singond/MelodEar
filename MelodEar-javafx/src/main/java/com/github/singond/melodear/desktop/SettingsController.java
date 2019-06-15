@@ -10,14 +10,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.github.singond.melodear.desktop.keyboard.KeyPlayDuration;
-import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
 
 public class SettingsController {
 
 	private static Logger logger = LogManager.getLogger(SettingsController.class);
 
 	@Inject
-	KeyboardSettings kbdSettings;
+	Settings settings;
 
 	@FXML
 	ChoiceBox<KeyPlayDuration> keyDuration;
@@ -29,8 +28,9 @@ public class SettingsController {
 
 	public void initialize() {
 		logger.debug("Initializing key duration list");
-		keyDuration.getSelectionModel().select(kbdSettings.getKeyDuration());
-		kbdSettings.keyDurationProperty().bind(
+		keyDuration.getSelectionModel().select(
+				settings.keyboard().getKeyDuration());
+		settings.keyboard().keyDurationProperty().bind(
 				keyDuration.getSelectionModel().selectedItemProperty());
 		keyDuration.setItems(FXCollections.observableArrayList(
 				KeyPlayDuration.values()));

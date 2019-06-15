@@ -1,0 +1,38 @@
+package com.github.singond.melodear.desktop;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
+
+/**
+ * Root container of application settings.
+ *
+ * @author Singon
+ */
+@Singleton
+public class Settings {
+
+	private static Logger logger = LogManager.getLogger(Settings.class);
+
+	private KeyboardSettings keyboard;
+
+	@Inject
+	public Settings() {
+		logger.debug("Creating Settings");
+		keyboard = new KeyboardSettings();
+	}
+
+	/**
+	 * Returns the piano keyboard settings.
+	 *
+	 * @return shared settings for the piano keyboard
+	 */
+	public KeyboardSettings keyboard() {
+		return keyboard;
+	}
+
+}
