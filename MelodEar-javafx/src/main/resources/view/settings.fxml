@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<DialogPane xmlns:fx="http://javafx.com/fxml/1">
+<DialogPane xmlns:fx="http://javafx.com/fxml/1" fx:id="settingsDlg">
 	<content>
 		<GridPane styleClass="settings-form">
 			<Label text="%keyboard.key_duration" GridPane.rowIndex="0" GridPane.columnIndex="0">

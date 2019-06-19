@@ -10,7 +10,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.layout.BorderPane;
@@ -33,7 +32,7 @@ public class MainController {
 	Lazy<PianoController> pianoController;
 
 	@Inject
-	Lazy<SettingsController> settingsController;
+	Settings settings;
 
 	@Inject
 	public MainController() {}
@@ -65,20 +64,21 @@ public class MainController {
 		FXMLLoader loader = new FXMLLoader(
 				getClass().getResource("/view/settings.fxml"),
 				ResourceBundle.getBundle("loc/settings"));
-		loader.setController(settingsController.get());
+		loader.setController(new SettingsController(settings));
 		try {
-			Dialog<ButtonType> dlg = new Dialog<>();
+			Dialog<Settings> dlg = new Dialog<>();
 			DialogPane dlgPane = loader.load();
 			dlgPane.getStylesheets().add("/view/settings.css");
 			dlg.setDialogPane(dlgPane);
-			Optional<ButtonType> result = dlg.showAndWait();
-			if (result.isPresent()) {
-				if (result.get() == ButtonType.APPLY) {
-					logger.debug("Applying settings");
-				} else if (result.get() == ButtonType.CANCEL) {
-					logger.debug("Canceled");
-				}
-			}
+//			dlg.setResultConverter(t -> dlgPane.getS);
+			Optional<Settings> result = dlg.showAndWait();
+//			if (result.isPresent()) {
+//				if (result.get() == ButtonType.APPLY) {
+//					logger.debug("Applying settings");
+//				} else if (result.get() == ButtonType.CANCEL) {
+//					logger.debug("Canceled");
+//				}
+//			}
 		} catch (IOException e) {
 			logger.error("Error loading settings", e);
 		}

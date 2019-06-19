@@ -36,6 +36,7 @@ public class Settings {
 	}
 
 	public void updateFrom(Settings src) {
+		logger.debug("Updating settings from {}", src);
 		keyboard.updateFrom(src.keyboard);
 	}
 
