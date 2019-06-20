@@ -61,12 +61,13 @@ public class MainController {
 
 	public void openSettings() {
 		logger.debug("Opening settings");
+		ResourceBundle bundle = ResourceBundle.getBundle("loc/settings");
 		FXMLLoader loader = new FXMLLoader(
-				getClass().getResource("/view/settings.fxml"),
-				ResourceBundle.getBundle("loc/settings"));
+				getClass().getResource("/view/settings.fxml"), bundle);
 		loader.setController(new SettingsController(settings));
 		try {
 			Dialog<Settings> dlg = new Dialog<>();
+			dlg.setTitle(bundle.getString("title"));
 			DialogPane dlgPane = loader.load();
 			dlgPane.getStylesheets().add("/view/settings.css");
 			dlg.setDialogPane(dlgPane);
