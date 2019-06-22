@@ -20,6 +20,8 @@ import org.apache.logging.log4j.Logger;
 import dagger.Lazy;
 
 import com.github.singond.melodear.desktop.piano.PianoController;
+import com.github.singond.melodear.desktop.settings.Settings;
+import com.github.singond.melodear.desktop.settings.SettingsController;
 
 public class MainController {
 

@@ -1,4 +1,4 @@
-package com.github.singond.melodear.desktop;
+package com.github.singond.melodear.desktop.settings;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;

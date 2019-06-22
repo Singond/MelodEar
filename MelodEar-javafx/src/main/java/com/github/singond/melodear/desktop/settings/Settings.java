@@ -1,4 +1,4 @@
-package com.github.singond.melodear.desktop;
+package com.github.singond.melodear.desktop.settings;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
