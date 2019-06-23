@@ -4,13 +4,13 @@ import javax.inject.Inject;
 
 import com.github.singond.melodear.desktop.AudioDevice;
 import com.github.singond.melodear.desktop.keyboard.AbstractKeyboardListener;
-import com.github.singond.melodear.desktop.settings.Settings;
+import com.github.singond.melodear.desktop.settings.AllSettings;
 import com.github.singond.music.Pitch;
 
 public class PianoKeyboardListener extends AbstractKeyboardListener {
 
 	@Inject
-	public PianoKeyboardListener(AudioDevice audio, Settings settings) {
+	public PianoKeyboardListener(AudioDevice audio, AllSettings settings) {
 		super(audio, settings.keyboard());
 	}
 

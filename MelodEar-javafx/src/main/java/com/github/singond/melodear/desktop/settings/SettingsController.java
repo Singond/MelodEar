@@ -18,8 +18,8 @@ public class SettingsController {
 
 	private static Logger logger = LogManager.getLogger(SettingsController.class);
 
-	private Settings settings;
-	private Settings settingsNew;
+	private AllSettings settings;
+	private AllSettings settingsNew;
 
 	@FXML
 	DialogPane settingsDlg;
@@ -27,10 +27,10 @@ public class SettingsController {
 	@FXML
 	ChoiceBox<KeyPlayDuration> keyDuration;
 
-	public SettingsController(Settings settings) {
+	public SettingsController(AllSettings settings) {
 		logger.debug("Creating SettingsController");
 		this.settings = settings;
-		this.settingsNew = new Settings(settings);
+		this.settingsNew = new AllSettings(settings);
 	}
 
 	public void initialize() {

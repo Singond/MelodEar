@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 import dagger.Lazy;
 
 import com.github.singond.melodear.desktop.piano.PianoController;
-import com.github.singond.melodear.desktop.settings.Settings;
+import com.github.singond.melodear.desktop.settings.AllSettings;
 import com.github.singond.melodear.desktop.settings.SettingsController;
 
 public class MainController {
@@ -34,7 +34,7 @@ public class MainController {
 	Lazy<PianoController> pianoController;
 
 	@Inject
-	Settings settings;
+	AllSettings settings;
 
 	@Inject
 	public MainController() {}
@@ -68,13 +68,13 @@ public class MainController {
 				getClass().getResource("/view/settings.fxml"), bundle);
 		loader.setController(new SettingsController(settings));
 		try {
-			Dialog<Settings> dlg = new Dialog<>();
+			Dialog<AllSettings> dlg = new Dialog<>();
 			dlg.setTitle(bundle.getString("title"));
 			DialogPane dlgPane = loader.load();
 			dlgPane.getStylesheets().add("/view/settings.css");
 			dlg.setDialogPane(dlgPane);
 //			dlg.setResultConverter(t -> dlgPane.getS);
-			Optional<Settings> result = dlg.showAndWait();
+			Optional<AllSettings> result = dlg.showAndWait();
 //			if (result.isPresent()) {
 //				if (result.get() == ButtonType.APPLY) {
 //					logger.debug("Applying settings");
