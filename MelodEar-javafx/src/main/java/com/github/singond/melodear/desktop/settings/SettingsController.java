@@ -36,9 +36,6 @@ public class SettingsController {
 	@FXML
 	ListView<SettingsView<?>> sectionSelect;
 
-//	@FXML
-//	ChoiceBox<KeyPlayDuration> keyDuration;
-
 	public SettingsController(AllSettings settings) {
 		logger.debug("Creating SettingsController");
 		this.settings = settings;
@@ -67,13 +64,6 @@ public class SettingsController {
 				});
 
 		logger.debug("Initializing key duration list");
-//		keyDuration.getSelectionModel().select(
-//				settingsNew.keyboard().getKeyDuration());
-//		settingsNew.keyboard().keyDurationProperty().bind(
-//				keyDuration.getSelectionModel().selectedItemProperty());
-//		keyDuration.setItems(FXCollections.observableArrayList(
-//				KeyPlayDuration.values()));
-//		keyDuration.setConverter(new KeyPlayDuration.Converter());
 
 		EventHandler<? super ActionEvent> updater
 				= e -> settings.updateFrom(settingsNew);
