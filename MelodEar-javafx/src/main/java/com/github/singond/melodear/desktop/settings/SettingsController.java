@@ -34,7 +34,7 @@ public class SettingsController {
 	BorderPane settingsPane;
 
 	@FXML
-	ListView<SettingsView> sectionSelect;
+	ListView<SettingsView<?>> sectionSelect;
 
 	@FXML
 	ChoiceBox<KeyPlayDuration> keyDuration;
@@ -46,7 +46,7 @@ public class SettingsController {
 	}
 
 	public void initialize() {
-		ObservableList<SettingsView> sectionsObs
+		ObservableList<SettingsView<?>> sectionsObs
 				= FXCollections.observableArrayList(buildSections());
 		sectionSelect.setItems(sectionsObs);
 		sectionSelect.getSelectionModel().selectedItemProperty()
@@ -70,10 +70,9 @@ public class SettingsController {
 		applyBtn.addEventHandler(ActionEvent.ACTION, updater);
 	}
 
-	private List<SettingsView> buildSections() {
-		List<SettingsView> sections = new ArrayList<>();
-//		sections.add(new SettingsSection());
-//		sections.add(new SettingsSection());
+	private List<SettingsView<?>> buildSections() {
+		List<SettingsView<?>> sections = new ArrayList<>();
+//		sections.add(new KeyboardSettingsView());
 		return sections;
 	}
 }
