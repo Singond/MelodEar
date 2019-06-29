@@ -1,6 +1,10 @@
 package com.github.singond.melodear.desktop.settings;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -8,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.BorderPane;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +31,12 @@ public class SettingsController {
 	DialogPane settingsDlg;
 
 	@FXML
+	BorderPane settingsPane;
+
+	@FXML
+	ListView<SettingsView> sectionSelect;
+
+	@FXML
 	ChoiceBox<KeyPlayDuration> keyDuration;
 
 	public SettingsController(AllSettings settings) {
@@ -34,6 +46,15 @@ public class SettingsController {
 	}
 
 	public void initialize() {
+		ObservableList<SettingsView> sectionsObs
+				= FXCollections.observableArrayList(buildSections());
+		sectionSelect.setItems(sectionsObs);
+		sectionSelect.getSelectionModel().selectedItemProperty()
+				.addListener((v, o, n) -> {
+					logger.debug("Selected {}", n);
+					settingsPane.setCenter(n.getNode());
+				});
+
 		logger.debug("Initializing key duration list");
 		keyDuration.getSelectionModel().select(
 				settingsNew.keyboard().getKeyDuration());
@@ -49,4 +70,10 @@ public class SettingsController {
 		applyBtn.addEventHandler(ActionEvent.ACTION, updater);
 	}
 
+	private List<SettingsView> buildSections() {
+		List<SettingsView> sections = new ArrayList<>();
+//		sections.add(new SettingsSection());
+//		sections.add(new SettingsSection());
+		return sections;
+	}
 }

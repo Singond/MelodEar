@@ -6,14 +6,21 @@
 
 <DialogPane xmlns:fx="http://javafx.com/fxml/1" fx:id="settingsDlg">
 	<content>
-		<GridPane styleClass="settings-form">
-			<Label text="%keyboard.key_duration" GridPane.rowIndex="0" GridPane.columnIndex="0">
-				<tooltip>
-					<Tooltip text="%keyboard.key_duration.tt"/>
-				</tooltip>
-			</Label>
-			<ChoiceBox fx:id="keyDuration" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-		</GridPane>
+		<BorderPane fx:id="settingsPane">
+			<left>
+				<ListView fx:id="sectionSelect"/>
+			</left>
+			<center>
+				<GridPane styleClass="settings-form">
+					<Label text="%keyboard.key_duration" GridPane.rowIndex="0" GridPane.columnIndex="0">
+						<tooltip>
+							<Tooltip text="%keyboard.key_duration.tt"/>
+						</tooltip>
+					</Label>
+					<ChoiceBox fx:id="keyDuration" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+				</GridPane>
+			</center>
+		</BorderPane>
 	</content>
 	<buttonTypes>
 		<ButtonType fx:constant="APPLY"/>
