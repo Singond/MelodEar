@@ -12,9 +12,11 @@ import com.github.singond.melodear.desktop.settings.SettingsView;
 
 public class KeyboardSettingsView implements SettingsView<KeyboardSettings> {
 
+	private static final ResourceBundle bundle
+			= ResourceBundle.getBundle("loc/settings");
+
 	@Override
 	public Node getNode(AllSettings s) {
-		ResourceBundle bundle = ResourceBundle.getBundle("loc/settings");
 		FXMLLoader loader = new FXMLLoader(
 				getClass().getResource("/view/settings_keyboard.fxml"), bundle);
 		loader.setController(new KeyboardSettingsController(s.keyboard()));
@@ -25,6 +27,11 @@ public class KeyboardSettingsView implements SettingsView<KeyboardSettings> {
 		} catch (IOException e) {
 			throw new RuntimeException("Could not load view/settings_keyboard.fxml", e);
 		}
+	}
+
+	@Override
+	public String getName() {
+		return bundle.getString("keyboard.title");
 	}
 
 }

@@ -13,4 +13,10 @@ public interface SettingsView<T extends Settings> {
 	 */
 	Node getNode(AllSettings settingsObj);
 
+	/**
+	 * Returns the name of this settings section to be displayed in menu.
+	 *
+	 * @return user-friendly name of this settings section
+	 */
+	String getName();
 }

@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 
@@ -47,6 +48,17 @@ public class SettingsController {
 	public void initialize() {
 		ObservableList<SettingsView<?>> sectionsObs
 				= FXCollections.observableArrayList(buildSections());
+		sectionSelect.setCellFactory(v -> new ListCell<SettingsView<?>>() {
+			@Override
+			protected void updateItem(SettingsView<?> item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item != null) {
+					setText(item.getName());
+				} else {
+					setText("");
+				}
+			}
+		});
 		sectionSelect.setItems(sectionsObs);
 		sectionSelect.getSelectionModel().selectedItemProperty()
 				.addListener((v, o, n) -> {
