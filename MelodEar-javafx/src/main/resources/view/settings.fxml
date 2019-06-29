@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
 <DialogPane xmlns:fx="http://javafx.com/fxml/1" fx:id="settingsDlg">
 	<content>
-		<BorderPane fx:id="settingsPane">
+		<BorderPane fx:id="settingsPane" minWidth="800">
 			<left>
-				<ListView fx:id="sectionSelect"/>
+				<ListView fx:id="sectionSelect" styleClass="section-select"
+						prefWidth="200">
+					<BorderPane.margin>
+						<Insets right="16"/>
+					</BorderPane.margin>
+				</ListView>
 			</left>
-			<center>
-				<GridPane styleClass="settings-form">
-					<Label text="%keyboard.key_duration" GridPane.rowIndex="0" GridPane.columnIndex="0">
-						<tooltip>
-							<Tooltip text="%keyboard.key_duration.tt"/>
-						</tooltip>
-					</Label>
-					<ChoiceBox fx:id="keyDuration" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-				</GridPane>
-			</center>
 		</BorderPane>
 	</content>
 	<buttonTypes>
