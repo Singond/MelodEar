@@ -12,8 +12,17 @@ public class KeyboardSettings implements Settings {
 
 	private static Logger logger = LogManager.getLogger(KeyboardSettings.class);
 
+	/**
+	 * Duration of the note played after a key is pressed.
+	 */
 	private ObjectProperty<KeyPlayDuration> keyDuration
 			= new SimpleObjectProperty<>(KeyPlayDuration.KEY_HELD);
+
+	/**
+	 * Format of piano key label.
+	 */
+	private ObjectProperty<KeyLabelFormat> keyLabelFormat
+			= new SimpleObjectProperty<>(KeyLabelFormats.getDefaultFormat());
 
 	public KeyboardSettings() {
 		logger.debug("Creating KeyboardSettings");
@@ -37,8 +46,21 @@ public class KeyboardSettings implements Settings {
 		return keyDuration;
 	}
 
+	public KeyLabelFormat getKeyLabelFormat() {
+		return keyLabelFormat.get();
+	}
+
+	public void setKeyLabelFormat(KeyLabelFormat keyLabelFormat) {
+		this.keyLabelFormat.set(keyLabelFormat);
+	}
+
+	public ObjectProperty<KeyLabelFormat> keyLabelFormatProperty() {
+		return keyLabelFormat;
+	}
+
 	private static void copyFields(KeyboardSettings src, KeyboardSettings tgt) {
 		tgt.keyDuration = new SimpleObjectProperty<>(src.keyDuration.get());
+		tgt.keyLabelFormat = new SimpleObjectProperty<>(src.keyLabelFormat.get());
 	}
 
 	public void updateFrom(KeyboardSettings src) {
