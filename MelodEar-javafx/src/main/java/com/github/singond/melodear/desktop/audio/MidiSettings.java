@@ -22,7 +22,9 @@ public class MidiSettings implements Settings {
 	public MidiSettings() {
 		logger.debug("Creating MidiSettings");
 		synth.addListener((v, o, n) ->
-				logger.debug("Synthesizer changed from {} to {}", o, n));
+				logger.debug("Synthesizer changed from {} to {}",
+						o != null ? o.getDeviceInfo().getName() : "null",
+						n != null ? n.getDeviceInfo().getName() : "null"));
 	}
 
 	public MidiSettings(MidiSettings src) {
