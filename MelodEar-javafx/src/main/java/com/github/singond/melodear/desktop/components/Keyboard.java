@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchClass;
 import com.github.singond.music.Pitches;
+import com.github.singond.music.text.PitchFormats;
 
 public class Keyboard extends Region {
 
@@ -99,8 +100,11 @@ public class Keyboard extends Region {
 	private Key lowestKey;
 	private Key highestKey;
 	private double leftEdge;
+	private List<Key> keys = new ArrayList<>();
 
 	private KeyboardListener listener = NullListener.INSTANCE;
+
+	private KeyLabelFormat labelFormat = new DefaultKeyLabelFormat();
 
 	public Keyboard() {
 		lowestPitch.addListener(o -> {logger.debug("Setting low key");});
@@ -228,6 +232,9 @@ public class Keyboard extends Region {
 		children.clear();
 		children.addAll(whites);
 		children.addAll(blacks);
+		keys.clear();
+		keys.addAll(whites);
+		keys.addAll(blacks);
 		lowestKey = lowKey;
 		highestKey = highKey;
 	}
@@ -331,7 +338,7 @@ public class Keyboard extends Region {
 			setPrefWidth(scale(keydef.type.width));
 			setPrefHeight(scale(keydef.type.height));
 			relocate(scale(offset(leftExtent)), 0);
-			setTooltip(new Tooltip(p.toString()));
+			setTooltip(new Tooltip(labelFormat.formatLabel(p)));
 			setOnMousePressed((e) -> listener.keyDown(pitch));
 			setOnMouseReleased((e) -> listener.keyUp(pitch));
 			getStyleClass().add("piano-key");
@@ -380,6 +387,14 @@ public class Keyboard extends Region {
 		this.listener = NullListener.INSTANCE;
 	}
 
+	public final void setLabelFormat(KeyLabelFormat labelFormat) {
+		logger.debug("Setting key label format to {}", labelFormat);
+		this.labelFormat = labelFormat;
+		for (Key k : keys) {
+			k.setTooltip(new Tooltip(labelFormat.formatLabel(k.pitch)));
+		}
+	}
+
 	/**
 	 * A default listener with no-op actions.
 	 */
@@ -393,6 +408,15 @@ public class Keyboard extends Region {
 
 		@Override
 		public void keyUp(Pitch pitch) {}
+
+	}
+
+	private static class DefaultKeyLabelFormat implements KeyLabelFormat {
+
+		@Override
+		public String formatLabel(Pitch pitch) {
+			return PitchFormats.SCIENTIFIC.format(pitch).toString();
+		}
 
 	}
 }

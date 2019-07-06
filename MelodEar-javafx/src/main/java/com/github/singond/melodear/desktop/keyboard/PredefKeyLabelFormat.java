@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 import com.github.singond.music.Pitch;
 import com.github.singond.music.text.PitchFormat;
 
-public class PredefKeyLabelFormat implements KeyLabelFormat {
+public class PredefKeyLabelFormat implements NamedKeyLabelFormat {
 
 	private static final ResourceBundle bundle
 			= ResourceBundle.getBundle("loc/settings");
@@ -27,6 +27,11 @@ public class PredefKeyLabelFormat implements KeyLabelFormat {
 	@Override
 	public String formatLabel(Pitch pitch) {
 		return format.format(pitch).toString();
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s ('%s')", format, name);
 	}
 
 }

@@ -17,7 +17,7 @@ public class KeyboardSettingsController {
 	ChoiceBox<KeyPlayDuration> keyDuration;
 
 	@FXML
-	ChoiceBox<KeyLabelFormat> keyLabelFormat;
+	ChoiceBox<NamedKeyLabelFormat> keyLabelFormat;
 
 	public KeyboardSettingsController(KeyboardSettings settings) {
 		logger.debug("Creating KeyboardSettingsController");
@@ -41,6 +41,6 @@ public class KeyboardSettingsController {
 				keyLabelFormat.getSelectionModel().selectedItemProperty());
 		keyLabelFormat.setItems(FXCollections.observableArrayList(
 				KeyLabelFormats.getFormats()));
-		keyLabelFormat.setConverter(new KeyLabelFormat.Converter());
+		keyLabelFormat.setConverter(new NamedKeyLabelFormat.Converter());
 	}
 }

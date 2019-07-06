@@ -21,7 +21,7 @@ public class KeyboardSettings implements Settings {
 	/**
 	 * Format of piano key label.
 	 */
-	private ObjectProperty<KeyLabelFormat> keyLabelFormat
+	private ObjectProperty<NamedKeyLabelFormat> keyLabelFormat
 			= new SimpleObjectProperty<>(KeyLabelFormats.getDefaultFormat());
 
 	public KeyboardSettings() {
@@ -46,15 +46,15 @@ public class KeyboardSettings implements Settings {
 		return keyDuration;
 	}
 
-	public KeyLabelFormat getKeyLabelFormat() {
+	public NamedKeyLabelFormat getKeyLabelFormat() {
 		return keyLabelFormat.get();
 	}
 
-	public void setKeyLabelFormat(KeyLabelFormat keyLabelFormat) {
+	public void setKeyLabelFormat(NamedKeyLabelFormat keyLabelFormat) {
 		this.keyLabelFormat.set(keyLabelFormat);
 	}
 
-	public ObjectProperty<KeyLabelFormat> keyLabelFormatProperty() {
+	public ObjectProperty<NamedKeyLabelFormat> keyLabelFormatProperty() {
 		return keyLabelFormat;
 	}
 
@@ -63,7 +63,13 @@ public class KeyboardSettings implements Settings {
 		tgt.keyLabelFormat = new SimpleObjectProperty<>(src.keyLabelFormat.get());
 	}
 
+	private static void updateFields(KeyboardSettings src, KeyboardSettings tgt) {
+		tgt.keyDuration.set(src.keyDuration.get());
+		tgt.keyLabelFormat.set(src.keyLabelFormat.get());
+	}
+
 	public void updateFrom(KeyboardSettings src) {
-		copyFields(src, this);
+//		copyFields(src, this);
+		updateFields(src, this);
 	}
 }
