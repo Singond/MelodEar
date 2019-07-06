@@ -34,4 +34,9 @@ public class KeyboardSettingsView implements SettingsView<KeyboardSettings> {
 		return bundle.getString("keyboard.title");
 	}
 
+	@Override
+	public String toString() {
+		return "keyboard settings";
+	}
+
 }

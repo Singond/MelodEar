@@ -59,12 +59,10 @@ public class SettingsController {
 		sectionSelect.setItems(sectionsObs);
 		sectionSelect.getSelectionModel().selectedItemProperty()
 				.addListener((v, o, n) -> {
-					logger.debug("Selected {}", n);
+					logger.debug("Selected section: {}", n);
 					settingsPane.setCenter(n.getNode(settingsNew));
 				});
 		sectionSelect.getSelectionModel().select(0);
-
-		logger.debug("Initializing key duration list");
 
 		EventHandler<? super ActionEvent> updater
 				= e -> settings.updateFrom(settingsNew);
