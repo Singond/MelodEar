@@ -338,7 +338,7 @@ public class Keyboard extends Region {
 			setPrefWidth(scale(keydef.type.width));
 			setPrefHeight(scale(keydef.type.height));
 			relocate(scale(offset(leftExtent)), 0);
-			setTooltip(new Tooltip(labelFormat.formatLabel(p)));
+			setTooltip(makeTooltip(this));
 			setOnMousePressed((e) -> listener.keyDown(pitch));
 			setOnMouseReleased((e) -> listener.keyUp(pitch));
 			getStyleClass().add("piano-key");
@@ -376,6 +376,12 @@ public class Keyboard extends Region {
 		}
 	}
 
+	private final Tooltip makeTooltip(Key key) {
+		Tooltip tt = new Tooltip(labelFormat.formatLabel(key.pitch));
+		tt.getStyleClass().add("piano-key-tooltip");
+		return tt;
+	}
+
 	public final void setListener(KeyboardListener listener) {
 		if (listener == null) {
 			throw new NullPointerException("A listener cannot be null");
@@ -391,7 +397,7 @@ public class Keyboard extends Region {
 		logger.debug("Setting key label format to {}", labelFormat);
 		this.labelFormat = labelFormat;
 		for (Key k : keys) {
-			k.setTooltip(new Tooltip(labelFormat.formatLabel(k.pitch)));
+			k.setTooltip(makeTooltip(k));
 		}
 	}
 
