@@ -14,8 +14,7 @@ public class PredefKeyLabelFormat implements NamedKeyLabelFormat {
 	private final PitchFormat format;
 
 	public PredefKeyLabelFormat(String name, PitchFormat format) {
-//		this.name = bundle.getString(name);
-		this.name = name;
+		this.name = bundle.getString("keyboard.key_label_format." + name);
 		this.format = format;
 	}
 
