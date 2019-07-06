@@ -18,6 +18,7 @@ import javafx.scene.layout.BorderPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.github.singond.melodear.desktop.audio.MidiSettingsView;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettingsView;
 
 public class SettingsController {
@@ -73,6 +74,7 @@ public class SettingsController {
 	private List<SettingsView<?>> buildSections() {
 		List<SettingsView<?>> sections = new ArrayList<>();
 		sections.add(new KeyboardSettingsView());
+		sections.add(new MidiSettingsView());
 		return sections;
 	}
 }

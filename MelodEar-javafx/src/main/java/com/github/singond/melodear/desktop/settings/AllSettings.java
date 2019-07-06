@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.github.singond.melodear.desktop.audio.MidiSettings;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
 
 /**
@@ -20,10 +21,13 @@ public class AllSettings {
 
 	private final KeyboardSettings keyboard;
 
+	private final MidiSettings midi;
+
 	@Inject
 	public AllSettings() {
 		logger.debug("Creating AllSettings");
 		keyboard = new KeyboardSettings();
+		midi = new MidiSettings();
 	}
 
 	/**
@@ -33,11 +37,13 @@ public class AllSettings {
 	 */
 	public AllSettings(AllSettings src) {
 		keyboard = new KeyboardSettings(src.keyboard);
+		midi = new MidiSettings(src.midi);
 	}
 
 	public void updateFrom(AllSettings src) {
 		logger.debug("Updating settings from {}", src);
 		keyboard.updateFrom(src.keyboard);
+		midi.updateFrom(src.midi);
 	}
 
 	/**
@@ -47,6 +53,15 @@ public class AllSettings {
 	 */
 	public KeyboardSettings keyboard() {
 		return keyboard;
+	}
+
+	/**
+	 * Returns the MIDI settings.
+	 *
+	 * @return MIDI system settings
+	 */
+	public MidiSettings midi() {
+		return midi;
 	}
 
 }
