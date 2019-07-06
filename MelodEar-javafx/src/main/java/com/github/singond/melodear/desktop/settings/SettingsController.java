@@ -62,6 +62,7 @@ public class SettingsController {
 					logger.debug("Selected {}", n);
 					settingsPane.setCenter(n.getNode(settingsNew));
 				});
+		sectionSelect.getSelectionModel().select(0);
 
 		logger.debug("Initializing key duration list");
 
