@@ -1,1 +1,8 @@
 .section-select {}
+
+.settings-form {
+	-fx-hgap: 1em;
+}
+.settings-form ChoiceBox {
+	-fx-max-width: infinity;
+}
