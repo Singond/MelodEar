@@ -1,6 +1,6 @@
 package com.github.singond.melodear.desktop.audio;
 
-import javax.sound.midi.Synthesizer;
+import javax.sound.midi.MidiDevice;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -17,29 +17,27 @@ public class MidiSettings implements Settings {
 	/**
 	 * MIDI synthesizer to be used.
 	 */
-	private ObjectProperty<Synthesizer> synth = new SimpleObjectProperty<>();
+	private ObjectProperty<MidiDevice.Info> synth = new SimpleObjectProperty<>();
 
 	public MidiSettings() {
 		logger.debug("Creating MidiSettings");
 		synth.addListener((v, o, n) ->
-				logger.debug("Synthesizer changed from {} to {}",
-						o != null ? o.getDeviceInfo().getName() : "null",
-						n != null ? n.getDeviceInfo().getName() : "null"));
+				logger.debug("Synthesizer changed from {} to {}", o, n));
 	}
 
 	public MidiSettings(MidiSettings src) {
 		copyFields(src, this);
 	}
 
-	public Synthesizer getSynth() {
+	public MidiDevice.Info getSynth() {
 		return synth.get();
 	}
 
-	public void setSynth(Synthesizer synth) {
+	public void setSynth(MidiDevice.Info synth) {
 		this.synth.set(synth);
 	}
 
-	public ObjectProperty<Synthesizer> synthProperty() {
+	public ObjectProperty<MidiDevice.Info> synthProperty() {
 		return synth;
 	}
 
@@ -54,4 +52,5 @@ public class MidiSettings implements Settings {
 	public void updateFrom(MidiSettings src) {
 		updateFields(src, this);
 	}
+
 }

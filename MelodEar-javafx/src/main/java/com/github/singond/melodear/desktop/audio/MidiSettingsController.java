@@ -11,7 +11,6 @@ import javax.sound.midi.Synthesizer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -20,23 +19,21 @@ import org.apache.logging.log4j.Logger;
 
 public class MidiSettingsController {
 
-	private static Logger logger = LogManager.getLogger(MidiSettingsController.class);
+	private static Logger logger
+			= LogManager.getLogger(MidiSettingsController.class);
 
 	private final MidiSettings settings;
 
 	@FXML
-	TableView<Synthesizer> synth;
+	TableView<MidiDevice.Info> synth;
 	@FXML
-	TableColumn<Synthesizer, String> synthNameColumn;
+	TableColumn<MidiDevice.Info, String> synthNameColumn;
 	@FXML
-	TableColumn<Synthesizer, String> synthVendorColumn;
+	TableColumn<MidiDevice.Info, String> synthVendorColumn;
 	@FXML
-	TableColumn<Synthesizer, String> synthDescriptionColumn;
+	TableColumn<MidiDevice.Info, String> synthDescriptionColumn;
 	@FXML
-	TableColumn<Synthesizer, String> synthVersionColumn;
-
-	@FXML
-	ChoiceBox<Synthesizer> synth2;
+	TableColumn<MidiDevice.Info, String> synthVersionColumn;
 
 	public MidiSettingsController(MidiSettings settings) {
 		logger.debug("Creating MidiSettingsController");
@@ -44,34 +41,45 @@ public class MidiSettingsController {
 	}
 
 	public void initialize() {
-		logger.debug("Initializing synthesizer list");
+		logger.debug("Initializing MIDI settings");
+		initSynth();
+	}
 
-		// Synthesizer
+	private void initSynth() {
+		logger.debug("Initializing synthesizer list");
 		settings.synthProperty().bind(
 				synth.getSelectionModel().selectedItemProperty());
-		synth.setItems(FXCollections.observableArrayList(synthesizers()));
+		List<MidiDevice.Info> synths = synthesizers();
+		synth.setItems(FXCollections.observableArrayList(synths));
+
+		// Select current synthesizer
 		try (Synthesizer currentSynth = MidiSystem.getSynthesizer()) {
-			synth.getSelectionModel().select(currentSynth);
+			if (!synths.contains(currentSynth.getDeviceInfo())) {
+				logger.warn("List of synths does not contain the current one");
+			}
+			synth.getSelectionModel().select(currentSynth.getDeviceInfo());
 		} catch (MidiUnavailableException e) {
 			logger.error("Could not obtain current synthesizer", e);
 		}
+
+		// Set column values
 		synthNameColumn.setCellValueFactory(f -> new SimpleStringProperty(
-				f.getValue().getDeviceInfo().getName()));
+				f.getValue().getName()));
 		synthVendorColumn.setCellValueFactory(f -> new SimpleStringProperty(
-				f.getValue().getDeviceInfo().getVendor()));
+				f.getValue().getVendor()));
 		synthDescriptionColumn.setCellValueFactory(f -> new SimpleStringProperty(
-				f.getValue().getDeviceInfo().getDescription()));
+				f.getValue().getDescription()));
 		synthVersionColumn.setCellValueFactory(f -> new SimpleStringProperty(
-				f.getValue().getDeviceInfo().getVersion()));
+				f.getValue().getVersion()));
 	}
 
-	private List<Synthesizer> synthesizers() {
-		List<Synthesizer> result = new ArrayList<>();
+	private List<MidiDevice.Info> synthesizers() {
+		List<MidiDevice.Info> result = new ArrayList<>();
 		for (MidiDevice.Info info : MidiSystem.getMidiDeviceInfo()) {
 			logger.debug("MIDI device: {}", info);
 			try (MidiDevice device = MidiSystem.getMidiDevice(info)) {
 				if (device instanceof Synthesizer) {
-					result.add((Synthesizer) device);
+					result.add(info);
 				}
 			} catch (MidiUnavailableException e) {
 				logger.error("Could not obtain device " + info, e);
