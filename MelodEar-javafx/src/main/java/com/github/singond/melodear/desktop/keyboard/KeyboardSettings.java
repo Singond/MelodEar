@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.singond.melodear.desktop.settings.Settings;
 
-public class KeyboardSettings implements Settings {
+public class KeyboardSettings implements Settings<KeyboardSettings> {
 
 	private static Logger logger = LogManager.getLogger(KeyboardSettings.class);
 
@@ -30,8 +30,8 @@ public class KeyboardSettings implements Settings {
 				logger.debug("Key duration changed from {} to {}", o, n));
 	}
 
-	public KeyboardSettings(KeyboardSettings src) {
-		copyFields(src, this);
+	private KeyboardSettings(KeyboardSettings src) {
+		updateFields(src, this);
 	}
 
 	public KeyPlayDuration getKeyDuration() {
@@ -58,18 +58,18 @@ public class KeyboardSettings implements Settings {
 		return keyLabelFormat;
 	}
 
-	private static void copyFields(KeyboardSettings src, KeyboardSettings tgt) {
-		tgt.keyDuration = new SimpleObjectProperty<>(src.keyDuration.get());
-		tgt.keyLabelFormat = new SimpleObjectProperty<>(src.keyLabelFormat.get());
-	}
-
 	private static void updateFields(KeyboardSettings src, KeyboardSettings tgt) {
 		tgt.keyDuration.set(src.keyDuration.get());
 		tgt.keyLabelFormat.set(src.keyLabelFormat.get());
 	}
 
+	@Override
+	public KeyboardSettings copy() {
+		return new KeyboardSettings(this);
+	}
+
+	@Override
 	public void updateFrom(KeyboardSettings src) {
-//		copyFields(src, this);
 		updateFields(src, this);
 	}
 }

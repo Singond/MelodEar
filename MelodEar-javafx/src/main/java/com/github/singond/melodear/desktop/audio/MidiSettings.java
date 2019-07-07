@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.singond.melodear.desktop.settings.Settings;
 
-public final class MidiSettings implements Settings {
+public final class MidiSettings implements Settings<MidiSettings> {
 
 	private static Logger logger = LogManager.getLogger(MidiSettings.class);
 
@@ -34,8 +34,8 @@ public final class MidiSettings implements Settings {
 				logger.debug("Synthesizer changed from {} to {}", o, n));
 	}
 
-	public MidiSettings(MidiSettings src) {
-		copyFields(src, this);
+	private MidiSettings(MidiSettings src) {
+		updateFrom(src);
 	}
 
 	public MidiDevice.Info getSynth() {
@@ -86,16 +86,14 @@ public final class MidiSettings implements Settings {
 		return result;
 	}
 
-	private static void copyFields(MidiSettings src, MidiSettings tgt) {
-		tgt.synth = new SimpleObjectProperty<>(src.synth.get());
+	@Override
+	public MidiSettings copy() {
+		return new MidiSettings(this);
 	}
 
-	private static void updateFields(MidiSettings src, MidiSettings tgt) {
-		tgt.synth.set(src.synth.get());
-	}
-
-	public void updateFrom(MidiSettings src) {
-		updateFields(src, this);
+	@Override
+	public final void updateFrom(MidiSettings src) {
+		this.synth.set(src.synth.get());
 	}
 
 }

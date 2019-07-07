@@ -36,8 +36,8 @@ public class AllSettings {
 	 * @param src source object
 	 */
 	public AllSettings(AllSettings src) {
-		keyboard = new KeyboardSettings(src.keyboard);
-		midi = new MidiSettings(src.midi);
+		keyboard = src.keyboard.copy();
+		midi = src.midi.copy();
 	}
 
 	public void updateFrom(AllSettings src) {
