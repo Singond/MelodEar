@@ -10,12 +10,14 @@
 			<Tooltip text="%keyboard.key_duration.tt"/>
 		</tooltip>
 	</Label>
-	<ChoiceBox fx:id="keyDuration" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+	<ChoiceBox fx:id="keyDuration" styleClass="value,key-duration"
+			GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
 	<Label text="%keyboard.key_label_format" GridPane.rowIndex="1" GridPane.columnIndex="0">
 		<tooltip>
 			<Tooltip text="%keyboard.key_label_format.tt"/>
 		</tooltip>
 	</Label>
-	<ChoiceBox fx:id="keyLabelFormat" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+	<ChoiceBox fx:id="keyLabelFormat" styleClass="value,key-label-format"
+			GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 </GridPane>
