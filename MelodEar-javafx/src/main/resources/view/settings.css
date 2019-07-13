@@ -11,6 +11,6 @@
 	-fx-hgap: 1em;
 	-fx-vgap: 0.5em;
 }
-.settings-form ChoiceBox {
+.settings-form .value {
 	-fx-max-width: infinity;
 }

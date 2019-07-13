@@ -12,7 +12,7 @@
 		</tooltip>
 	</Label>
 	<TableView fx:id="synth" GridPane.rowIndex="0" GridPane.columnIndex="1"
-			styleClass="synth">
+			styleClass="value,synth">
 		<columns>
 			<TableColumn text="name" fx:id="synthNameColumn"/>
 			<TableColumn text="vendor" fx:id="synthVendorColumn"/>
@@ -26,7 +26,10 @@
 			<Tooltip text="%midi.soundbank.tt"/>
 		</tooltip>
 	</Label>
-	<TextField fx:id="soundbank" GridPane.rowIndex="1" GridPane.columnIndex="1"
-			styleClass="soundbank">
-	</TextField>
+	<HBox GridPane.rowIndex="1" GridPane.columnIndex="1"
+			styleClass="value,soundbank">
+		<TextField fx:id="soundbank" styleClass="soundbank-text"
+				HBox.hgrow="ALWAYS"/>
+		<Button text="%midi.soundbank.browseFile" styleClass="soundbank-file"/>
+	</HBox>
 </GridPane>
