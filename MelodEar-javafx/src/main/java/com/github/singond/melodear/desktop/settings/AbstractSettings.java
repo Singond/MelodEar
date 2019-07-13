@@ -3,6 +3,7 @@ package com.github.singond.melodear.desktop.settings;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 
 import javafx.beans.property.Property;
 
@@ -41,7 +42,7 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 				throw new AssertionError(
 						"Settings item found under different key from its own");
 			}
-			item.property().setValue(src.getItem(item.key()));
+			item.property().setValue(src.getItem(item.key()).valueCopy());
 		}
 	}
 
@@ -51,6 +52,8 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 
 		T value();
 
+		T valueCopy();
+
 		Property<T> property();
 
 	}
@@ -59,10 +62,19 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 
 		private final String key;
 		private final Property<T> value;
+		private Function<T, T> duplicator;
 
 		public BasicSettingsItem(String key, Property<T> valueProperty) {
 			this.key = key;
 			this.value = valueProperty;
+			this.duplicator = v -> v;
+		}
+
+		public BasicSettingsItem(String key, Property<T> valueProperty,
+				Function<T, T> valueDuplicator) {
+			this.key = key;
+			this.value = valueProperty;
+			this.duplicator = valueDuplicator;
 		}
 
 		@Override
@@ -73,6 +85,11 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 		@Override
 		public T value() {
 			return value.getValue();
+		}
+
+		@Override
+		public T valueCopy() {
+			return duplicator.apply(value.getValue());
 		}
 
 		@Override
