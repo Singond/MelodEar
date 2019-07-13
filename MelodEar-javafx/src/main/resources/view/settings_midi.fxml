@@ -6,6 +6,12 @@
 <?import javafx.scene.text.*?>
 
 <GridPane xmlns:fx="http://javafx.com/fxml/1" styleClass="settings-form">
+
+	<columnConstraints>
+		<ColumnConstraints/>
+		<ColumnConstraints hgrow="ALWAYS"/>
+	</columnConstraints>
+
 	<Label text="%midi.synth" GridPane.rowIndex="0" GridPane.columnIndex="0">
 		<tooltip>
 			<Tooltip text="%midi.synth.tt"/>

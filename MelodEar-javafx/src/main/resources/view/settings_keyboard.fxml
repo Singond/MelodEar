@@ -5,6 +5,12 @@
 <?import javafx.scene.text.*?>
 
 <GridPane xmlns:fx="http://javafx.com/fxml/1" styleClass="settings-form">
+
+	<columnConstraints>
+		<ColumnConstraints/>
+		<ColumnConstraints hgrow="ALWAYS"/>
+	</columnConstraints>
+
 	<Label text="%keyboard.key_duration" GridPane.rowIndex="0" GridPane.columnIndex="0">
 		<tooltip>
 			<Tooltip text="%keyboard.key_duration.tt"/>
