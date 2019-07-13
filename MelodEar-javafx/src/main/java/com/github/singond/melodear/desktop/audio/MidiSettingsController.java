@@ -1,12 +1,18 @@
 package com.github.singond.melodear.desktop.audio;
 
+import java.io.File;
+import java.util.ResourceBundle;
+
 import javax.sound.midi.MidiDevice;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +21,9 @@ public class MidiSettingsController {
 
 	private static Logger logger
 			= LogManager.getLogger(MidiSettingsController.class);
+
+	private static final ResourceBundle bundle
+			= ResourceBundle.getBundle("loc/settings");
 
 	private final MidiSettings settings;
 
@@ -30,7 +39,9 @@ public class MidiSettingsController {
 	TableColumn<MidiDevice.Info, String> synthVersionColumn;
 
 	@FXML
-	TextField soundbank;
+	TextField soundbankText;
+	@FXML
+	Button soundbankFile;
 
 	public MidiSettingsController(MidiSettings settings) {
 		logger.debug("Creating MidiSettingsController");
@@ -40,6 +51,9 @@ public class MidiSettingsController {
 	public void initialize() {
 		logger.debug("Initializing MIDI settings");
 		initSynth();
+
+		soundbankFile.addEventHandler(ActionEvent.ACTION,
+				e -> selectSoundbankFile());
 	}
 
 	private void initSynth() {
@@ -60,4 +74,14 @@ public class MidiSettingsController {
 				f.getValue().getVersion()));
 	}
 
+	private void selectSoundbankFile() {
+		FileChooser chooser = new FileChooser();
+		chooser.setTitle(bundle.getString("midi.soundbank.browser.title"));
+		File file = chooser.showOpenDialog(soundbankFile.getScene().getWindow());
+		if (file != null) {
+			logger.debug("Selected {}", file);
+		} else {
+			logger.debug("No selection");
+		}
+	}
 }

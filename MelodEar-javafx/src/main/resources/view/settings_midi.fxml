@@ -28,8 +28,9 @@
 	</Label>
 	<HBox GridPane.rowIndex="1" GridPane.columnIndex="1"
 			styleClass="value,soundbank">
-		<TextField fx:id="soundbank" styleClass="soundbank-text"
+		<TextField fx:id="soundbankText" styleClass="soundbank-text"
 				HBox.hgrow="ALWAYS"/>
-		<Button text="%midi.soundbank.browseFile" styleClass="soundbank-file"/>
+		<Button fx:id="soundbankFile" text="%midi.soundbank.browseFile"
+				styleClass="soundbank-file"/>
 	</HBox>
 </GridPane>
