@@ -28,6 +28,9 @@ public final class MidiSettings implements Settings<MidiSettings> {
 	 */
 	private ObjectProperty<MidiDevice.Info> synth = new SimpleObjectProperty<>();
 
+	/**
+	 * Soundbank used in the MIDI device to produce sound.
+	 */
 	private ObjectProperty<Path> soundbank = new SimpleObjectProperty<>();
 
 	public MidiSettings() {
