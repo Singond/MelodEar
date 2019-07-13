@@ -1,5 +1,6 @@
 package com.github.singond.melodear.desktop.audio;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,8 @@ public final class MidiSettings implements Settings<MidiSettings> {
 	 * MIDI synthesizer to be used.
 	 */
 	private ObjectProperty<MidiDevice.Info> synth = new SimpleObjectProperty<>();
+
+	private ObjectProperty<Path> soundbank = new SimpleObjectProperty<>();
 
 	public MidiSettings() {
 		logger.debug("Creating MidiSettings");
@@ -84,6 +87,18 @@ public final class MidiSettings implements Settings<MidiSettings> {
 			}
 		}
 		return result;
+	}
+
+	public Path getSoundbank() {
+		return soundbank.get();
+	}
+
+	public void setSoundbank(Path soundbank) {
+		this.soundbank.set(soundbank);
+	}
+
+	public ObjectProperty<Path> soundbankProperty() {
+		return soundbank;
 	}
 
 	@Override

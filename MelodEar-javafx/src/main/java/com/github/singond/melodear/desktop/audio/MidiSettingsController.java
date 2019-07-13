@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,6 +28,9 @@ public class MidiSettingsController {
 	TableColumn<MidiDevice.Info, String> synthDescriptionColumn;
 	@FXML
 	TableColumn<MidiDevice.Info, String> synthVersionColumn;
+
+	@FXML
+	TextField soundbank;
 
 	public MidiSettingsController(MidiSettings settings) {
 		logger.debug("Creating MidiSettingsController");
