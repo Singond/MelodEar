@@ -14,3 +14,6 @@
 .settings-form .value {
 	-fx-max-width: infinity;
 }
+.settings-form HBox.multicontrol.value {
+	-fx-spacing: 1em;
+}

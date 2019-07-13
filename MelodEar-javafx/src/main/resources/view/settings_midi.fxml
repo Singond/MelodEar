@@ -33,7 +33,7 @@
 		</tooltip>
 	</Label>
 	<HBox GridPane.rowIndex="1" GridPane.columnIndex="1"
-			styleClass="value,soundbank">
+			styleClass="value,multicontrol,soundbank">
 		<TextField fx:id="soundbankText" styleClass="soundbank-text"
 				HBox.hgrow="ALWAYS"/>
 		<Button fx:id="soundbankFile" text="%midi.soundbank.browseFile"
