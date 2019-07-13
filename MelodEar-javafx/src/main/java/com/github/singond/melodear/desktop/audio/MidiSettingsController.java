@@ -19,6 +19,8 @@ import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.github.singond.melodear.desktop.settings.PathStringConverter;
+
 public class MidiSettingsController {
 
 	private static Logger logger
@@ -56,6 +58,8 @@ public class MidiSettingsController {
 
 		soundbankFile.addEventHandler(ActionEvent.ACTION,
 				e -> selectSoundbankFile());
+		soundbankText.textProperty().bindBidirectional(
+				settings.soundbankProperty(), new PathStringConverter());
 	}
 
 	private void initSynth() {
@@ -93,6 +97,7 @@ public class MidiSettingsController {
 			if (Files.exists(path)) {
 				logger.debug("File exists");
 				settings.setSoundbankDefaultDir(path.getParent());
+				settings.setSoundbank(path);
 			} else {
 				logger.warn("File does not exist");
 			}
@@ -100,4 +105,5 @@ public class MidiSettingsController {
 			logger.debug("No selection");
 		}
 	}
+
 }
