@@ -1,6 +1,8 @@
 package com.github.singond.melodear.desktop.audio;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ResourceBundle;
 
 import javax.sound.midi.MidiDevice;
@@ -75,11 +77,25 @@ public class MidiSettingsController {
 	}
 
 	private void selectSoundbankFile() {
+		// Setup file chooser
 		FileChooser chooser = new FileChooser();
 		chooser.setTitle(bundle.getString("midi.soundbank.browser.title"));
+		Path defaultDir = settings.getSoundbankDefaultDir();
+		if (defaultDir != null) {
+			chooser.setInitialDirectory(defaultDir.toFile());
+		}
+
+		// Launch it and evaluate
 		File file = chooser.showOpenDialog(soundbankFile.getScene().getWindow());
 		if (file != null) {
 			logger.debug("Selected {}", file);
+			Path path = file.toPath();
+			if (Files.exists(path)) {
+				logger.debug("File exists");
+				settings.setSoundbankDefaultDir(path.getParent());
+			} else {
+				logger.warn("File does not exist");
+			}
 		} else {
 			logger.debug("No selection");
 		}

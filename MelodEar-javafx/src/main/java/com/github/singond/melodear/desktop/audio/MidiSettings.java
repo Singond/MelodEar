@@ -10,6 +10,7 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,6 +33,13 @@ public final class MidiSettings implements Settings<MidiSettings> {
 	 * Soundbank used in the MIDI device to produce sound.
 	 */
 	private ObjectProperty<Path> soundbank = new SimpleObjectProperty<>();
+
+	/**
+	 * The default directory displayed by the file chooser when prompting
+	 * to select a sound bank.
+	 */
+	private ObjectProperty<Path> soundbankDefaultDir
+			= new SimpleObjectProperty<>();
 
 	public MidiSettings() {
 		logger.debug("Creating MidiSettings");
@@ -104,6 +112,18 @@ public final class MidiSettings implements Settings<MidiSettings> {
 		return soundbank;
 	}
 
+	public Path getSoundbankDefaultDir() {
+		return soundbankDefaultDir.get();
+	}
+
+	public void setSoundbankDefaultDir(Path soundbankDefaultDir) {
+		this.soundbankDefaultDir.set(soundbankDefaultDir);
+	}
+
+	public Property<Path> soundbankDefaultDirProperty() {
+		return this.soundbankDefaultDir;
+	}
+
 	@Override
 	public MidiSettings copy() {
 		return new MidiSettings(this);
@@ -112,6 +132,8 @@ public final class MidiSettings implements Settings<MidiSettings> {
 	@Override
 	public final void updateFrom(MidiSettings src) {
 		this.synth.set(src.synth.get());
+		this.soundbank.set(src.soundbank.get());
+		this.soundbankDefaultDir.set(src.soundbankDefaultDir.get());
 	}
 
 }
