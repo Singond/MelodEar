@@ -10,6 +10,17 @@ import javafx.beans.property.Property;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Skeletal implementation of the {@link Settings} interface.
+ * <p>
+ * <strong>Important:</strong> Note that this class relies heavily
+ * on the fact that in each subtype, the type parameter {@code <S>}
+ * is the subclass itself. Undefined behaviour occurs if this requirement
+ * is violated.
+ *
+ * @author Singon
+ * @param <S> the concrete subclass of {@code AbstractSettings}
+ */
 public abstract class AbstractSettings<S extends AbstractSettings<S>>
 		implements Settings<S> {
 
@@ -44,6 +55,16 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 			}
 			item.property().setValue(src.getItem(item.key()).valueCopy());
 		}
+	}
+
+	protected abstract S newInstance();
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public S copy() {
+		S copy = newInstance();
+		copy.updateFrom((S)this);
+		return copy;
 	}
 
 	public interface SettingsItem<T> {

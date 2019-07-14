@@ -32,6 +32,11 @@ public class MockSettings extends AbstractSettings<MockSettings> {
 		return copy;
 	}
 
+	@Override
+	protected MockSettings newInstance() {
+		return new MockSettings();
+	}
+
 	public String getName() {
 		return name.get();
 	}
