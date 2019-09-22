@@ -45,6 +45,7 @@ public class SettingsTest {
 		MockSettings copy = src.copy();
 		assertEquals("Property 'date' not copied correctly", dateExp, copy.getDate());
 		src.getDate().setYear(114);
-		assertEquals("Property 'date' not copied correctly", dateExp, copy.getDate());
+		assertEquals("Property 'date' not protected from changes to original",
+				dateExp, copy.getDate());
 	}
 }
