@@ -16,21 +16,25 @@ public class MockSettings extends AbstractSettings<MockSettings> {
 	private final ObjectProperty<Path> path = new SimpleObjectProperty<>();
 	/** An example of a mutable property. */
 	private final ObjectProperty<Date> date = new SimpleObjectProperty<>(new Date());
+	/** Nested settings object. */
+	private final MockSubSettings sub = new MockSubSettings();
 
 	public MockSettings() {
+		super("MockSettings");
 		addItem(new BasicSettingsItem<String>("name", name));
 		addItem(new BasicSettingsItem<Path>("path", path));
 		// Date is mutable, we need to create a defensive copy on duplicating
 		addItem(new BasicSettingsItem<Date>("date", date,
 				d -> new Date(d.getTime())));
+		addItem(sub);
 	}
 
-	@Override
-	public MockSettings copy() {
-		MockSettings copy = new MockSettings();
-		copy.updateFrom(this);
-		return copy;
-	}
+//	@Override
+//	public MockSettings copy() {
+//		MockSettings copy = new MockSettings();
+//		copy.updateFrom(this);
+//		return copy;
+//	}
 
 	@Override
 	protected MockSettings newInstance() {
@@ -71,6 +75,10 @@ public class MockSettings extends AbstractSettings<MockSettings> {
 
 	public Property<Date> DateProperty() {
 		return this.date;
+	}
+
+	public MockSubSettings getNested() {
+		return sub;
 	}
 
 }

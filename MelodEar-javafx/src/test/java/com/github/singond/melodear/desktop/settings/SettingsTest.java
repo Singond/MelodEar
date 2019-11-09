@@ -50,4 +50,34 @@ public class SettingsTest {
 		assertEquals("Property 'date' not protected from changes to original",
 				dateExp, copy.getDate());
 	}
+
+	@Test
+	public void nestedImmutableValue() {
+		MockSettings src = new MockSettings();
+		Integer integer = Integer.valueOf(64);
+		src.getNested().setInteger(integer);
+		MockSettings copy = src.copy();
+		assertEquals("Property 'nested/integer' not copied correctly",
+				integer, copy.getNested().getInteger());
+	}
+
+	@Test
+	public void nestedMutableValue() {
+		MockSettings src = new MockSettings();
+		Date dateExp, dateNew;
+		try {
+			src.getNested().setDate(dateFmt.parse("15.03.2016"));
+			dateExp = dateFmt.parse("15.03.2016");
+			dateNew = dateFmt.parse("15.03.2014");
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+		MockSettings copy = src.copy();
+		assertEquals("Property 'date' not copied correctly",
+				dateExp, copy.getNested().getDate());
+		src.getNested().getDate().setTime(dateNew.getTime());
+		assertEquals("Property 'date' not protected from changes to original",
+				dateExp, copy.getNested().getDate());
+	}
+
 }

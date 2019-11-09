@@ -6,7 +6,7 @@ package com.github.singond.melodear.desktop.settings;
  * @author Singon
  * @param <T> the concrete subtype of {@code Settings}
  */
-public interface Settings<T extends Settings<?>> {
+public interface Settings<T extends Settings<T>> extends SettingsItem<Settings<T>, T> {
 
 	/**
 	 * Returns a new instance of this subtype of {@code Settings} which is

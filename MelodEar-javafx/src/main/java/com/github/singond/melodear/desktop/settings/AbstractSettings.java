@@ -26,11 +26,14 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 
 	private static Logger logger = LogManager.getLogger(AbstractSettings.class);
 
-	protected final Map<String, SettingsItem<?>> items = new HashMap<>();
+	private final String key;
+	protected final Map<String, SettingsItem<?,?>> items = new HashMap<>();
 
-	public AbstractSettings() {}
+	public AbstractSettings(String key) {
+		this.key = key;
+	}
 
-	public void addItem(SettingsItem<?> item) {
+	protected void addItem(SettingsItem<?,?> item) {
 		if (item == null) {
 			throw new NullPointerException("Cannot insert null item");
 		} else if (item.key() == null) {
@@ -39,7 +42,7 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 		items.put(item.key(), item);
 	}
 
-	public SettingsItem<?> getItem(String key) {
+	public SettingsItem<?,?> getItem(String key) {
 		return items.get(key);
 	}
 
@@ -47,13 +50,14 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 	@Override
 	public final void updateFrom(S src) {
 		logger.debug("Updating from {}", src);
-		for (Entry<String, SettingsItem<?>> e : items.entrySet()) {
+		for (Entry<String, SettingsItem<?,?>> e : items.entrySet()) {
 			SettingsItem item = e.getValue();
 			if (!e.getKey().equals(item.key())) {
 				throw new AssertionError(
 						"Settings item found under different key from its own");
 			}
-			item.property().setValue(src.getItem(item.key()).valueCopy());
+//			item.property().setValue(src.getItem(item.key()).valueCopy());
+			item.updateFrom(src.getItem(item.key()));
 		}
 	}
 
@@ -67,19 +71,28 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 		return copy;
 	}
 
-	public interface SettingsItem<T> {
-
-		String key();
-
-		T value();
-
-		T valueCopy();
-
-		Property<T> property();
-
+	@Override
+	public String key() {
+		return key;
 	}
 
-	public static class BasicSettingsItem<T> implements SettingsItem<T> {
+	@Override
+	public Settings<S> value() {
+		return this;
+	}
+
+	@Override
+	public Settings<S> valueCopy() {
+		return copy();
+	}
+
+	@Override
+	public Property<Settings<S>> property() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static class BasicSettingsItem<T> implements SettingsItem<T, BasicSettingsItem<T>> {
 
 		private final String key;
 		private final Property<T> value;
@@ -118,5 +131,9 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 			return value;
 		}
 
+		@Override
+		public void updateFrom(BasicSettingsItem<T> src) {
+			value.setValue(src.valueCopy());
+		}
 	}
 }
