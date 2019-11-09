@@ -86,12 +86,6 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 		return copy();
 	}
 
-	@Override
-	public Property<Settings<S>> property() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public static class BasicSettingsItem<T> implements SettingsItem<T, BasicSettingsItem<T>> {
 
 		private final String key;
@@ -124,11 +118,6 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 		@Override
 		public T valueCopy() {
 			return duplicator.apply(value.getValue());
-		}
-
-		@Override
-		public Property<T> property() {
-			return value;
 		}
 
 		@Override
