@@ -21,10 +21,10 @@ public class MockSettings extends AbstractSettingsTree<MockSettings> {
 
 	public MockSettings() {
 		super("MockSettings");
-		addItem(new BasicSettingsItem<String>("name", name));
-		addItem(new BasicSettingsItem<Path>("path", path));
+		addItem(new ImmutableSettingsValue<String>("name", name));
+		addItem(new ImmutableSettingsValue<Path>("path", path));
 		// Date is mutable, we need to create a defensive copy on duplicating
-		addItem(new BasicSettingsItem<Date>("date", date,
+		addItem(new MutableSettingsValue<Date>("date", date,
 				d -> new Date(d.getTime())));
 		addItem(sub);
 	}
