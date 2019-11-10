@@ -7,7 +7,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class MockSubSettings extends AbstractSettings<MockSubSettings> {
+public class MockSubSettings extends AbstractSettingsTree<MockSubSettings> {
 
 	/** An example of an immutable property. */
 	private final IntegerProperty integer = new SimpleIntegerProperty();

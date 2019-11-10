@@ -20,17 +20,18 @@ import org.apache.logging.log4j.Logger;
  * is violated.
  *
  * @author Singon
- * @param <S> the concrete subclass of {@code AbstractSettings}
+ * @param <S> the concrete subclass of {@code AbstractSettingsTree}
  */
-public abstract class AbstractSettings<S extends AbstractSettings<S>>
+public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 		implements SettingsTree<S> {
 
-	private static Logger logger = LogManager.getLogger(AbstractSettings.class);
+	private static Logger logger
+			= LogManager.getLogger(AbstractSettingsTree.class);
 
 	private final String key;
 	protected final Map<String, SettingsNode<?>> items = new HashMap<>();
 
-	public AbstractSettings(String key) {
+	public AbstractSettingsTree(String key) {
 		this.key = key;
 	}
 

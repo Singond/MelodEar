@@ -9,7 +9,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class MockSettings extends AbstractSettings<MockSettings> {
+public class MockSettings extends AbstractSettingsTree<MockSettings> {
 
 	private final StringProperty name = new SimpleStringProperty();
 	/** An example of an immutable property. */
