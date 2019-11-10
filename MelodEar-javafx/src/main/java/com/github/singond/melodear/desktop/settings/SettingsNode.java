@@ -1,12 +1,8 @@
 package com.github.singond.melodear.desktop.settings;
 
-public interface SettingsItem<T, S extends SettingsItem<T, S>> {
+public interface SettingsNode<S extends SettingsNode<S>> {
 
 	String key();
-
-	T value();
-
-	T valueCopy();
 
 	void updateFrom(S src);
 

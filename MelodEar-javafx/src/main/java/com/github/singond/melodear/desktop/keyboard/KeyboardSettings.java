@@ -6,9 +6,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.singond.melodear.desktop.settings.Settings;
+import com.github.singond.melodear.desktop.settings.SettingsTree;
 
-public class KeyboardSettings implements Settings<KeyboardSettings> {
+public class KeyboardSettings implements SettingsTree<KeyboardSettings> {
 
 	private static Logger logger = LogManager.getLogger(KeyboardSettings.class);
 

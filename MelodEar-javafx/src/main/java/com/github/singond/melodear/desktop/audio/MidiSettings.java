@@ -18,9 +18,9 @@ import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.singond.melodear.desktop.settings.Settings;
+import com.github.singond.melodear.desktop.settings.SettingsTree;
 
-public final class MidiSettings implements Settings<MidiSettings> {
+public final class MidiSettings implements SettingsTree<MidiSettings> {
 
 	private static Logger logger = LogManager.getLogger(MidiSettings.class);
 

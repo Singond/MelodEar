@@ -7,7 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 
-public abstract class BasicSettingsView <T extends Settings>
+public abstract class BasicSettingsView <T extends SettingsTree>
 		implements SettingsView<T> {
 
 	protected static final ResourceBundle bundle

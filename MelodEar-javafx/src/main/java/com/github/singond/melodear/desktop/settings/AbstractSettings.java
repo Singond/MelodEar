@@ -11,7 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Skeletal implementation of the {@link Settings} interface.
+ * Skeletal implementation of the {@link SettingsTree} interface.
  * <p>
  * <strong>Important:</strong> Note that this class relies heavily
  * on the fact that in each subtype, the type parameter {@code <S>}
@@ -22,18 +22,18 @@ import org.apache.logging.log4j.Logger;
  * @param <S> the concrete subclass of {@code AbstractSettings}
  */
 public abstract class AbstractSettings<S extends AbstractSettings<S>>
-		implements Settings<S> {
+		implements SettingsTree<S> {
 
 	private static Logger logger = LogManager.getLogger(AbstractSettings.class);
 
 	private final String key;
-	protected final Map<String, SettingsItem<?,?>> items = new HashMap<>();
+	protected final Map<String, SettingsNode<?>> items = new HashMap<>();
 
 	public AbstractSettings(String key) {
 		this.key = key;
 	}
 
-	protected void addItem(SettingsItem<?,?> item) {
+	protected void addItem(SettingsNode<?> item) {
 		if (item == null) {
 			throw new NullPointerException("Cannot insert null item");
 		} else if (item.key() == null) {
@@ -42,7 +42,7 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 		items.put(item.key(), item);
 	}
 
-	public SettingsItem<?,?> getItem(String key) {
+	public SettingsNode<?> getItem(String key) {
 		return items.get(key);
 	}
 
@@ -50,11 +50,11 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 	@Override
 	public final void updateFrom(S src) {
 		logger.debug("Updating from {}", src);
-		for (Entry<String, SettingsItem<?,?>> e : items.entrySet()) {
-			SettingsItem item = e.getValue();
+		for (Entry<String, SettingsNode<?>> e : items.entrySet()) {
+			SettingsNode item = e.getValue();
 			if (!e.getKey().equals(item.key())) {
 				throw new AssertionError(
-						"Settings item found under different key from its own");
+						"SettingsTree item found under different key from its own");
 			}
 //			item.property().setValue(src.getItem(item.key()).valueCopy());
 			item.updateFrom(src.getItem(item.key()));
@@ -76,17 +76,7 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 		return key;
 	}
 
-	@Override
-	public Settings<S> value() {
-		return this;
-	}
-
-	@Override
-	public Settings<S> valueCopy() {
-		return copy();
-	}
-
-	public static class BasicSettingsItem<T> implements SettingsItem<T, BasicSettingsItem<T>> {
+	public static class BasicSettingsItem<T> implements SettingsValue<T, BasicSettingsItem<T>> {
 
 		private final String key;
 		private final Property<T> value;
