@@ -3,29 +3,25 @@ package com.github.singond.melodear.desktop.settings;
 import java.nio.file.Path;
 import java.util.Date;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 public class MockSettings extends AbstractSettingsTree<MockSettings> {
 
-	private final StringProperty name = new SimpleStringProperty();
+	private SettingsValue<String,?> name
+			= new ImmutableSettingsValue<String>("name", null);
 	/** An example of an immutable property. */
-	private final ObjectProperty<Path> path = new SimpleObjectProperty<>();
+	private SettingsValue<Path,?> path
+			= new ImmutableSettingsValue<Path>("path", null);
 	/** An example of a mutable property. */
-	private final ObjectProperty<Date> date = new SimpleObjectProperty<>(new Date());
+	private final SettingsValue<Date,?> date
+			= new MutableSettingsValue<Date>("date", null,
+					d -> new Date(d.getTime()));
 	/** Nested settings object. */
 	private final MockSubSettings sub = new MockSubSettings();
 
 	public MockSettings() {
 		super("MockSettings");
-		addItem(new ImmutableSettingsValue<String>("name", name));
-		addItem(new ImmutableSettingsValue<Path>("path", path));
-		// Date is mutable, we need to create a defensive copy on duplicating
-		addItem(new MutableSettingsValue<Date>("date", date,
-				d -> new Date(d.getTime())));
+		addItem(name);
+		addItem(path);
+		addItem(date);
 		addItem(sub);
 	}
 
@@ -35,39 +31,27 @@ public class MockSettings extends AbstractSettingsTree<MockSettings> {
 	}
 
 	public String getName() {
-		return name.get();
+		return name.value();
 	}
 
 	public void setName(String name) {
-		this.name.set(name);
-	}
-
-	public Property<String> nameProperty() {
-		return this.name;
+		this.name.setValue(name);
 	}
 
 	public Path getPath() {
-		return path.get();
+		return path.value();
 	}
 
 	public void setPath(Path path) {
-		this.path.set(path);
-	}
-
-	public Property<Path> pathProperty() {
-		return this.path;
+		this.path.setValue(path);
 	}
 
 	public Date getDate() {
-		return date.get();
+		return date.value();
 	}
 
 	public void setDate(Date date) {
-		this.date.set(date);
-	}
-
-	public Property<Date> DateProperty() {
-		return this.date;
+		this.date.setValue(date);
 	}
 
 	public MockSubSettings getNested() {

@@ -2,23 +2,19 @@ package com.github.singond.melodear.desktop.settings;
 
 import java.util.Date;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-
 public class MockSubSettings extends AbstractSettingsTree<MockSubSettings> {
 
 	/** An example of an immutable property. */
-	private final IntegerProperty integer = new SimpleIntegerProperty();
+	private final SettingsValue<Integer,?> integer
+			= new ImmutableSettingsValue<Integer>("integer", null);
 	/** An example of a mutable property. */
-	private final ObjectProperty<Date> date = new SimpleObjectProperty<>(new Date());
+	private final SettingsValue<Date,?> date = new MutableSettingsValue<Date>(
+			"date", null, d -> new Date(d.getTime()));
 
 	public MockSubSettings() {
 		super("MockSettings");
-		addItem(new ImmutableSettingsValue<Number>("integer", integer));
-		addItem(new MutableSettingsValue<Date>("date", date,
-				d -> new Date(d.getTime())));
+		addItem(integer);
+		addItem(date);
 	}
 
 	@Override
@@ -27,15 +23,15 @@ public class MockSubSettings extends AbstractSettingsTree<MockSubSettings> {
 	}
 
 	public Integer getInteger() {
-		return integer.get();
+		return integer.value();
 	}
 
 	public void setInteger(Integer value) {
-		integer.set(value);
+		integer.setValue(value);
 	}
 
 	public Date getDate() {
-		return date.get();
+		return date.value();
 	}
 
 	public void setDate(Date date) {

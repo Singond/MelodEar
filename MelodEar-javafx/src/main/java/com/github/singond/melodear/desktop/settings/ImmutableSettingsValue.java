@@ -1,7 +1,5 @@
 package com.github.singond.melodear.desktop.settings;
 
-import javafx.beans.property.Property;
-
 /**
  * An implementation of {@link SettingsValue} suitable for wrapping
  * an immutable value.
@@ -21,11 +19,11 @@ public class ImmutableSettingsValue<T>
 		implements SettingsValue<T, ImmutableSettingsValue<T>> {
 
 	private final String key;
-	private final Property<T> value;
+	private T value;
 
-	public ImmutableSettingsValue(String key, Property<T> valueProperty) {
+	public ImmutableSettingsValue(String key, T value) {
 		this.key = key;
-		this.value = valueProperty;
+		this.value = value;
 	}
 
 	@Override
@@ -35,17 +33,26 @@ public class ImmutableSettingsValue<T>
 
 	@Override
 	public T value() {
-		return value.getValue();
+		return value;
+	}
+
+	@Override
+	public void setValue(T value) {
+		this.value = value;
 	}
 
 	@Override
 	public T valueCopy() {
-		return value.getValue();
+		return value;
 	}
 
 	@Override
 	public void updateFrom(ImmutableSettingsValue<T> src) {
-		value.setValue(src.valueCopy());
+		if (src != null) {
+			value = src.valueCopy();
+		} else {
+			value = null;
+		}
 	}
 
 }

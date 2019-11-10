@@ -2,8 +2,6 @@ package com.github.singond.melodear.desktop.settings;
 
 import java.util.function.Function;
 
-import javafx.beans.property.Property;
-
 /**
  * An implementation of {@link SettingsValue} which wraps a mutable value.
  * A mutable value requires creating a defensive copy in the copies of the
@@ -16,13 +14,13 @@ public class MutableSettingsValue<T>
 		implements SettingsValue<T, MutableSettingsValue<T>> {
 
 	private final String key;
-	private final Property<T> value;
-	private Function<T, T> duplicator;
+	private T value;
+	private final Function<T, T> duplicator;
 
-	public MutableSettingsValue(String key, Property<T> valueProperty,
+	public MutableSettingsValue(String key, T value,
 			Function<T, T> valueDuplicator) {
 		this.key = key;
-		this.value = valueProperty;
+		this.value = value;
 		this.duplicator = valueDuplicator;
 	}
 
@@ -33,17 +31,30 @@ public class MutableSettingsValue<T>
 
 	@Override
 	public T value() {
-		return value.getValue();
+		return value;
+	}
+
+	@Override
+	public void setValue(T value) {
+		this.value = value;
 	}
 
 	@Override
 	public T valueCopy() {
-		return duplicator.apply(value.getValue());
+		if (value != null) {
+			return duplicator.apply(value);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public void updateFrom(MutableSettingsValue<T> src) {
-		value.setValue(src.valueCopy());
+		if (src != null) {
+			value = src.valueCopy();
+		} else {
+			value = null;
+		}
 	}
 
 }

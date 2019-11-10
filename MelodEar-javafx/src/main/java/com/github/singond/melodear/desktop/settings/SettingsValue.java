@@ -23,6 +23,8 @@ public interface SettingsValue<T, S extends SettingsValue<T, S>>
 	 */
 	T value();
 
+	void setValue(T value);
+
 	/**
 	 * Returns an object equal to the value of this node
 	 * (by means of {@link Object#equals}), which does not expose the value
