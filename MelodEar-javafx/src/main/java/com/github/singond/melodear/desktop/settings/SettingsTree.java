@@ -1,12 +1,19 @@
 package com.github.singond.melodear.desktop.settings;
 
 /**
- * An aggregation of user settings.
+ * A branch node of the settings tree, which holds nested settings.
+ * <p>
+ * <strong>Important:</strong> Note that all types in the
+ * {@code com.github.singond.melodear.desktop.settings} package rely heavily
+ * on the fact that in each generic type, the type parameter {@code <S>}
+ * is the type itself. Undefined behaviour occurs if this requirement
+ * is violated.
  *
  * @author Singon
- * @param <T> the concrete subtype of {@code SettingsTree}
+ * @param <S> the concrete subtype of {@code SettingsTree}
  */
-public interface SettingsTree<T extends SettingsTree<T>> extends SettingsNode<T> {
+public interface SettingsTree<S extends SettingsTree<S>>
+		extends SettingsNode<S> {
 
 	/**
 	 * Returns a new instance of this subtype of {@code SettingsTree} which is
@@ -14,7 +21,7 @@ public interface SettingsTree<T extends SettingsTree<T>> extends SettingsNode<T>
 	 *
 	 * @return a copy of this instance
 	 */
-	T copy();
+	S copy();
 
 	/**
 	 * Updates this instance to contain exactly the same data as the given
@@ -23,6 +30,6 @@ public interface SettingsTree<T extends SettingsTree<T>> extends SettingsNode<T>
 	 * @param src the original whose fields are to be coped to this instance
 	 */
 	@Override
-	void updateFrom(T src);
+	void updateFrom(S src);
 
 }
