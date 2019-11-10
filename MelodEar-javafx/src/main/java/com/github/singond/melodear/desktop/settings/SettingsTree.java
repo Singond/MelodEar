@@ -23,13 +23,4 @@ public interface SettingsTree<S extends SettingsTree<S>>
 	 */
 	S copy();
 
-	/**
-	 * Updates this instance to contain exactly the same data as the given
-	 * instance of the same class.
-	 *
-	 * @param src the original whose fields are to be coped to this instance
-	 */
-	@Override
-	void updateFrom(S src);
-
 }
