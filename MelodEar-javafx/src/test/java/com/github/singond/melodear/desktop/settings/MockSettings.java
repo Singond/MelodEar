@@ -29,13 +29,6 @@ public class MockSettings extends AbstractSettings<MockSettings> {
 		addItem(sub);
 	}
 
-//	@Override
-//	public MockSettings copy() {
-//		MockSettings copy = new MockSettings();
-//		copy.updateFrom(this);
-//		return copy;
-//	}
-
 	@Override
 	protected MockSettings newInstance() {
 		return new MockSettings();

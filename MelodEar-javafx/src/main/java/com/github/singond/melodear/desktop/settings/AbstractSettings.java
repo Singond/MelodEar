@@ -56,7 +56,6 @@ public abstract class AbstractSettings<S extends AbstractSettings<S>>
 				throw new AssertionError(
 						"SettingsTree item found under different key from its own");
 			}
-//			item.property().setValue(src.getItem(item.key()).valueCopy());
 			item.updateFrom(src.getItem(item.key()));
 		}
 	}

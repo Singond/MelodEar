@@ -21,13 +21,6 @@ public class MockSubSettings extends AbstractSettings<MockSubSettings> {
 				d -> new Date(d.getTime())));
 	}
 
-//	@Override
-//	public MockSubSettings copy() {
-//		MockSubSettings copy = new MockSubSettings();
-//		copy.updateFrom(this);
-//		return copy;
-//	}
-
 	@Override
 	protected MockSubSettings newInstance() {
 		return new MockSubSettings();
