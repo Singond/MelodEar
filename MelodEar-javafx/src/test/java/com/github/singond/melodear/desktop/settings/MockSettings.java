@@ -5,24 +5,21 @@ import java.util.Date;
 
 public class MockSettings extends AbstractSettingsTree<MockSettings> {
 
-	private SettingsValue<String,?> name
-			= new ImmutableSettingsValue<String>("name", null);
+	private final SettingsValue<String> name;
 	/** An example of an immutable property. */
-	private SettingsValue<Path,?> path
-			= new ImmutableSettingsValue<Path>("path", null);
+	private final SettingsValue<Path> path;
 	/** An example of a mutable property. */
-	private final SettingsValue<Date,?> date
-			= new MutableSettingsValue<Date>("date", null,
-					d -> new Date(d.getTime()));
+	private final SettingsValue<Date> date;
 	/** Nested settings object. */
 	private final MockSubSettings sub = new MockSubSettings();
 
 	public MockSettings() {
 		super("MockSettings");
-		addItem(name);
-		addItem(path);
-		addItem(date);
-		addItem(sub);
+		name = newNode(new ImmutableSettingsValue<String>("name", null));
+		path = newNode(new ImmutableSettingsValue<Path>("path", null));
+		date = newNode(new MutableSettingsValue<Date>("date", null,
+				d -> new Date(d.getTime())));
+		newNode(sub);
 	}
 
 	@Override

@@ -32,13 +32,14 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 		this.key = key;
 	}
 
-	protected void addItem(SettingsNode<?> item) {
+	protected <T extends SettingsNode<?>> T newNode(T item) {
 		if (item == null) {
 			throw new NullPointerException("Cannot insert null item");
 		} else if (item.key() == null) {
 			throw new NullPointerException("Cannot insert item with null key");
 		}
 		items.put(item.key(), item);
+		return item;
 	}
 
 	public SettingsNode<?> getItem(String key) {

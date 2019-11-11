@@ -5,16 +5,15 @@ import java.util.Date;
 public class MockSubSettings extends AbstractSettingsTree<MockSubSettings> {
 
 	/** An example of an immutable property. */
-	private final SettingsValue<Integer,?> integer
-			= new ImmutableSettingsValue<Integer>("integer", null);
+	private final SettingsValue<Integer> integer;
 	/** An example of a mutable property. */
-	private final SettingsValue<Date,?> date = new MutableSettingsValue<Date>(
-			"date", null, d -> new Date(d.getTime()));
+	private final SettingsValue<Date> date;
 
 	public MockSubSettings() {
-		super("MockSettings");
-		addItem(integer);
-		addItem(date);
+		super("MockSubSettings");
+		integer = newNode(new ImmutableSettingsValue<Integer>("integer", null));
+		date = newNode(new MutableSettingsValue<Date>(
+				"date", null, d -> new Date(d.getTime())));
 	}
 
 	@Override
@@ -37,4 +36,5 @@ public class MockSubSettings extends AbstractSettingsTree<MockSubSettings> {
 	public void setDate(Date date) {
 		this.date.setValue(date);
 	}
+
 }

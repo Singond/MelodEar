@@ -1,7 +1,7 @@
 package com.github.singond.melodear.desktop.settings;
 
 /**
- * An implementation of {@link SettingsValue} suitable for wrapping
+ * An implementation of {@link SettingsValueNode} suitable for wrapping
  * an immutable value.
  * An immutable value cannot be modified once created and thus can be freely
  * passed directly into copies of the tree.
@@ -16,7 +16,7 @@ package com.github.singond.melodear.desktop.settings;
  * @param <T> the type of value held by this node
  */
 public class ImmutableSettingsValue<T>
-		implements SettingsValue<T, ImmutableSettingsValue<T>> {
+		implements SettingsValueNode<T, ImmutableSettingsValue<T>> {
 
 	private final String key;
 	private T value;

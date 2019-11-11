@@ -3,7 +3,7 @@ package com.github.singond.melodear.desktop.settings;
 import java.util.function.Function;
 
 /**
- * An implementation of {@link SettingsValue} which wraps a mutable value.
+ * An implementation of {@link SettingsValueNode} which wraps a mutable value.
  * A mutable value requires creating a defensive copy in the copies of the
  * tree to prevent modifications from propagating into the original.
  *
@@ -11,7 +11,7 @@ import java.util.function.Function;
  * @param <T> the type of value held by this node
  */
 public class MutableSettingsValue<T>
-		implements SettingsValue<T, MutableSettingsValue<T>> {
+		implements SettingsValueNode<T, MutableSettingsValue<T>> {
 
 	private final String key;
 	private T value;
