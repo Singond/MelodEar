@@ -49,7 +49,7 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 	 * @param item the node to be added
 	 * @return the {@code item} argument itself
 	 */
-	protected <T extends SettingsNode<?>> T newNode(T item) {
+	protected <T extends SettingsNode<?>, U extends T> U newNode(U item) {
 		if (item == null) {
 			throw new NullPointerException("Cannot insert null item");
 		} else if (item.key() == null) {
