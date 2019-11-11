@@ -15,6 +15,11 @@ public interface SettingsValue<T> {
 	 */
 	T value();
 
+	/**
+	 * Sets the value of this node.
+	 *
+	 * @param value the value to be set to this node
+	 */
 	void setValue(T value);
 
 	/**

@@ -32,6 +32,23 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 		this.key = key;
 	}
 
+	/**
+	 * Adds a new node (either a value node or a tree node) to this tree.
+	 * <p>
+	 * The return value is the argument itself. It serves as a syntactic sugar
+	 * to make initialization of a field in a constructor easier,
+	 * as in the following example:
+	 * <pre>
+	 *   private final SettingsValue&lt;Integer> myVal;
+	 *
+	 *   public MySettings() {
+	 *     myVal = newNode(new ImmutableSettingsValue&lt;Integer>("myVal", null));
+	 *   }
+	 * </pre>
+	 *
+	 * @param item the node to be added
+	 * @return the {@code item} argument itself
+	 */
 	protected <T extends SettingsNode<?>> T newNode(T item) {
 		if (item == null) {
 			throw new NullPointerException("Cannot insert null item");
