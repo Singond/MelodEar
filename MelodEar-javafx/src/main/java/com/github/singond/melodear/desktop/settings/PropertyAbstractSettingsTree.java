@@ -23,22 +23,16 @@ public abstract class PropertyAbstractSettingsTree<S extends PropertyAbstractSet
 	}
 
 	private static final class PropertySettingsValue<T>
-			implements SettingsValueNode<T, PropertySettingsValue<T>> {
+			extends AbstractSettingsValue<T, PropertySettingsValue<T>> {
 
-		private final String key;
 		private final Property<T> property;
 		private final Function<T, T> duplicator;
 
 		public PropertySettingsValue(String key, Property<T> property,
 				Function<T, T> duplicator) {
-			this.key = key;
+			super(key);
 			this.property = property;
 			this.duplicator = duplicator;
-		}
-
-		@Override
-		public String key() {
-			return key;
 		}
 
 		@Override

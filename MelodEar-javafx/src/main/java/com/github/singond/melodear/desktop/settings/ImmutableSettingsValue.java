@@ -16,19 +16,13 @@ package com.github.singond.melodear.desktop.settings;
  * @param <T> the type of value held by this node
  */
 public class ImmutableSettingsValue<T>
-		implements SettingsValueNode<T, ImmutableSettingsValue<T>> {
+		extends AbstractSettingsValue<T, ImmutableSettingsValue<T>> {
 
-	private final String key;
 	private T value;
 
 	public ImmutableSettingsValue(String key, T value) {
-		this.key = key;
+		super(key);
 		this.value = value;
-	}
-
-	@Override
-	public String key() {
-		return key;
 	}
 
 	@Override

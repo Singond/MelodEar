@@ -11,22 +11,16 @@ import java.util.function.Function;
  * @param <T> the type of value held by this node
  */
 public class MutableSettingsValue<T>
-		implements SettingsValueNode<T, MutableSettingsValue<T>> {
+		extends AbstractSettingsValue<T, MutableSettingsValue<T>> {
 
-	private final String key;
 	private T value;
 	private final Function<T, T> duplicator;
 
 	public MutableSettingsValue(String key, T value,
 			Function<T, T> valueDuplicator) {
-		this.key = key;
+		super(key);
 		this.value = value;
 		this.duplicator = valueDuplicator;
-	}
-
-	@Override
-	public String key() {
-		return key;
 	}
 
 	@Override
