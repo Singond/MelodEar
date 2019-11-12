@@ -26,7 +26,7 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 			= LogManager.getLogger(AbstractSettingsTree.class);
 
 	private final String key;
-	protected final Map<String, SettingsNode<?>> items = new HashMap<>();
+	private final Map<String, SettingsNode<?>> nodes = new HashMap<>();
 
 	public AbstractSettingsTree(String key) {
 		this.key = key;
@@ -46,28 +46,28 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 	 *   }
 	 * </pre>
 	 *
-	 * @param item the node to be added
+	 * @param node the node to be added
 	 * @return the {@code item} argument itself
 	 */
-	protected <T extends SettingsNode<?>, U extends T> U newNode(U item) {
-		if (item == null) {
+	protected <T extends SettingsNode<?>, U extends T> U newNode(U node) {
+		if (node == null) {
 			throw new NullPointerException("Cannot insert null item");
-		} else if (item.key() == null) {
+		} else if (node.key() == null) {
 			throw new NullPointerException("Cannot insert item with null key");
 		}
-		items.put(item.key(), item);
-		return item;
+		nodes.put(node.key(), node);
+		return node;
 	}
 
 	public SettingsNode<?> getItem(String key) {
-		return items.get(key);
+		return nodes.get(key);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public final void updateFrom(S src) {
 		logger.debug("Updating from {}", src);
-		for (Entry<String, SettingsNode<?>> e : items.entrySet()) {
+		for (Entry<String, SettingsNode<?>> e : nodes.entrySet()) {
 			SettingsNode item = e.getValue();
 			if (!e.getKey().equals(item.key())) {
 				throw new AssertionError(
