@@ -18,9 +18,10 @@ import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.singond.settings.SettingsTree;
+import com.github.singond.melodear.desktop.settings.PropertyAbstractSettingsTree;
 
-public final class MidiSettings implements SettingsTree<MidiSettings> {
+public final class MidiSettings
+		extends PropertyAbstractSettingsTree<MidiSettings> {
 
 	private static Logger logger = LogManager.getLogger(MidiSettings.class);
 
@@ -42,14 +43,19 @@ public final class MidiSettings implements SettingsTree<MidiSettings> {
 			= new SimpleObjectProperty<>();
 
 	public MidiSettings() {
+		super(MidiSettings.class.getName());
 		logger.debug("Creating MidiSettings");
+		synth = newPropertyNode("synth", new SimpleObjectProperty<>());
+		soundbank = newPropertyNode("soundbank", new SimpleObjectProperty<>());
+		soundbankDefaultDir = newPropertyNode("soundbankDefaultDir", new SimpleObjectProperty<>());
 		initSynth();
 		synth.addListener((v, o, n) ->
 				logger.debug("Synthesizer changed from {} to {}", o, n));
 	}
 
-	private MidiSettings(MidiSettings src) {
-		updateWith(src);
+	@Override
+	protected MidiSettings newInstance() {
+		return new MidiSettings();
 	}
 
 	public MidiDevice.Info getSynth() {
@@ -122,18 +128,6 @@ public final class MidiSettings implements SettingsTree<MidiSettings> {
 
 	public Property<Path> soundbankDefaultDirProperty() {
 		return this.soundbankDefaultDir;
-	}
-
-	@Override
-	public MidiSettings copy() {
-		return new MidiSettings(this);
-	}
-
-	@Override
-	public final void updateWith(MidiSettings src) {
-		this.synth.set(src.synth.get());
-		this.soundbank.set(src.soundbank.get());
-		this.soundbankDefaultDir.set(src.soundbankDefaultDir.get());
 	}
 
 }

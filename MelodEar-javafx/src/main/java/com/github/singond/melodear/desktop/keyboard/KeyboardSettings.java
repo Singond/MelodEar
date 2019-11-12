@@ -6,17 +6,17 @@ import javafx.beans.property.SimpleObjectProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.singond.settings.SettingsTree;
+import com.github.singond.melodear.desktop.settings.PropertyAbstractSettingsTree;
 
-public class KeyboardSettings implements SettingsTree<KeyboardSettings> {
+public class KeyboardSettings
+		extends PropertyAbstractSettingsTree<KeyboardSettings> {
 
 	private static Logger logger = LogManager.getLogger(KeyboardSettings.class);
 
 	/**
 	 * Duration of the note played after a key is pressed.
 	 */
-	private ObjectProperty<KeyPlayDuration> keyDuration
-			= new SimpleObjectProperty<>(KeyPlayDuration.KEY_HELD);
+	private final ObjectProperty<KeyPlayDuration> keyDuration;
 
 	/**
 	 * Format of piano key label.
@@ -25,13 +25,19 @@ public class KeyboardSettings implements SettingsTree<KeyboardSettings> {
 			= new SimpleObjectProperty<>(KeyLabelFormats.getDefaultFormat());
 
 	public KeyboardSettings() {
+		super(KeyboardSettings.class.getName());
 		logger.debug("Creating KeyboardSettings");
+		keyDuration = newPropertyNode("keyDuration",
+				new SimpleObjectProperty<>(KeyPlayDuration.KEY_HELD));
+		keyLabelFormat = newPropertyNode("keyLabelFormat",
+				new SimpleObjectProperty<>(KeyLabelFormats.getDefaultFormat()));
 		keyDuration.addListener((v, o, n) ->
 				logger.debug("Key duration changed from {} to {}", o, n));
 	}
 
-	private KeyboardSettings(KeyboardSettings src) {
-		updateFields(src, this);
+	@Override
+	protected KeyboardSettings newInstance() {
+		return new KeyboardSettings();
 	}
 
 	public KeyPlayDuration getKeyDuration() {
@@ -58,18 +64,4 @@ public class KeyboardSettings implements SettingsTree<KeyboardSettings> {
 		return keyLabelFormat;
 	}
 
-	private static void updateFields(KeyboardSettings src, KeyboardSettings tgt) {
-		tgt.keyDuration.set(src.keyDuration.get());
-		tgt.keyLabelFormat.set(src.keyLabelFormat.get());
-	}
-
-	@Override
-	public KeyboardSettings copy() {
-		return new KeyboardSettings(this);
-	}
-
-	@Override
-	public void updateWith(KeyboardSettings src) {
-		updateFields(src, this);
-	}
 }
