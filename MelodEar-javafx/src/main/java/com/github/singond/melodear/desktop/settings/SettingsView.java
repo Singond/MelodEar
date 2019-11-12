@@ -2,6 +2,8 @@ package com.github.singond.melodear.desktop.settings;
 
 import javafx.scene.Node;
 
+import com.github.singond.settings.SettingsTree;
+
 public interface SettingsView<T extends SettingsTree> {
 
 	/**

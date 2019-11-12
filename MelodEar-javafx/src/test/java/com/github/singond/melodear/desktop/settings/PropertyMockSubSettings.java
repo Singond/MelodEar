@@ -7,6 +7,10 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
+import com.github.singond.settings.AbstractSettingsTree;
+import com.github.singond.settings.MutableSettingsValue;
+import com.github.singond.settings.SettingsValue;
+
 public class PropertyMockSubSettings extends AbstractSettingsTree<PropertyMockSubSettings> {
 
 	/** An example of an immutable property. */

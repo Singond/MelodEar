@@ -1,7 +1,12 @@
-package com.github.singond.melodear.desktop.settings;
+package com.github.singond.settings;
 
 import java.nio.file.Path;
 import java.util.Date;
+
+import com.github.singond.settings.AbstractSettingsTree;
+import com.github.singond.settings.ImmutableSettingsValue;
+import com.github.singond.settings.MutableSettingsValue;
+import com.github.singond.settings.SettingsValue;
 
 public class MockSettings extends AbstractSettingsTree<MockSettings> {
 

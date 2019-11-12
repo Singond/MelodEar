@@ -1,4 +1,4 @@
-package com.github.singond.melodear.desktop.settings;
+package com.github.singond.settings;
 
 /**
  * A leaf node of the settings tree, which holds a value.

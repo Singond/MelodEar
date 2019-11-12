@@ -1,10 +1,10 @@
-package com.github.singond.melodear.desktop.settings;
+package com.github.singond.settings;
 
 /**
  * Skeletal implementation of {@link SettingsValueNode}.
  * <p>
  * <strong>Important:</strong> Note that all types in the
- * {@code com.github.singond.melodear.desktop.settings} package rely heavily
+ * {@code com.github.singond.settings} package rely heavily
  * on the fact that in each generic type, the type parameter {@code <S>}
  * is the type itself. Undefined behaviour occurs if this requirement
  * is violated.

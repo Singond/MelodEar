@@ -1,4 +1,4 @@
-package com.github.singond.melodear.desktop.settings;
+package com.github.singond.settings;
 
 import java.util.function.Function;
 

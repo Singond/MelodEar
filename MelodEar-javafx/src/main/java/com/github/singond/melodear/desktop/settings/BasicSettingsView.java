@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 
+import com.github.singond.settings.SettingsTree;
+
 public abstract class BasicSettingsView <T extends SettingsTree>
 		implements SettingsView<T> {
 

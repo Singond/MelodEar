@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.singond.melodear.desktop.settings.SettingsTree;
+import com.github.singond.settings.SettingsTree;
 
 public class KeyboardSettings implements SettingsTree<KeyboardSettings> {
 

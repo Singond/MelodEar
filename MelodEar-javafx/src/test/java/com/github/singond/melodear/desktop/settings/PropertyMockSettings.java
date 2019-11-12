@@ -8,6 +8,10 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import com.github.singond.settings.AbstractSettingsTree;
+import com.github.singond.settings.MutableSettingsValue;
+import com.github.singond.settings.SettingsValue;
+
 public class PropertyMockSettings extends AbstractSettingsTree<PropertyMockSettings> {
 
 	private final SettingsValue<StringProperty> name;

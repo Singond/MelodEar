@@ -4,6 +4,9 @@ import java.util.function.Function;
 
 import javafx.beans.property.Property;
 
+import com.github.singond.settings.AbstractSettingsTree;
+import com.github.singond.settings.AbstractSettingsValue;
+
 public abstract class PropertyAbstractSettingsTree<S extends PropertyAbstractSettingsTree<S>>
 		extends AbstractSettingsTree<S> {
 
