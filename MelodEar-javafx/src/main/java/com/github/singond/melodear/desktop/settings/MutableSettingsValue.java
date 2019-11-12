@@ -43,7 +43,7 @@ public class MutableSettingsValue<T>
 	}
 
 	@Override
-	public void updateFrom(MutableSettingsValue<T> src) {
+	public void updateWith(MutableSettingsValue<T> src) {
 		if (src != null) {
 			value = src.valueCopy();
 		} else {

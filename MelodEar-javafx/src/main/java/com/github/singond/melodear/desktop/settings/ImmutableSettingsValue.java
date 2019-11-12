@@ -41,7 +41,7 @@ public class ImmutableSettingsValue<T>
 	}
 
 	@Override
-	public void updateFrom(ImmutableSettingsValue<T> src) {
+	public void updateWith(ImmutableSettingsValue<T> src) {
 		if (src != null) {
 			value = src.valueCopy();
 		} else {

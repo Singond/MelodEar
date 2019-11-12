@@ -69,7 +69,7 @@ public class KeyboardSettings implements SettingsTree<KeyboardSettings> {
 	}
 
 	@Override
-	public void updateFrom(KeyboardSettings src) {
+	public void updateWith(KeyboardSettings src) {
 		updateFields(src, this);
 	}
 }

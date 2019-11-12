@@ -49,7 +49,7 @@ public final class MidiSettings implements SettingsTree<MidiSettings> {
 	}
 
 	private MidiSettings(MidiSettings src) {
-		updateFrom(src);
+		updateWith(src);
 	}
 
 	public MidiDevice.Info getSynth() {
@@ -130,7 +130,7 @@ public final class MidiSettings implements SettingsTree<MidiSettings> {
 	}
 
 	@Override
-	public final void updateFrom(MidiSettings src) {
+	public final void updateWith(MidiSettings src) {
 		this.synth.set(src.synth.get());
 		this.soundbank.set(src.soundbank.get());
 		this.soundbankDefaultDir.set(src.soundbankDefaultDir.get());

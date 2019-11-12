@@ -65,7 +65,7 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public final void updateFrom(S src) {
+	public final void updateWith(S src) {
 		logger.debug("Updating from {}", src);
 		for (Entry<String, SettingsNode<?>> e : nodes.entrySet()) {
 			SettingsNode item = e.getValue();
@@ -73,7 +73,7 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 				throw new AssertionError(
 						"SettingsTree item found under different key from its own");
 			}
-			item.updateFrom(src.getItem(item.key()));
+			item.updateWith(src.getItem(item.key()));
 		}
 	}
 
@@ -83,7 +83,7 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 	@Override
 	public S copy() {
 		S copy = newInstance();
-		copy.updateFrom((S)this);
+		copy.updateWith((S)this);
 		return copy;
 	}
 

@@ -42,8 +42,8 @@ public class AllSettings {
 
 	public void updateFrom(AllSettings src) {
 		logger.debug("Updating settings from {}", src);
-		keyboard.updateFrom(src.keyboard);
-		midi.updateFrom(src.midi);
+		keyboard.updateWith(src.keyboard);
+		midi.updateWith(src.midi);
 	}
 
 	/**

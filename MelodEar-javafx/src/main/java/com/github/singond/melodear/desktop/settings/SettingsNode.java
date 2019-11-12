@@ -28,6 +28,6 @@ public interface SettingsNode<S extends SettingsNode<S>> {
 	 *
 	 * @param src the source object
 	 */
-	void updateFrom(S src);
+	void updateWith(S src);
 
 }

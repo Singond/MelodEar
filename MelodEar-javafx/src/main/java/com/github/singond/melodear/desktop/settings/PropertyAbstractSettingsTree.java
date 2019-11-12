@@ -56,7 +56,7 @@ public abstract class PropertyAbstractSettingsTree<S extends PropertyAbstractSet
 		}
 
 		@Override
-		public void updateFrom(PropertySettingsValue<T> src) {
+		public void updateWith(PropertySettingsValue<T> src) {
 			property.setValue(src.valueCopy());
 		}
 	}
