@@ -78,8 +78,11 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 	}
 
 	@Override
-	public final <A, R> R invite(SettingsNodeVisitor<A, R> visitor, A arg) {
-		return visitor.visitTree(this, arg);
+	public final void invite(SettingsNodeVisitor visitor) {
+		for (SettingsNode<?> node : nodes.values()) {
+			node.invite(visitor);
+		}
+		visitor.visitTree(this);
 	}
 
 	protected abstract S newInstance();

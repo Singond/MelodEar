@@ -37,8 +37,8 @@ public abstract class AbstractSettingsValue<T, S extends AbstractSettingsValue<T
 	}
 
 	@Override
-	public final <A, R> R invite(SettingsNodeVisitor<A, R> visitor, A arg) {
-		return visitor.visitValue(this, arg);
+	public final void invite(SettingsNodeVisitor visitor) {
+		visitor.visitValue(this);
 	}
 
 }
