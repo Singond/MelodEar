@@ -49,7 +49,7 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 	 * @param node the node to be added
 	 * @return the {@code item} argument itself
 	 */
-	protected <T extends SettingsNode<?>, U extends T> U newNode(U node) {
+	protected final <T extends SettingsNode<?>, U extends T> U newNode(U node) {
 		if (node == null) {
 			throw new NullPointerException("Cannot insert null item");
 		} else if (node.key() == null) {
@@ -59,7 +59,7 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 		return node;
 	}
 
-	public SettingsNode<?> getItem(String key) {
+	public final SettingsNode<?> getItem(String key) {
 		return nodes.get(key);
 	}
 
@@ -86,14 +86,14 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public S copy() {
+	public final S copy() {
 		S copy = newInstance();
 		copy.updateWith((S)this);
 		return copy;
 	}
 
 	@Override
-	public String key() {
+	public final String key() {
 		return key;
 	}
 
