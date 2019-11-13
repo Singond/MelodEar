@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -154,9 +155,23 @@ public class SettingsTest {
 	}
 
 	@Test
-	public void testAncestors() {
+	public void testAncestors1() {
 		MockSettings src = new MockSettings();
-		System.out.println(src.getNested().ancestors());
+		List<SettingsNode<?>> ancestors = src.pathNode().ancestors();
+		System.out.println(ancestors);
+		assertEquals("Wrong number of ancestors", 1, ancestors.size());
+		assertEquals("Wrong parent", src, ancestors.get(0));
+	}
+
+	@Test
+	public void testAncestors2() {
+		MockSettings src = new MockSettings();
+		List<SettingsNode<?>> ancestors
+				= src.getNested().integerNode().ancestors();
+		System.out.println(ancestors);
+		assertEquals("Wrong number of ancestors", 2, ancestors.size());
+		assertEquals("Wrong ancestor 1", src, ancestors.get(0));
+		assertEquals("Wrong parent", src.getNested(), ancestors.get(1));
 	}
 
 }

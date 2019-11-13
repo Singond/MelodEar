@@ -2,11 +2,6 @@ package com.github.singond.settings;
 
 import java.util.Date;
 
-import com.github.singond.settings.AbstractSettingsTree;
-import com.github.singond.settings.ImmutableSettingsValue;
-import com.github.singond.settings.MutableSettingsValue;
-import com.github.singond.settings.SettingsValue;
-
 public class MockSubSettings extends AbstractSettingsTree<MockSubSettings> {
 
 	/** An example of an immutable property. */
@@ -34,12 +29,20 @@ public class MockSubSettings extends AbstractSettingsTree<MockSubSettings> {
 		integer.setValue(value);
 	}
 
+	SettingsNode<?> integerNode() {
+		return (SettingsNode<?>) integer;
+	}
+
 	public Date getDate() {
 		return date.value();
 	}
 
 	public void setDate(Date date) {
 		this.date.setValue(date);
+	}
+
+	SettingsNode<?> dateNode() {
+		return (SettingsNode<?>) date;
 	}
 
 }

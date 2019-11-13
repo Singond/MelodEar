@@ -3,11 +3,6 @@ package com.github.singond.settings;
 import java.nio.file.Path;
 import java.util.Date;
 
-import com.github.singond.settings.AbstractSettingsTree;
-import com.github.singond.settings.ImmutableSettingsValue;
-import com.github.singond.settings.MutableSettingsValue;
-import com.github.singond.settings.SettingsValue;
-
 public class MockSettings extends AbstractSettingsTree<MockSettings> {
 
 	private final SettingsValue<String> name;
@@ -40,6 +35,10 @@ public class MockSettings extends AbstractSettingsTree<MockSettings> {
 		this.name.setValue(name);
 	}
 
+	SettingsNode<?> nameNode() {
+		return (SettingsNode<?>) name;
+	}
+
 	public Path getPath() {
 		return path.value();
 	}
@@ -48,12 +47,20 @@ public class MockSettings extends AbstractSettingsTree<MockSettings> {
 		this.path.setValue(path);
 	}
 
+	SettingsNode<?> pathNode() {
+		return (SettingsNode<?>) path;
+	}
+
 	public Date getDate() {
 		return date.value();
 	}
 
 	public void setDate(Date date) {
 		this.date.setValue(date);
+	}
+
+	SettingsNode<?> dateNode() {
+		return (SettingsNode<?>) date;
 	}
 
 	public MockSubSettings getNested() {

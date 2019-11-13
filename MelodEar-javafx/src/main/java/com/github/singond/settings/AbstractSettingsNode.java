@@ -57,11 +57,10 @@ public abstract class AbstractSettingsNode<S extends AbstractSettingsNode<S>>
 	@Override
 	public List<SettingsNode<?>> ancestors() {
 		if (parent == null) {
-			List<SettingsNode<?>> emptyList = new LinkedList<>();
-			return emptyList;
+			return new LinkedList<>();
 		} else {
 			List<SettingsNode<?>> parentAncestors = parent().ancestors();
-			parentAncestors.add(this);
+			parentAncestors.add(parent);
 			return parentAncestors;
 		}
 	}
