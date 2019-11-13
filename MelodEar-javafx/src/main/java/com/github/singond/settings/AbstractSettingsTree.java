@@ -60,7 +60,7 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 		return node;
 	}
 
-	public final SettingsNode<?> getItem(String key) {
+	public final SettingsNode<?> getNode(String key) {
 		return nodes.get(key);
 	}
 
@@ -74,7 +74,7 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 				throw new AssertionError(
 						"SettingsTree item found under different key from its own");
 			}
-			item.updateWith(src.getItem(item.key()));
+			item.updateWith(src.getNode(item.key()));
 		}
 	}
 
