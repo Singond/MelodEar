@@ -17,6 +17,8 @@ public abstract class AbstractSettingsValue<T, S extends AbstractSettingsValue<T
 		extends AbstractSettingsNode<S>
 		implements SettingsValueNode<T, S> {
 
+	private T value;
+
 	/**
 	 * Creates a new instance of settings value with the given key.
 	 * This constructor is intended only for subclasses of this class.
@@ -24,8 +26,57 @@ public abstract class AbstractSettingsValue<T, S extends AbstractSettingsValue<T
 	 * @param key the key of the value. Must not be {@code null}.
 	 * @throws NullPointerException if {@code key} is null
 	 */
-	protected AbstractSettingsValue(String key) {
+	protected AbstractSettingsValue(String key, T value) {
 		super(key);
+		this.value = value;
+	}
+
+	@Override
+	public final T value() {
+		return value;
+	}
+
+	@Override
+	public final void setValue(T value) {
+		this.value = value;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * This default implementation returns the value directly.
+	 */
+	@Override
+	public T valueCopy() {
+		return value;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * This default implementation returns the output of {@link #toString}.
+	 */
+	@Override
+	public String valueToString() {
+		return this.toString();
+	}
+
+	@Override
+	public final void setValueFromString(String string) {
+		if (string != null) {
+			setValue(valueFromString(string));
+		} else {
+			setValue(null);
+		}
+	}
+
+	@Override
+	public final void updateWith(S src) {
+		if (src != null) {
+			value = src.valueCopy();
+		} else {
+			value = null;
+		}
 	}
 
 	@Override

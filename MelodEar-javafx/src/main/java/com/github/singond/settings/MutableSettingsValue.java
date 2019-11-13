@@ -11,43 +11,34 @@ import java.util.function.Function;
  * @param <T> the type of value held by this node
  */
 public class MutableSettingsValue<T>
-		extends AbstractSettingsValue<T, MutableSettingsValue<T>> {
+		extends ConvertableSettingsValue<T, MutableSettingsValue<T>> {
 
-	private T value;
 	private final Function<T, T> duplicator;
 
 	public MutableSettingsValue(String key, T value,
-			Function<T, T> valueDuplicator) {
-		super(key);
-		this.value = value;
+			Function<T, T> valueDuplicator,
+			Function<T, String> toString, Function<String, T> fromString) {
+		super(key, value, toString, fromString);
+		if (valueDuplicator == null) {
+			throw new NullPointerException(
+					"Value duplicator must not be null");
+		}
 		this.duplicator = valueDuplicator;
 	}
 
-	@Override
-	public T value() {
-		return value;
-	}
-
-	@Override
-	public void setValue(T value) {
-		this.value = value;
+	public MutableSettingsValue(String key, T value,
+			Function<T, T> valueDuplicator,
+			Function<String, T> fromString) {
+		this(key, value, valueDuplicator, t -> t.toString(), fromString);
 	}
 
 	@Override
 	public T valueCopy() {
-		if (value != null) {
-			return duplicator.apply(value);
+		T val = value();
+		if (val != null) {
+			return duplicator.apply(val);
 		} else {
 			return null;
-		}
-	}
-
-	@Override
-	public void updateWith(MutableSettingsValue<T> src) {
-		if (src != null) {
-			value = src.valueCopy();
-		} else {
-			value = null;
 		}
 	}
 

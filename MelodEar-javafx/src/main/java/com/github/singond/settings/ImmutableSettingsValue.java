@@ -1,5 +1,7 @@
 package com.github.singond.settings;
 
+import java.util.function.Function;
+
 /**
  * An implementation of {@link SettingsValueNode} suitable for wrapping
  * an immutable value.
@@ -16,37 +18,21 @@ package com.github.singond.settings;
  * @param <T> the type of value held by this node
  */
 public class ImmutableSettingsValue<T>
-		extends AbstractSettingsValue<T, ImmutableSettingsValue<T>> {
+		extends ConvertableSettingsValue<T, ImmutableSettingsValue<T>> {
 
-	private T value;
+	public ImmutableSettingsValue(String key, T value,
+			Function<T, String> toString, Function<String, T> fromString) {
+		super(key, value, toString, fromString);
+	}
 
-	public ImmutableSettingsValue(String key, T value) {
-		super(key);
-		this.value = value;
+	public ImmutableSettingsValue(String key, T value,
+			Function<String, T> fromString) {
+		super(key, value, fromString);
 	}
 
 	@Override
-	public T value() {
-		return value;
-	}
-
-	@Override
-	public void setValue(T value) {
-		this.value = value;
-	}
-
-	@Override
-	public T valueCopy() {
-		return value;
-	}
-
-	@Override
-	public void updateWith(ImmutableSettingsValue<T> src) {
-		if (src != null) {
-			value = src.valueCopy();
-		} else {
-			value = null;
-		}
+	public final T valueCopy() {
+		return super.valueCopy();
 	}
 
 }

@@ -36,4 +36,30 @@ public interface SettingsValue<T> {
 	 */
 	T valueCopy();
 
+	/**
+	 * Converts the value of this node to a format, from which it can be
+	 * retreived by {@link #valueFromString}.
+	 *
+	 * @return a string representation of {@link #value}
+	 */
+	String valueToString();
+
+	/**
+	 * Converts the string created by {@link #valueToString} in an object of
+	 * the same type as this back into a value of type {@code T}.
+	 *
+	 * @param string the string to be converted
+	 * @return value read from {@code string}
+	 */
+	T valueFromString(String string);
+
+	/**
+	 * Sets the value of this node to the value represented by the given
+	 * string. This is equivalent to calling
+	 * {@code setValue(this.valueFromString(string))}.
+	 *
+	 * @param string
+	 * @see {@link #valueFromString}
+	 */
+	void setValueFromString(String string);
 }
