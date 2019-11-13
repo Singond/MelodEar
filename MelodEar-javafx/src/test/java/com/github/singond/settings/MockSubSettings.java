@@ -9,10 +9,14 @@ public class MockSubSettings extends AbstractSettingsTree<MockSubSettings> {
 	/** An example of a mutable property. */
 	private final SettingsValue<Date> date;
 
-	public MockSubSettings() {
-		super("MockSubSettings");
+	public MockSubSettings(String key) {
+		super(key);
 		integer = newNode(new IntegerSettingsValue("integer", null));
 		date = newNode(new DateSettingsValue("date", null));
+	}
+
+	public MockSubSettings() {
+		this("MockSubSettings");
 	}
 
 	@Override
