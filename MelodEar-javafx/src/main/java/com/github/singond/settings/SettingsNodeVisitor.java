@@ -7,7 +7,7 @@ package com.github.singond.settings;
  */
 public interface SettingsNodeVisitor {
 
-	void visitValue(SettingsValue<?> value);
+	void visitValue(SettingsValueNode<?, ?> value);
 
 	void visitTree(SettingsTree<?> tree);
 
