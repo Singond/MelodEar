@@ -15,10 +15,9 @@ public class MockSettings extends AbstractSettingsTree<MockSettings> {
 
 	public MockSettings() {
 		super("MockSettings");
-		name = newNode(new ImmutableSettingsValue<String>("name", null));
-		path = newNode(new ImmutableSettingsValue<Path>("path", null));
-		date = newNode(new MutableSettingsValue<Date>("date", null,
-				d -> new Date(d.getTime())));
+		name = newNode(new StringSettingsValue("name", null));
+		path = newNode(new PathSettingsValue("path", null));
+		date = newNode(new DateSettingsValue("date", null));
 		newNode(sub);
 	}
 

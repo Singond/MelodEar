@@ -1,6 +1,7 @@
 package com.github.singond.melodear.desktop.settings;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 
 import javafx.beans.property.Property;
@@ -27,13 +28,15 @@ public class PropertyMockSettings extends AbstractSettingsTree<PropertyMockSetti
 		// Property is mutable, we need to use MutableSettingsValue everywhere
 		name = newNode(new MutableSettingsValue<StringProperty>(
 				"name", new SimpleStringProperty(),
-				p -> new SimpleStringProperty(p.getValue())));
+				p -> new SimpleStringProperty(p.getValue()),
+				p -> p.get(), s-> new SimpleStringProperty(s)));
 		path = newNode(new MutableSettingsValue<Property<Path>>(
 				"path", new SimpleObjectProperty<>(),
-				p -> new SimpleObjectProperty<Path>(p.getValue())));
-		date = newNode(new MutableSettingsValue<Property<Date>>(
-				"date", new SimpleObjectProperty<>(new Date()),
-				p -> new SimpleObjectProperty<Date>(new Date(p.getValue().getTime()))));
+				p -> new SimpleObjectProperty<Path>(p.getValue()),
+				p -> p.getValue().toString(),
+				s -> new SimpleObjectProperty<Path>(Paths.get(s))));
+		date = newNode(new DatePropertySettingsValue(
+				"date", new SimpleObjectProperty<>(new Date())));
 		newNode(sub);
 	}
 

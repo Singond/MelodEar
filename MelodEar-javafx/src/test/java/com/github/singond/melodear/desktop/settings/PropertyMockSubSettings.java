@@ -11,7 +11,8 @@ import com.github.singond.settings.AbstractSettingsTree;
 import com.github.singond.settings.MutableSettingsValue;
 import com.github.singond.settings.SettingsValue;
 
-public class PropertyMockSubSettings extends AbstractSettingsTree<PropertyMockSubSettings> {
+public class PropertyMockSubSettings
+		extends AbstractSettingsTree<PropertyMockSubSettings> {
 
 	/** An example of an immutable property. */
 	private final SettingsValue<IntegerProperty> integer;
@@ -23,10 +24,11 @@ public class PropertyMockSubSettings extends AbstractSettingsTree<PropertyMockSu
 		// Property is mutable, we need to use MutableSettingsValue everywhere
 		integer = newNode(new MutableSettingsValue<IntegerProperty>(
 				"integer", new SimpleIntegerProperty(),
-				p -> new SimpleIntegerProperty(p.getValue())));
-		date = newNode(new MutableSettingsValue<Property<Date>>(
-				"date", new SimpleObjectProperty<>(new Date()),
-				p -> new SimpleObjectProperty<Date>(new Date(p.getValue().getTime()))));
+				p -> new SimpleIntegerProperty(p.getValue()),
+				p -> p.getValue().toString(),
+				s -> new SimpleIntegerProperty(Integer.valueOf(s))));
+		date = newNode(new DatePropertySettingsValue(
+				"date", new SimpleObjectProperty<>(new Date())));
 	}
 
 	@Override

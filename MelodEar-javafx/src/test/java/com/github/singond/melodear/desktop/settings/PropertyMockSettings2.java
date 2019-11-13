@@ -7,6 +7,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.util.converter.DefaultStringConverter;
 
 public class PropertyMockSettings2
 		extends PropertyAbstractSettingsTree<PropertyMockSettings2> {
@@ -21,10 +22,12 @@ public class PropertyMockSettings2
 
 	public PropertyMockSettings2() {
 		super("MockSettings");
-		name = newPropertyNode("name", new SimpleStringProperty());
-		path = newPropertyNode("path", new SimpleObjectProperty<Path>());
+		name = newPropertyNode("name", new SimpleStringProperty(),
+				new DefaultStringConverter());
+		path = newPropertyNode("path", new SimpleObjectProperty<Path>(),
+				new PathStringConverter());
 		date = newPropertyNode("date", new SimpleObjectProperty<Date>(),
-				d -> new Date(d.getTime()));
+				d -> new Date(d.getTime()), new DateStringConverter());
 		newNode(sub);
 	}
 

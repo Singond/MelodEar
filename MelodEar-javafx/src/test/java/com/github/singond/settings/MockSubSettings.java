@@ -11,9 +11,8 @@ public class MockSubSettings extends AbstractSettingsTree<MockSubSettings> {
 
 	public MockSubSettings() {
 		super("MockSubSettings");
-		integer = newNode(new ImmutableSettingsValue<Integer>("integer", null));
-		date = newNode(new MutableSettingsValue<Date>(
-				"date", null, d -> new Date(d.getTime())));
+		integer = newNode(new IntegerSettingsValue("integer", null));
+		date = newNode(new DateSettingsValue("date", null));
 	}
 
 	@Override
