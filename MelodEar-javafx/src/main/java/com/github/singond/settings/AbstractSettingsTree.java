@@ -20,16 +20,16 @@ import org.apache.logging.log4j.Logger;
  * @param <S> the concrete subclass of {@code AbstractSettingsTree}
  */
 public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
+		extends AbstractSettingsNode<S>
 		implements SettingsTree<S> {
 
 	private static Logger logger
 			= LogManager.getLogger(AbstractSettingsTree.class);
 
-	private final String key;
 	private final Map<String, SettingsNode<?>> nodes = new HashMap<>();
 
 	public AbstractSettingsTree(String key) {
-		this.key = key;
+		super(key);
 	}
 
 	/**
@@ -93,11 +93,6 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 		S copy = newInstance();
 		copy.updateWith((S)this);
 		return copy;
-	}
-
-	@Override
-	public final String key() {
-		return key;
 	}
 
 }

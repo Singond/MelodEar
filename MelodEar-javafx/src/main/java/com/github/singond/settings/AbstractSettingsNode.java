@@ -10,27 +10,30 @@ package com.github.singond.settings;
  * is violated.
  *
  * @author Singon
- * @param <T> the type of value held by this node
  * @param <S> the concrete subtype of {@code SettingsValueNode}
  */
-public abstract class AbstractSettingsValue<T, S extends AbstractSettingsValue<T, S>>
-		extends AbstractSettingsNode<S>
-		implements SettingsValueNode<T, S> {
+public abstract class AbstractSettingsNode<S extends AbstractSettingsNode<S>>
+		implements SettingsNode<S> {
+
+	private final String key;
 
 	/**
-	 * Creates a new instance of settings value with the given key.
+	 * Creates a new instance of settings node with the given key.
 	 * This constructor is intended only for subclasses of this class.
 	 *
 	 * @param key the key of the value. Must not be {@code null}.
 	 * @throws NullPointerException if {@code key} is null
 	 */
-	protected AbstractSettingsValue(String key) {
-		super(key);
+	protected AbstractSettingsNode(String key) {
+		if (key == null) {
+			throw new NullPointerException("Key must not be null");
+		}
+		this.key = key;
 	}
 
 	@Override
-	public final void invite(SettingsNodeVisitor visitor) {
-		visitor.visitValue(this);
+	public final String key() {
+		return key;
 	}
 
 }
