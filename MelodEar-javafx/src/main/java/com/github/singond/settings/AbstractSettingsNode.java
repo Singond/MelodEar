@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Skeletal implementation of {@link SettingsValueNode}.
+ * Skeletal implementation of {@link SettingsNode}.
  * <p>
  * <strong>Important:</strong> Note that all types in the
  * {@code com.github.singond.settings} package rely heavily
