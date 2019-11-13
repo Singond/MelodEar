@@ -55,6 +55,7 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 		} else if (node.key() == null) {
 			throw new NullPointerException("Cannot insert item with null key");
 		}
+		node.setParent(this);
 		nodes.put(node.key(), node);
 		return node;
 	}

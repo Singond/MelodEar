@@ -1,5 +1,8 @@
 package com.github.singond.settings;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Skeletal implementation of {@link SettingsValueNode}.
  * <p>
@@ -16,6 +19,7 @@ public abstract class AbstractSettingsNode<S extends AbstractSettingsNode<S>>
 		implements SettingsNode<S> {
 
 	private final String key;
+	private SettingsNode<?> parent = null;
 
 	/**
 	 * Creates a new instance of settings node with the given key.
@@ -34,6 +38,32 @@ public abstract class AbstractSettingsNode<S extends AbstractSettingsNode<S>>
 	@Override
 	public final String key() {
 		return key;
+	}
+
+	@Override
+	public final SettingsNode<?> parent() {
+		return parent;
+	}
+
+	@Override
+	public final void setParent(SettingsNode<?> parent) {
+		if (this.parent != null) {
+			throw new IllegalStateException("Cannot set parent more than once. "
+					+ "Node " + this + " already has a parent: " + parent());
+		}
+		this.parent = parent;
+	}
+
+	@Override
+	public List<SettingsNode<?>> ancestors() {
+		if (parent == null) {
+			List<SettingsNode<?>> emptyList = new LinkedList<>();
+			return emptyList;
+		} else {
+			List<SettingsNode<?>> parentAncestors = parent().ancestors();
+			parentAncestors.add(this);
+			return parentAncestors;
+		}
 	}
 
 }

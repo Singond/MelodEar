@@ -1,5 +1,7 @@
 package com.github.singond.settings;
 
+import java.util.List;
+
 /**
  * An element (a branch node or a leaf node) of a settings tree.
  * <p>
@@ -21,6 +23,35 @@ public interface SettingsNode<S extends SettingsNode<S>> {
 	 * @return a unique key of this node
 	 */
 	String key();
+
+	/**
+	 * Returns the parent node of this node, if any.
+	 * If no parent has been assigned yet, this method returns {@code null}.
+	 *
+	 * @return parent node or {@code null}
+	 */
+	SettingsNode<?> parent();
+
+	/**
+	 * Sets the parent of this node.
+	 * This method must be called when adding this node as a child to another
+	 * node.
+	 * This method may only be called once. Subsequent calls will fail with
+	 * {@link IllegalStateException}.
+	 *
+	 * @param parent the parent node
+	 * @throws IllegalStateException if this method has been called when
+	 *         this node already has a parent
+	 */
+	void setParent(SettingsNode<?> parent);
+
+	/**
+	 * Returns all ancestors of this node, starting with the root node
+	 * and proceeding downwards to the parent of this node.
+	 *
+	 * @return ancestors of this node
+	 */
+	List<SettingsNode<?>> ancestors();
 
 	/**
 	 * Sets the values in this node and its children to their corresponding

@@ -153,4 +153,10 @@ public class SettingsTest {
 				date3, src.getNested().getDate());
 	}
 
+	@Test
+	public void testAncestors() {
+		MockSettings src = new MockSettings();
+		System.out.println(src.getNested().ancestors());
+	}
+
 }
