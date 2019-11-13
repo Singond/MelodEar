@@ -77,6 +77,11 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 		}
 	}
 
+	@Override
+	public final <A, R> R invite(SettingsNodeVisitor<A, R> visitor, A arg) {
+		return visitor.visitTree(this, arg);
+	}
+
 	protected abstract S newInstance();
 
 	@SuppressWarnings("unchecked")
