@@ -38,7 +38,7 @@ public interface SettingsValue<T> {
 
 	/**
 	 * Converts the value of this node to a format, from which it can be
-	 * retreived by {@link #valueFromString}.
+	 * retrieved by {@link #valueFromString}.
 	 *
 	 * @return a string representation of {@link #value}
 	 */
