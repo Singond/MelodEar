@@ -15,6 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.singond.settings.MockEnum;
 import com.github.singond.settings.MockSettings;
 
 public class SettingsToPreferences {
@@ -26,6 +27,7 @@ public class SettingsToPreferences {
 	private Path path = Paths.get("/home/user/thefile.txt");
 	private Date date;
 	private Integer integer = Integer.valueOf(68);
+	private MockEnum enm = MockEnum.TWO;
 
 	private Preferences userPrefs;
 	private PreferencesStorage storage;
@@ -45,6 +47,7 @@ public class SettingsToPreferences {
 		settings.setPath(path);
 		settings.setDate(new Date(date.getTime()));
 		settings.getNested().setDate(new Date(date.getTime()));
+		settings.setEnum(enm);
 		settings.getNested().setInteger(integer);
 
 		userPrefs = Preferences.userNodeForPackage(SettingsToPreferences.class);
@@ -57,6 +60,7 @@ public class SettingsToPreferences {
 		assertEquals(name, userPrefs.get("MockSettings.name", ""));
 		assertEquals(path.toString(), userPrefs.get("MockSettings.path", ""));
 		assertEquals(DATE_FMT.format(date), userPrefs.get("MockSettings.date", ""));
+		assertEquals(enm.name(), userPrefs.get("MockSettings.enum", ""));
 		assertEquals(integer.toString(), userPrefs.get("MockSettings.nested.integer", ""));
 		assertEquals(DATE_FMT.format(date), userPrefs.get("MockSettings.nested.date", ""));
 	}
@@ -69,6 +73,7 @@ public class SettingsToPreferences {
 		assertEquals(name, saved.getName());
 		assertEquals(path, saved.getPath());
 		assertEquals(date, saved.getDate());
+		assertEquals(enm, saved.getEnum());
 		assertEquals(integer, saved.getNested().getInteger());
 		assertEquals(date, saved.getNested().getDate());
 	}

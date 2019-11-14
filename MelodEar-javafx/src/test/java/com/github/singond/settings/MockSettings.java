@@ -10,6 +10,8 @@ public class MockSettings extends AbstractSettingsTree<MockSettings> {
 	private final SettingsValue<Path> path;
 	/** An example of a mutable property. */
 	private final SettingsValue<Date> date;
+	/** An example of enum. */
+	private final SettingsValue<MockEnum> enm;
 	/** Nested settings object. */
 	private final MockSubSettings sub = new MockSubSettings("nested");
 
@@ -18,6 +20,7 @@ public class MockSettings extends AbstractSettingsTree<MockSettings> {
 		name = newNode(new StringSettingsValue("name", null));
 		path = newNode(new PathSettingsValue("path", null));
 		date = newNode(new DateSettingsValue("date", null));
+		enm  = newNode(new EnumSettingsValue<MockEnum>("enum", MockEnum.ONE));
 		newNode(sub);
 	}
 
@@ -64,6 +67,18 @@ public class MockSettings extends AbstractSettingsTree<MockSettings> {
 
 	SettingsNode<?> dateNode() {
 		return (SettingsNode<?>) date;
+	}
+
+	public MockEnum getEnum() {
+		return enm.value();
+	}
+
+	public void setEnum(MockEnum enm) {
+		this.enm.setValue(enm);
+	}
+
+	SettingsNode<?> enumNode() {
+		return (SettingsNode<?>) enm;
 	}
 
 	public MockSubSettings getNested() {
