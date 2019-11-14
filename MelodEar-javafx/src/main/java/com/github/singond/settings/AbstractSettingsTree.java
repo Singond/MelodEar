@@ -47,13 +47,13 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 	 * </pre>
 	 *
 	 * @param node the node to be added
-	 * @return the {@code item} argument itself
+	 * @return the {@code node} argument itself
 	 */
 	protected final <T extends SettingsNode<?>, U extends T> U newNode(U node) {
 		if (node == null) {
-			throw new NullPointerException("Cannot insert null item");
+			throw new NullPointerException("Cannot insert null node");
 		} else if (node.key() == null) {
-			throw new NullPointerException("Cannot insert item with null key");
+			throw new NullPointerException("Cannot insert node with null key");
 		}
 		node.setParent(this);
 		nodes.put(node.key(), node);
@@ -67,14 +67,14 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public final void updateWith(S src) {
-		logger.debug("Updating from {}", src);
+		logger.debug("Updating {} to contain values from {}", this, src);
 		for (Entry<String, SettingsNode<?>> e : nodes.entrySet()) {
-			SettingsNode item = e.getValue();
-			if (!e.getKey().equals(item.key())) {
+			SettingsNode node = e.getValue();
+			if (!e.getKey().equals(node.key())) {
 				throw new AssertionError(
-						"SettingsTree item found under different key from its own");
+						"Node found under different key from its own");
 			}
-			item.updateWith(src.getNode(item.key()));
+			node.updateWith(src.getNode(node.key()));
 		}
 	}
 
