@@ -1,7 +1,11 @@
 package com.github.singond.melodear.desktop.settings;
 
 import java.util.List;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.github.singond.settings.SettingsNode;
 import com.github.singond.settings.SettingsNodeVisitor;
@@ -10,38 +14,65 @@ import com.github.singond.settings.SettingsValueNode;
 
 public class PreferencesStorage {
 
-	private final Class<?> cls;
-	private final SettingsNodeVisitor userWriter = new UserSettingsWriter();
-	private final SettingsNodeVisitor sysWriter = new SystemSettingsWriter();
+	private static final String SEPARATOR = ".";
+	private static final String DEFAULT_STRING = "";
 
-	public PreferencesStorage(Class<?> cls) {
-		this.cls = cls;
+	private static Logger logger
+			= LogManager.getLogger(PreferencesStorage.class);
+
+	private final Preferences prefs;
+	private final SettingsNodeVisitor writer = new SettingsWriter();
+	private final SettingsNodeVisitor reader = new SettingsReader();
+
+	public PreferencesStorage(Preferences preferencesNode) {
+		this.prefs = preferencesNode;
 	}
 
-	public void writeUserSettings(SettingsTree<?> settings) {
-		settings.invite(userWriter);
+	public void writeSettings(SettingsTree<?> settings) {
+		settings.invite(writer);
 	}
 
-	public void writeSystemSettings(SettingsTree<?> settings) {
-		settings.invite(sysWriter);
+	public void readSettings(SettingsTree<?> settings) {
+		settings.invite(reader);
 	}
 
-	private abstract class SettingsWriter implements SettingsNodeVisitor {
+	public void clearUserSettings() {
+		try {
+			prefs.removeNode();
+		} catch (BackingStoreException e) {
+			logger.error("Error while clearing user preferences", e);
+		}
+	}
 
-		protected abstract Preferences preferencesNode();
+	public void clearSystemSettings() {
+		try {
+			prefs.removeNode();
+		} catch (BackingStoreException e) {
+			logger.error("Error while clearing user preferences", e);
+		}
+	}
+
+	/**
+	 * Constructs the key under which the given node value is stored.
+	 *
+	 * @param node the node value to be stored or retrieved
+	 * @return the key
+	 */
+	private static String wholeKey(SettingsValueNode<?, ?> node) {
+		List<SettingsNode<?>> ancestors = node.ancestors();
+		StringBuilder path = new StringBuilder();
+		for (SettingsNode<?> n : ancestors) {
+			path.append(n.key()).append(SEPARATOR);
+		}
+		path.append(node.key());
+		return path.toString();
+	}
+
+	private class SettingsWriter implements SettingsNodeVisitor {
 
 		@Override
 		public void visitValue(SettingsValueNode<?, ?> value) {
-			List<SettingsNode<?>> ancestors = value.ancestors();
-			StringBuilder path = new StringBuilder();
-			for (SettingsNode<?> node : ancestors) {
-				path.append(node.key()).append(".");
-			}
-			path.append(value.key());
-			// TODO: Use dedicated method, not toString
-//			preferencesNode().put(value.key(), value.value().toString());
-
-			System.out.println(path + ": " + value.value());
+			prefs.put(wholeKey(value), value.valueToString());
 		}
 
 		@Override
@@ -50,17 +81,20 @@ public class PreferencesStorage {
 		}
 	}
 
-	private class UserSettingsWriter extends SettingsWriter {
+	private class SettingsReader implements SettingsNodeVisitor {
+
 		@Override
-		protected Preferences preferencesNode() {
-			return Preferences.userNodeForPackage(cls);
+		public void visitValue(SettingsValueNode<?, ?> value) {
+			String str = prefs.get(wholeKey(value), DEFAULT_STRING);
+			if (!str.equals(DEFAULT_STRING)) {
+				value.setValueFromString(str);
+			}
+		}
+
+		@Override
+		public void visitTree(SettingsTree<?> tree) {
+			// skip
 		}
 	}
 
-	private class SystemSettingsWriter extends SettingsWriter {
-		@Override
-		protected Preferences preferencesNode() {
-			return Preferences.systemNodeForPackage(cls);
-		}
-	}
 }
