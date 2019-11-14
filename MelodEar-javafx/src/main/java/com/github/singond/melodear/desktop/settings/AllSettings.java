@@ -1,11 +1,14 @@
 package com.github.singond.melodear.desktop.settings;
 
+import java.util.prefs.Preferences;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.github.singond.melodear.desktop.Main;
 import com.github.singond.melodear.desktop.audio.MidiSettings;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
 
@@ -28,6 +31,10 @@ public class AllSettings {
 		logger.debug("Creating AllSettings");
 		keyboard = new KeyboardSettings();
 		midi = new MidiSettings();
+		// TODO Read all settings
+		PreferencesStorage prefs = new PreferencesStorage(
+				Preferences.userNodeForPackage(Main.class));
+		prefs.readSettings(keyboard);
 	}
 
 	/**

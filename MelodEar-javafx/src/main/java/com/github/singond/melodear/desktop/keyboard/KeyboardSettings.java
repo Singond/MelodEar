@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.github.singond.melodear.desktop.settings.EnumStringConverter;
 import com.github.singond.melodear.desktop.settings.PropertyAbstractSettingsTree;
 
 public class KeyboardSettings
@@ -28,7 +29,8 @@ public class KeyboardSettings
 		super(KeyboardSettings.class.getName());
 		logger.debug("Creating KeyboardSettings");
 		keyDuration = newPropertyNode("keyDuration",
-				new SimpleObjectProperty<>(KeyPlayDuration.KEY_HELD));
+				new SimpleObjectProperty<>(KeyPlayDuration.KEY_HELD),
+				new EnumStringConverter<>(KeyPlayDuration.KEY_HELD));
 		keyLabelFormat = newPropertyNode("keyLabelFormat",
 				new SimpleObjectProperty<>(KeyLabelFormats.getDefaultFormat()));
 		keyDuration.addListener((v, o, n) ->

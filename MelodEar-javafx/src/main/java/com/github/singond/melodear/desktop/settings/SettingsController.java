@@ -2,6 +2,7 @@ package com.github.singond.melodear.desktop.settings;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,6 +19,7 @@ import javafx.scene.layout.BorderPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.github.singond.melodear.desktop.Main;
 import com.github.singond.melodear.desktop.audio.MidiSettingsView;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettingsView;
 
@@ -66,7 +68,11 @@ public class SettingsController {
 		sectionSelect.getSelectionModel().select(0);
 
 		EventHandler<? super ActionEvent> updater
-				= e -> settings.updateFrom(settingsNew);
+				= e -> {
+					settings.updateFrom(settingsNew);
+					// TODO: Write all preferences, not just keyboard
+					userPrefs().writeSettings(settings.keyboard());
+				};
 		Button applyBtn = (Button) settingsDlg.lookupButton(ButtonType.APPLY);
 		applyBtn.addEventHandler(ActionEvent.ACTION, updater);
 	}
@@ -76,5 +82,10 @@ public class SettingsController {
 		sections.add(new KeyboardSettingsView());
 		sections.add(new MidiSettingsView());
 		return sections;
+	}
+
+	private PreferencesStorage userPrefs() {
+		return new PreferencesStorage(
+				Preferences.userNodeForPackage(Main.class));
 	}
 }
