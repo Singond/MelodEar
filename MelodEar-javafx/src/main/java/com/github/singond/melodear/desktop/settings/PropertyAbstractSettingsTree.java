@@ -21,7 +21,7 @@ public abstract class PropertyAbstractSettingsTree
 	protected <T, P extends Property<T>> P newPropertyNode(String key,
 			P property, Function<T, T> propertyValueDuplicator,
 			StringConverter<T> stringConverter) {
-		super.newNode(new PropertySettingsValue<T>(key, property,
+		super.newNode(new ConvertablePropertySettingsValue<T>(key, property,
 				propertyValueDuplicator, stringConverter));
 		return property;
 	}
@@ -32,41 +32,100 @@ public abstract class PropertyAbstractSettingsTree
 				stringConverter);
 	}
 
-	private static final class PropertySettingsValue<T>
-			extends AbstractSettingsNode<PropertySettingsValue<T>>
-			implements SettingsValueNode<T, PropertySettingsValue<T>> {
+	protected <T, P extends Property<T>> P newPropertyNode(String key,
+			P property, Function<T, T> propertyValueDuplicator) {
+		super.newNode(new NonconvertablePropertySettingsValue<T>(
+				key, property, propertyValueDuplicator));
+		return property;
+	}
+
+	protected <T, P extends Property<T>> P newPropertyNode(String key,
+			P property) {
+		super.newNode(new NonconvertablePropertySettingsValue<T>(
+				key, property, Function.identity()));
+		return property;
+	}
+
+	private abstract static class PropertySettingsValue
+			<T, S extends PropertySettingsValue<T, S>>
+			extends AbstractSettingsNode<S>
+			implements SettingsValueNode<T, S> {
 
 		private final Property<T> property;
 		private final Function<T, T> duplicator;
-		private final StringConverter<T> stringConverter;
 
 		public PropertySettingsValue(String key, Property<T> property,
-				Function<T, T> duplicator,
-				StringConverter<T> stringConverter) {
+				Function<T, T> duplicator) {
 			super(key);
 			this.property = property;
 			this.duplicator = duplicator;
-			this.stringConverter = stringConverter;
 		}
 
 		@Override
-		public T value() {
+		public final T value() {
 			return property.getValue();
 		}
 
 		@Override
-		public void setValue(T value) {
+		public final void setValue(T value) {
 			property.setValue(value);
 		}
 
 		@Override
-		public T valueCopy() {
+		public final T valueCopy() {
 			T value = property.getValue();
 			if (value != null) {
 				return duplicator.apply(property.getValue());
 			} else {
 				return null;
 			}
+		}
+
+		@Override
+		public final void setValueFromString(String string) {
+			setValue(valueFromString(string));
+		}
+
+		@Override
+		public final void updateWith(S src) {
+			property.setValue(src.valueCopy());
+		}
+
+		@Override
+		public final void invite(SettingsNodeVisitor visitor) {
+			visitor.visitValue(this);
+		}
+	}
+
+	private static final class NonconvertablePropertySettingsValue<T>
+			extends PropertySettingsValue<T, NonconvertablePropertySettingsValue<T>> {
+
+		public NonconvertablePropertySettingsValue(String key,
+				Property<T> property, Function<T, T> duplicator) {
+			super(key, property, duplicator);
+		}
+
+		@Override
+		public String valueToString() {
+			return "";
+		}
+
+		@Override
+		public T valueFromString(String string) {
+			return null;
+		}
+	}
+
+	private static final class ConvertablePropertySettingsValue<T>
+			extends PropertySettingsValue<T, ConvertablePropertySettingsValue<T>> {
+
+		private final StringConverter<T> stringConverter;
+
+		public ConvertablePropertySettingsValue(String key,
+				Property<T> property, Function<T, T> duplicator,
+				StringConverter<T> stringConverter) {
+			super(key, property, duplicator);
+			this.stringConverter = stringConverter;
 		}
 
 		@Override
@@ -77,21 +136,6 @@ public abstract class PropertyAbstractSettingsTree
 		@Override
 		public T valueFromString(String string) {
 			return stringConverter.fromString(string);
-		}
-
-		@Override
-		public void setValueFromString(String string) {
-			setValue(valueFromString(string));
-		}
-
-		@Override
-		public void updateWith(PropertySettingsValue<T> src) {
-			property.setValue(src.valueCopy());
-		}
-
-		@Override
-		public void invite(SettingsNodeVisitor visitor) {
-			visitor.visitValue(this);
 		}
 	}
 }
