@@ -2,9 +2,9 @@ package com.github.singond.melodear.desktop.settings;
 
 import javafx.scene.Node;
 
-import com.github.singond.settings.SettingsTree;
+import com.github.singond.settings.SettingsTreeNode;
 
-public interface SettingsView<T extends SettingsTree> {
+public interface SettingsView<T extends SettingsTreeNode> {
 
 	/**
 	 * Returns a node containing all controls for this part of settings.

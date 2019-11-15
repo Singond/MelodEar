@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.singond.settings.SettingsNode;
 import com.github.singond.settings.SettingsNodeVisitor;
-import com.github.singond.settings.SettingsTree;
+import com.github.singond.settings.SettingsTreeNode;
 import com.github.singond.settings.SettingsValueNode;
 
 public class PreferencesStorage {
@@ -28,11 +28,11 @@ public class PreferencesStorage {
 		this.prefs = preferencesNode;
 	}
 
-	public void writeSettings(SettingsTree<?> settings) {
+	public void writeSettings(SettingsTreeNode<?> settings) {
 		settings.invite(writer);
 	}
 
-	public void readSettings(SettingsTree<?> settings) {
+	public void readSettings(SettingsTreeNode<?> settings) {
 		settings.invite(reader);
 	}
 
@@ -76,7 +76,7 @@ public class PreferencesStorage {
 		}
 
 		@Override
-		public void visitTree(SettingsTree<?> tree) {
+		public void visitTree(SettingsTreeNode<?> tree) {
 			// skip
 		}
 	}
@@ -92,7 +92,7 @@ public class PreferencesStorage {
 		}
 
 		@Override
-		public void visitTree(SettingsTree<?> tree) {
+		public void visitTree(SettingsTreeNode<?> tree) {
 			// skip
 		}
 	}

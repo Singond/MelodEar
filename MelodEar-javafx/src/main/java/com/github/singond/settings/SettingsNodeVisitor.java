@@ -9,6 +9,6 @@ public interface SettingsNodeVisitor {
 
 	void visitValue(SettingsValueNode<?, ?> value);
 
-	void visitTree(SettingsTree<?> tree);
+	void visitTree(SettingsTreeNode<?> tree);
 
 }

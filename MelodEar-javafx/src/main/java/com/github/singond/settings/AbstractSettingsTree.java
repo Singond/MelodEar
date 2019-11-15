@@ -8,7 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Skeletal implementation of the {@link SettingsTree} interface.
+ * Skeletal implementation of the {@link SettingsTreeNode} interface.
  * <p>
  * <strong>Important:</strong> Note that all types in the
  * {@code com.github.singond.settings} package rely heavily
@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
  */
 public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 		extends AbstractSettingsNode<S>
-		implements SettingsTree<S> {
+		implements SettingsTreeNode<S> {
 
 	private static Logger logger
 			= LogManager.getLogger(AbstractSettingsTree.class);
