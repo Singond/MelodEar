@@ -86,12 +86,12 @@ public abstract class AbstractSettingsTree<S extends AbstractSettingsTree<S>>
 		visitor.visitTree(this);
 	}
 
-	protected abstract S newInstance();
+	protected abstract S newInstance(String key);
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public final S copy() {
-		S copy = newInstance();
+		S copy = newInstance(key());
 		copy.updateWith((S)this);
 		return copy;
 	}

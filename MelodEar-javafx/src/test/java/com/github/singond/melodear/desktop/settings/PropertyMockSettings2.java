@@ -32,7 +32,7 @@ public class PropertyMockSettings2
 	}
 
 	@Override
-	protected PropertyMockSettings2 newInstance() {
+	protected PropertyMockSettings2 newInstance(String key) {
 		return new PropertyMockSettings2();
 	}
 

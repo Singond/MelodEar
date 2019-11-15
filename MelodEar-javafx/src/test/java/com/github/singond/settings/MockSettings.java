@@ -29,8 +29,8 @@ public class MockSettings extends AbstractSettingsTree<MockSettings> {
 	}
 
 	@Override
-	protected MockSettings newInstance() {
-		return new MockSettings();
+	protected MockSettings newInstance(String key) {
+		return new MockSettings(key);
 	}
 
 	public String getName() {

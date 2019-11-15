@@ -20,8 +20,8 @@ public class MockSubSettings extends AbstractSettingsTree<MockSubSettings> {
 	}
 
 	@Override
-	protected MockSubSettings newInstance() {
-		return new MockSubSettings();
+	protected MockSubSettings newInstance(String key) {
+		return new MockSubSettings(key);
 	}
 
 	public Integer getInteger() {

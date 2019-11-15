@@ -25,7 +25,7 @@ public class PropertyMockSubSettings2
 	}
 
 	@Override
-	protected PropertyMockSubSettings2 newInstance() {
+	protected PropertyMockSubSettings2 newInstance(String key) {
 		return new PropertyMockSubSettings2();
 	}
 

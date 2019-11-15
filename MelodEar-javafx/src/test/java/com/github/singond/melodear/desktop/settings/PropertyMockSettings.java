@@ -41,7 +41,7 @@ public class PropertyMockSettings extends AbstractSettingsTree<PropertyMockSetti
 	}
 
 	@Override
-	protected PropertyMockSettings newInstance() {
+	protected PropertyMockSettings newInstance(String key) {
 		return new PropertyMockSettings();
 	}
 

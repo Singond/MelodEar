@@ -42,8 +42,8 @@ public final class MidiSettings
 	private ObjectProperty<Path> soundbankDefaultDir
 			= new SimpleObjectProperty<>();
 
-	public MidiSettings() {
-		super(MidiSettings.class.getName());
+	public MidiSettings(String key) {
+		super(key);
 		logger.debug("Creating MidiSettings");
 		synth = newPropertyNode("synth", new SimpleObjectProperty<>());
 		soundbank = newPropertyNode("soundbank", new SimpleObjectProperty<>());
@@ -53,9 +53,13 @@ public final class MidiSettings
 				logger.debug("Synthesizer changed from {} to {}", o, n));
 	}
 
+	public MidiSettings() {
+		this(MidiSettings.class.getName());
+	}
+
 	@Override
-	protected MidiSettings newInstance() {
-		return new MidiSettings();
+	protected MidiSettings newInstance(String key) {
+		return new MidiSettings(key);
 	}
 
 	public MidiDevice.Info getSynth() {

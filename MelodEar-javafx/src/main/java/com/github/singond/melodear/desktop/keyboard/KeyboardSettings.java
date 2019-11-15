@@ -25,8 +25,8 @@ public class KeyboardSettings
 	private ObjectProperty<NamedKeyLabelFormat> keyLabelFormat
 			= new SimpleObjectProperty<>(KeyLabelFormats.getDefaultFormat());
 
-	public KeyboardSettings() {
-		super(KeyboardSettings.class.getName());
+	public KeyboardSettings(String name) {
+		super(name);
 		logger.debug("Creating KeyboardSettings");
 		keyDuration = newPropertyNode("keyDuration",
 				new SimpleObjectProperty<>(KeyPlayDuration.KEY_HELD),
@@ -37,9 +37,13 @@ public class KeyboardSettings
 				logger.debug("Key duration changed from {} to {}", o, n));
 	}
 
+	public KeyboardSettings() {
+		this(KeyboardSettings.class.getName());
+	}
+
 	@Override
-	protected KeyboardSettings newInstance() {
-		return new KeyboardSettings();
+	protected KeyboardSettings newInstance(String key) {
+		return new KeyboardSettings(key);
 	}
 
 	public KeyPlayDuration getKeyDuration() {
