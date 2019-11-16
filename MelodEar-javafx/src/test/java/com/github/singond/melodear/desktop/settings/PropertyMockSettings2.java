@@ -9,6 +9,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.util.converter.DefaultStringConverter;
 
+import com.github.singond.settings.MockEnum;
+
 public class PropertyMockSettings2
 		extends PropertyAbstractSettingsTree<PropertyMockSettings2> {
 
@@ -17,6 +19,8 @@ public class PropertyMockSettings2
 	private final Property<Path> path;
 	/** An example of a mutable property. */
 	private final Property<Date> date;
+	/** An example of an enum. */
+	private final Property<MockEnum> enm;
 	/** Nested settings object. */
 	private final PropertyMockSubSettings2 sub = new PropertyMockSubSettings2();
 
@@ -28,6 +32,7 @@ public class PropertyMockSettings2
 				new PathStringConverter());
 		date = newPropertyNode("date", new SimpleObjectProperty<Date>(),
 				d -> new Date(d.getTime()), new DateStringConverter());
+		enm = newPropertyNode("enm", MockEnum.ONE);
 		newNode(sub);
 	}
 
@@ -68,8 +73,20 @@ public class PropertyMockSettings2
 		this.date.setValue(date);
 	}
 
-	public Property<Date> DateProperty() {
+	public Property<Date> dateProperty() {
 		return this.date;
+	}
+
+	public MockEnum getEnum() {
+		return enm.getValue();
+	}
+
+	public void setEnum(MockEnum enm) {
+		this.enm.setValue(enm);
+	}
+
+	public Property<MockEnum> enumProperty() {
+		return enm;
 	}
 
 	public PropertyMockSubSettings2 getNested() {

@@ -10,6 +10,8 @@ import java.util.Date;
 
 import org.junit.Test;
 
+import com.github.singond.settings.MockEnum;
+
 public class PropertySettingsTest2 {
 
 	private static final SimpleDateFormat dateFmt
@@ -151,6 +153,28 @@ public class PropertySettingsTest2 {
 				date5, copy.getNested().getDate());
 		assertEquals("Field 'nested/date' not protected from changes to original wrapper:",
 				date3, src.getNested().getDate());
+	}
+
+	@Test
+	public void wrappedEnumValue() {
+		PropertyMockSettings2 src = new PropertyMockSettings2();
+		src.setEnum(MockEnum.TWO);
+		// Copy
+		PropertyMockSettings2 copy = src.copy();
+		assertEquals("Field 'path' not copied correctly:",
+				MockEnum.TWO, copy.getEnum());
+		// Modify original node
+		src.setEnum(MockEnum.THREE);
+		assertEquals("Field 'path' not set correctly:",
+				MockEnum.THREE, src.getEnum());
+		assertEquals("Field 'path' not protected from changes to original wrapper:",
+				MockEnum.TWO, copy.getEnum());
+		// Modify copied node
+		copy.setEnum(MockEnum.FOUR);
+		assertEquals("Field 'path' not set correctly:",
+				MockEnum.FOUR, copy.getEnum());
+		assertEquals("Field 'path' not protected from changes to copied wrapper:",
+				MockEnum.THREE, src.getEnum());
 	}
 
 }

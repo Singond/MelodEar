@@ -3,6 +3,7 @@ package com.github.singond.melodear.desktop.settings;
 import java.util.function.Function;
 
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.util.StringConverter;
 
 import com.github.singond.settings.AbstractSettingsNode;
@@ -44,6 +45,12 @@ public abstract class PropertyAbstractSettingsTree
 		super.newNode(new NonconvertablePropertySettingsValue<T>(
 				key, property, Function.identity()));
 		return property;
+	}
+
+	protected <E extends Enum<E>> Property<E> newPropertyNode(
+			String key, E value) {
+		return newPropertyNode(key, new SimpleObjectProperty<>(value),
+				Function.identity(), new EnumStringConverter<>(value));
 	}
 
 	private abstract static class PropertySettingsValue
