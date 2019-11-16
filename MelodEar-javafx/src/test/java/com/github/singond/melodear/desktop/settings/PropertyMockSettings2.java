@@ -5,9 +5,7 @@ import java.util.Date;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.util.converter.DefaultStringConverter;
 
 import com.github.singond.settings.MockEnum;
 
@@ -26,8 +24,7 @@ public class PropertyMockSettings2
 
 	public PropertyMockSettings2() {
 		super("MockSettings");
-		name = newPropertyNode("name", new SimpleStringProperty(),
-				new DefaultStringConverter());
+		name = newPropertyNode("name", "");
 		path = newPropertyNode("path", new SimpleObjectProperty<Path>(),
 				new PathStringConverter());
 		date = newPropertyNode("date", new SimpleObjectProperty<Date>(),

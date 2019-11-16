@@ -4,6 +4,8 @@ import java.util.function.Function;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.util.StringConverter;
 
 import com.github.singond.settings.AbstractSettingsNode;
@@ -19,12 +21,24 @@ public abstract class PropertyAbstractSettingsTree
 		super(key);
 	}
 
+	/**
+	 * Adds a new {@code PropertySettingsValue} to this tree
+	 * and returns its wrapped property.
+	 *
+	 * @param propval
+	 * @return
+	 */
+	private <T, P extends Property<T>> P addPropertyNode(
+			PropertySettingsValue<T, P, ?> propval) {
+		super.newNode(propval);
+		return propval.property();
+	}
+
 	protected <T, P extends Property<T>> P newPropertyNode(String key,
 			P property, Function<T, T> propertyValueDuplicator,
 			StringConverter<T> stringConverter) {
-		super.newNode(new ConvertablePropertySettingsValue<T>(key, property,
-				propertyValueDuplicator, stringConverter));
-		return property;
+		return addPropertyNode(new ConvertablePropertySettingsValue<T, P>(
+				key, property, propertyValueDuplicator, stringConverter));
 	}
 
 	protected <T, P extends Property<T>> P newPropertyNode(String key,
@@ -35,16 +49,17 @@ public abstract class PropertyAbstractSettingsTree
 
 	protected <T, P extends Property<T>> P newPropertyNode(String key,
 			P property, Function<T, T> propertyValueDuplicator) {
-		super.newNode(new NonconvertablePropertySettingsValue<T>(
+		return addPropertyNode(new NonconvertablePropertySettingsValue<T, P>(
 				key, property, propertyValueDuplicator));
-		return property;
 	}
 
 	protected <T, P extends Property<T>> P newPropertyNode(String key,
 			P property) {
-		super.newNode(new NonconvertablePropertySettingsValue<T>(
-				key, property, Function.identity()));
-		return property;
+		return newPropertyNode(key, property, Function.identity());
+	}
+
+	protected StringProperty newPropertyNode(String key, String value) {
+		return addPropertyNode(new StringPropertySettingsValue(key,value));
 	}
 
 	protected <E extends Enum<E>> Property<E> newPropertyNode(
@@ -54,18 +69,15 @@ public abstract class PropertyAbstractSettingsTree
 	}
 
 	private abstract static class PropertySettingsValue
-			<T, S extends PropertySettingsValue<T, S>>
+			<T, P extends Property<T>, S extends PropertySettingsValue<T, P, S>>
 			extends AbstractSettingsNode<S>
 			implements SettingsValueNode<T, S> {
 
-		private final Property<T> property;
-		private final Function<T, T> duplicator;
+		private final P property;
 
-		public PropertySettingsValue(String key, Property<T> property,
-				Function<T, T> duplicator) {
+		public PropertySettingsValue(String key, P property) {
 			super(key);
 			this.property = property;
-			this.duplicator = duplicator;
 		}
 
 		@Override
@@ -76,16 +88,6 @@ public abstract class PropertyAbstractSettingsTree
 		@Override
 		public final void setValue(T value) {
 			property.setValue(value);
-		}
-
-		@Override
-		public final T valueCopy() {
-			T value = property.getValue();
-			if (value != null) {
-				return duplicator.apply(property.getValue());
-			} else {
-				return null;
-			}
 		}
 
 		@Override
@@ -102,13 +104,41 @@ public abstract class PropertyAbstractSettingsTree
 		public final void invite(SettingsNodeVisitor visitor) {
 			visitor.visitValue(this);
 		}
+
+		P property() {
+			return property;
+		}
 	}
 
-	private static final class NonconvertablePropertySettingsValue<T>
-			extends PropertySettingsValue<T, NonconvertablePropertySettingsValue<T>> {
+	private abstract static class CopiablePropertySettingsValue
+			<T, P extends Property<T>, S extends CopiablePropertySettingsValue<T, P, S>>
+			extends PropertySettingsValue<T, P, S> {
+
+		private final Function<T, T> duplicator;
+
+		public CopiablePropertySettingsValue(String key, P property,
+				Function<T, T> duplicator) {
+			super(key, property);
+			this.duplicator = duplicator;
+		}
+
+		@Override
+		public T valueCopy() {
+			T value = value();
+			if (value != null) {
+				return duplicator.apply(value);
+			} else {
+				return null;
+			}
+		}
+	}
+
+	private static final class NonconvertablePropertySettingsValue
+			<T, P extends Property<T>>
+			extends CopiablePropertySettingsValue<T, P, NonconvertablePropertySettingsValue<T, P>> {
 
 		public NonconvertablePropertySettingsValue(String key,
-				Property<T> property, Function<T, T> duplicator) {
+				P property, Function<T, T> duplicator) {
 			super(key, property, duplicator);
 		}
 
@@ -123,13 +153,14 @@ public abstract class PropertyAbstractSettingsTree
 		}
 	}
 
-	private static final class ConvertablePropertySettingsValue<T>
-			extends PropertySettingsValue<T, ConvertablePropertySettingsValue<T>> {
+	private static final class ConvertablePropertySettingsValue
+			<T, P extends Property<T>>
+			extends CopiablePropertySettingsValue<T, P, ConvertablePropertySettingsValue<T, P>> {
 
 		private final StringConverter<T> stringConverter;
 
 		public ConvertablePropertySettingsValue(String key,
-				Property<T> property, Function<T, T> duplicator,
+				P property, Function<T, T> duplicator,
 				StringConverter<T> stringConverter) {
 			super(key, property, duplicator);
 			this.stringConverter = stringConverter;
@@ -143,6 +174,30 @@ public abstract class PropertyAbstractSettingsTree
 		@Override
 		public T valueFromString(String string) {
 			return stringConverter.fromString(string);
+		}
+	}
+
+	private static final class StringPropertySettingsValue
+			extends PropertySettingsValue<String, StringProperty, StringPropertySettingsValue> {
+
+		public StringPropertySettingsValue(String key,
+				String value) {
+			super(key, new SimpleStringProperty(value));
+		}
+
+		@Override
+		public String valueCopy() {
+			return value();
+		}
+
+		@Override
+		public String valueToString() {
+			return value();
+		}
+
+		@Override
+		public String valueFromString(String string) {
+			return string;
 		}
 	}
 }
