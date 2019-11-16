@@ -4,9 +4,7 @@ import java.util.Date;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.util.converter.NumberStringConverter;
 
 public class PropertyMockSubSettings2
 		extends PropertyAbstractSettingsTree<PropertyMockSubSettings2> {
@@ -18,8 +16,7 @@ public class PropertyMockSubSettings2
 
 	public PropertyMockSubSettings2() {
 		super("MockSubSettings");
-		integer = newPropertyNode("integer", new SimpleIntegerProperty(),
-				new NumberStringConverter());
+		integer = newPropertyNode("integer", Integer.valueOf(0));
 		date = newPropertyNode("date", new SimpleObjectProperty<>(),
 				d -> new Date(d.getTime()), new DateStringConverter());
 	}

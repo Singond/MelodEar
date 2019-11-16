@@ -2,7 +2,11 @@ package com.github.singond.melodear.desktop.settings;
 
 import java.util.function.Function;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -58,8 +62,16 @@ public abstract class PropertyAbstractSettingsTree
 		return newPropertyNode(key, property, Function.identity());
 	}
 
+	protected IntegerProperty newPropertyNode(String key, Integer value) {
+		return addPropertyNode(new IntegerPropertySettingsValue(key, value));
+	}
+
+	protected DoubleProperty newPropertyNode(String key, Double value) {
+		return addPropertyNode(new DoublePropertySettingsValue(key, value));
+	}
+
 	protected StringProperty newPropertyNode(String key, String value) {
-		return addPropertyNode(new StringPropertySettingsValue(key,value));
+		return addPropertyNode(new StringPropertySettingsValue(key, value));
 	}
 
 	protected <E extends Enum<E>> Property<E> newPropertyNode(
@@ -177,11 +189,56 @@ public abstract class PropertyAbstractSettingsTree
 		}
 	}
 
+	private static final class IntegerPropertySettingsValue
+			extends PropertySettingsValue<Number, IntegerProperty, IntegerPropertySettingsValue> {
+
+		public IntegerPropertySettingsValue(String key, Integer value) {
+			super(key, new SimpleIntegerProperty(value));
+		}
+
+		@Override
+		public Integer valueCopy() {
+			return (Integer) value();
+		}
+
+		@Override
+		public String valueToString() {
+			return value().toString();
+		}
+
+		@Override
+		public Integer valueFromString(String string) {
+			return Integer.valueOf(string);
+		}
+	}
+
+	private static final class DoublePropertySettingsValue
+			extends PropertySettingsValue<Number, DoubleProperty, DoublePropertySettingsValue> {
+
+		public DoublePropertySettingsValue(String key, Double value) {
+			super(key, new SimpleDoubleProperty(value));
+		}
+
+		@Override
+		public Double valueCopy() {
+			return (Double) value();
+		}
+
+		@Override
+		public String valueToString() {
+			return value().toString();
+		}
+
+		@Override
+		public Double valueFromString(String string) {
+			return Double.valueOf(string);
+		}
+	}
+
 	private static final class StringPropertySettingsValue
 			extends PropertySettingsValue<String, StringProperty, StringPropertySettingsValue> {
 
-		public StringPropertySettingsValue(String key,
-				String value) {
+		public StringPropertySettingsValue(String key, String value) {
 			super(key, new SimpleStringProperty(value));
 		}
 
