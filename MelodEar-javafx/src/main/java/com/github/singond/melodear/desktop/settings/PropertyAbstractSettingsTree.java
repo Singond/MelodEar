@@ -1,5 +1,7 @@
 package com.github.singond.melodear.desktop.settings;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.function.Function;
 
 import javafx.beans.property.DoubleProperty;
@@ -78,6 +80,10 @@ public abstract class PropertyAbstractSettingsTree
 			String key, E value) {
 		return newPropertyNode(key, new SimpleObjectProperty<>(value),
 				Function.identity(), new EnumStringConverter<>(value));
+	}
+
+	protected Property<Path> newPropertyNode(String key, Path value) {
+		return addPropertyNode(new PathPropertySettingsValue(key, value));
 	}
 
 	private abstract static class PropertySettingsValue
@@ -255,6 +261,29 @@ public abstract class PropertyAbstractSettingsTree
 		@Override
 		public String valueFromString(String string) {
 			return string;
+		}
+	}
+
+	private static final class PathPropertySettingsValue
+			extends PropertySettingsValue<Path, Property<Path>, PathPropertySettingsValue> {
+
+		public PathPropertySettingsValue(String key, Path value) {
+			super(key, new SimpleObjectProperty<>(value));
+		}
+
+		@Override
+		public Path valueCopy() {
+			return value();
+		}
+
+		@Override
+		public String valueToString() {
+			return value().toString();
+		}
+
+		@Override
+		public Path valueFromString(String string) {
+			return Paths.get(string);
 		}
 	}
 }

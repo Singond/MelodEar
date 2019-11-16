@@ -25,8 +25,7 @@ public class PropertyMockSettings2
 	public PropertyMockSettings2() {
 		super("MockSettings");
 		name = newPropertyNode("name", "");
-		path = newPropertyNode("path", new SimpleObjectProperty<Path>(),
-				new PathStringConverter());
+		path = newPropertyNode("path", (Path) null);
 		date = newPropertyNode("date", new SimpleObjectProperty<Date>(),
 				d -> new Date(d.getTime()), new DateStringConverter());
 		enm = newPropertyNode("enm", MockEnum.ONE);
