@@ -42,7 +42,7 @@ public class SettingsController {
 	public SettingsController(AllSettings settings) {
 		logger.debug("Creating SettingsController");
 		this.settings = settings;
-		this.settingsNew = new AllSettings(settings);
+		this.settingsNew = settings.copy();
 	}
 
 	public void initialize() {
@@ -69,7 +69,7 @@ public class SettingsController {
 
 		EventHandler<? super ActionEvent> updater
 				= e -> {
-					settings.updateFrom(settingsNew);
+					settings.updateWith(settingsNew);
 					// TODO: Write all preferences, not just keyboard
 					userPrefs().writeSettings(settings.keyboard());
 				};

@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import com.github.singond.melodear.desktop.Main;
 import com.github.singond.melodear.desktop.audio.MidiSettings;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
+import com.github.singond.settings.AbstractSettingsTree;
 
 /**
  * Root container of application settings.
@@ -18,39 +19,46 @@ import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
  * @author Singon
  */
 @Singleton
-public class AllSettings {
+public class AllSettings extends AbstractSettingsTree<AllSettings>{
 
 	private static Logger logger = LogManager.getLogger(AllSettings.class);
 
 	private final KeyboardSettings keyboard;
-
 	private final MidiSettings midi;
 
-	@Inject
-	public AllSettings() {
+	/**
+	 * Constructs a new instance of MelodEar settings.
+	 *
+	 * @param key the node key in the settings tree
+	 */
+	public AllSettings(String key) {
+		super(key);
 		logger.debug("Creating AllSettings");
-		keyboard = new KeyboardSettings();
-		midi = new MidiSettings();
-		// TODO Read all settings
-		PreferencesStorage prefs = new PreferencesStorage(
-				Preferences.userNodeForPackage(Main.class));
-		prefs.readSettings(keyboard);
+		keyboard = newNode(new KeyboardSettings("keyboard"));
+		midi     = newNode(new MidiSettings("midi"));
 	}
 
 	/**
-	 * A copy constructor.
-	 *
-	 * @param src source object
+	 * Constructs a new instance of MelodEar settings with the default
+	 * key and initializes it using user preferences.
+	 * <p>
+	 * This constructor is meant to be used in application initialization.
 	 */
-	public AllSettings(AllSettings src) {
-		keyboard = src.keyboard.copy();
-		midi = src.midi.copy();
+	@Inject
+	public AllSettings() {
+		this("melodear");
+		loadFromUserPreferences();
 	}
 
-	public void updateFrom(AllSettings src) {
-		logger.debug("Updating settings from {}", src);
-		keyboard.updateWith(src.keyboard);
-		midi.updateWith(src.midi);
+	@Override
+	protected AllSettings newInstance(String key) {
+		return new AllSettings();
+	}
+
+	public void loadFromUserPreferences() {
+		PreferencesStorage prefs = new PreferencesStorage(
+				Preferences.userNodeForPackage(Main.class));
+		prefs.readSettings(this);
 	}
 
 	/**
