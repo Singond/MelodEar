@@ -70,8 +70,7 @@ public class SettingsController {
 		EventHandler<? super ActionEvent> updater
 				= e -> {
 					settings.updateWith(settingsNew);
-					// TODO: Write all preferences, not just keyboard
-					userPrefs().writeSettings(settings.keyboard());
+					userPrefs().writeSettings(settings);
 				};
 		Button applyBtn = (Button) settingsDlg.lookupButton(ButtonType.APPLY);
 		applyBtn.addEventHandler(ActionEvent.ACTION, updater);

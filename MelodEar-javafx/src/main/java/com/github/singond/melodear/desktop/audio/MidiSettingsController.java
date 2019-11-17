@@ -81,6 +81,7 @@ public class MidiSettingsController {
 	}
 
 	private void selectSoundbankFile() {
+		logger.debug("Selecting soundbank file");
 		// Setup file chooser
 		FileChooser chooser = new FileChooser();
 		chooser.setTitle(bundle.getString("midi.soundbank.browser.title"));

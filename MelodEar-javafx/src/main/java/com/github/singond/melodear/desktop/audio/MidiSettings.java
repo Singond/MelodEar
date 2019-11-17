@@ -33,21 +33,20 @@ public final class MidiSettings
 	/**
 	 * Soundbank used in the MIDI device to produce sound.
 	 */
-	private ObjectProperty<Path> soundbank = new SimpleObjectProperty<>();
+	private Property<Path> soundbank;
 
 	/**
 	 * The default directory displayed by the file chooser when prompting
 	 * to select a sound bank.
 	 */
-	private ObjectProperty<Path> soundbankDefaultDir
-			= new SimpleObjectProperty<>();
+	private Property<Path> soundbankDefaultDir;
 
 	public MidiSettings(String key) {
 		super(key);
 		logger.debug("Creating MidiSettings");
 		synth = newPropertyNode("synth", new SimpleObjectProperty<>());
-		soundbank = newPropertyNode("soundbank", new SimpleObjectProperty<>());
-		soundbankDefaultDir = newPropertyNode("soundbankDefaultDir", new SimpleObjectProperty<>());
+		soundbank = newPropertyNode("soundbank", (Path) null);
+		soundbankDefaultDir = newPropertyNode("soundbankDefaultDir", (Path) null);
 		initSynth();
 		synth.addListener((v, o, n) ->
 				logger.debug("Synthesizer changed from {} to {}", o, n));
@@ -111,23 +110,23 @@ public final class MidiSettings
 	}
 
 	public Path getSoundbank() {
-		return soundbank.get();
+		return soundbank.getValue();
 	}
 
 	public void setSoundbank(Path soundbank) {
-		this.soundbank.set(soundbank);
+		this.soundbank.setValue(soundbank);
 	}
 
-	public ObjectProperty<Path> soundbankProperty() {
+	public Property<Path> soundbankProperty() {
 		return soundbank;
 	}
 
 	public Path getSoundbankDefaultDir() {
-		return soundbankDefaultDir.get();
+		return soundbankDefaultDir.getValue();
 	}
 
 	public void setSoundbankDefaultDir(Path soundbankDefaultDir) {
-		this.soundbankDefaultDir.set(soundbankDefaultDir);
+		this.soundbankDefaultDir.setValue(soundbankDefaultDir);
 	}
 
 	public Property<Path> soundbankDefaultDirProperty() {
