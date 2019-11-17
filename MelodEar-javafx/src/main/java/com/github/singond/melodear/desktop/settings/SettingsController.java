@@ -2,7 +2,6 @@ package com.github.singond.melodear.desktop.settings;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.prefs.Preferences;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,7 +18,6 @@ import javafx.scene.layout.BorderPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.singond.melodear.desktop.Main;
 import com.github.singond.melodear.desktop.audio.MidiSettingsView;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettingsView;
 
@@ -27,7 +25,7 @@ public class SettingsController {
 
 	private static Logger logger = LogManager.getLogger(SettingsController.class);
 
-	private AllSettings settings;
+	private SettingsLoader settingsLoader;
 	private AllSettings settingsNew;
 
 	@FXML
@@ -39,10 +37,10 @@ public class SettingsController {
 	@FXML
 	ListView<SettingsView<?>> sectionSelect;
 
-	public SettingsController(AllSettings settings) {
+	public SettingsController(SettingsLoader settingsLoader) {
 		logger.debug("Creating SettingsController");
-		this.settings = settings;
-		this.settingsNew = settings.copy();
+		this.settingsLoader = settingsLoader;
+		this.settingsNew = settingsLoader.getSettings().copy();
 	}
 
 	public void initialize() {
@@ -68,10 +66,7 @@ public class SettingsController {
 		sectionSelect.getSelectionModel().select(0);
 
 		EventHandler<? super ActionEvent> updater
-				= e -> {
-					settings.updateWith(settingsNew);
-					userPrefs().writeSettings(settings);
-				};
+				= e -> settingsLoader.updateSettingsWith(settingsNew);
 		Button applyBtn = (Button) settingsDlg.lookupButton(ButtonType.APPLY);
 		applyBtn.addEventHandler(ActionEvent.ACTION, updater);
 	}
@@ -81,10 +76,5 @@ public class SettingsController {
 		sections.add(new KeyboardSettingsView());
 		sections.add(new MidiSettingsView());
 		return sections;
-	}
-
-	private PreferencesStorage userPrefs() {
-		return new PreferencesStorage(
-				Preferences.userNodeForPackage(Main.class));
 	}
 }

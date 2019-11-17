@@ -22,6 +22,7 @@ import dagger.Lazy;
 import com.github.singond.melodear.desktop.piano.PianoController;
 import com.github.singond.melodear.desktop.settings.AllSettings;
 import com.github.singond.melodear.desktop.settings.SettingsController;
+import com.github.singond.melodear.desktop.settings.SettingsLoader;
 
 public class MainController {
 
@@ -34,7 +35,7 @@ public class MainController {
 	Lazy<PianoController> pianoController;
 
 	@Inject
-	AllSettings settings;
+	SettingsLoader settingsLoader;
 
 	@Inject
 	public MainController() {}
@@ -66,7 +67,7 @@ public class MainController {
 		ResourceBundle bundle = ResourceBundle.getBundle("loc/settings");
 		FXMLLoader loader = new FXMLLoader(
 				getClass().getResource("/view/settings.fxml"), bundle);
-		loader.setController(new SettingsController(settings));
+		loader.setController(new SettingsController(settingsLoader));
 		try {
 			Dialog<AllSettings> dlg = new Dialog<>();
 			dlg.setTitle(bundle.getString("title"));
