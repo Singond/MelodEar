@@ -1,12 +1,12 @@
 package com.github.singond.melodear.desktop.keyboard;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.singond.melodear.desktop.settings.EnumStringConverter;
 import com.github.singond.melodear.desktop.settings.PropertyAbstractSettingsTree;
 
 public class KeyboardSettings
@@ -17,22 +17,21 @@ public class KeyboardSettings
 	/**
 	 * Duration of the note played after a key is pressed.
 	 */
-	private final ObjectProperty<KeyPlayDuration> keyDuration;
+	private final Property<KeyPlayDuration> keyDuration;
 
 	/**
 	 * Format of piano key label.
 	 */
 	private ObjectProperty<NamedKeyLabelFormat> keyLabelFormat
-			= new SimpleObjectProperty<>(KeyLabelFormats.getDefaultFormat());
+			= new SimpleObjectProperty<>(NamedKeyLabelFormats.getDefaultFormat());
 
 	public KeyboardSettings(String name) {
 		super(name);
 		logger.debug("Creating KeyboardSettings");
-		keyDuration = newPropertyNode("keyDuration",
-				new SimpleObjectProperty<>(KeyPlayDuration.KEY_HELD),
-				new EnumStringConverter<>(KeyPlayDuration.KEY_HELD));
+		keyDuration = newPropertyNode("keyDuration", KeyPlayDuration.KEY_HELD);
 		keyLabelFormat = newPropertyNode("keyLabelFormat",
-				new SimpleObjectProperty<>(KeyLabelFormats.getDefaultFormat()));
+				new SimpleObjectProperty<>(NamedKeyLabelFormats.getDefaultFormat()),
+				NamedKeyLabelFormats.STRING_CONVERTER);
 		keyDuration.addListener((v, o, n) ->
 				logger.debug("Key duration changed from {} to {}", o, n));
 	}
@@ -47,14 +46,14 @@ public class KeyboardSettings
 	}
 
 	public KeyPlayDuration getKeyDuration() {
-		return keyDuration.get();
+		return keyDuration.getValue();
 	}
 
 	public void setKeyDuration(KeyPlayDuration keyDuration) {
-		this.keyDuration.set(keyDuration);
+		this.keyDuration.setValue(keyDuration);
 	}
 
-	public ObjectProperty<KeyPlayDuration> keyDurationProperty() {
+	public Property<KeyPlayDuration> keyDurationProperty() {
 		return keyDuration;
 	}
 

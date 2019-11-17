@@ -10,12 +10,19 @@ public class PredefKeyLabelFormat implements NamedKeyLabelFormat {
 	private static final ResourceBundle bundle
 			= ResourceBundle.getBundle("loc/settings");
 
+	private final String key;
 	private final String name;
 	private final PitchFormat format;
 
-	public PredefKeyLabelFormat(String name, PitchFormat format) {
-		this.name = bundle.getString("keyboard.key_label_format." + name);
+	public PredefKeyLabelFormat(String key, PitchFormat format) {
+		this.key = key;
+		this.name = bundle.getString("keyboard.key_label_format." + key);
 		this.format = format;
+	}
+
+	@Override
+	public String getKey() {
+		return key;
 	}
 
 	@Override

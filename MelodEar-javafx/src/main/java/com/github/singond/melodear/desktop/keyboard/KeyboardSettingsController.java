@@ -40,7 +40,7 @@ public class KeyboardSettingsController {
 		settings.keyLabelFormatProperty().bind(
 				keyLabelFormat.getSelectionModel().selectedItemProperty());
 		keyLabelFormat.setItems(FXCollections.observableArrayList(
-				KeyLabelFormats.getFormats()));
-		keyLabelFormat.setConverter(new NamedKeyLabelFormat.Converter());
+				NamedKeyLabelFormats.getFormats()));
+		keyLabelFormat.setConverter(NamedKeyLabelFormats.LABEL_CONVERTER);
 	}
 }
