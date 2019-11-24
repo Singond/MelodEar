@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml/1" styleClass="settings-form">
+
+	<columnConstraints>
+		<ColumnConstraints/>
+		<ColumnConstraints hgrow="ALWAYS"/>
+	</columnConstraints>
+
+	<Label text="%midi.synth" GridPane.rowIndex="0" GridPane.columnIndex="0">
+		<tooltip>
+			<Tooltip text="%midi.synth.tt"/>
+		</tooltip>
+	</Label>
+	<TableView fx:id="synth" GridPane.rowIndex="0" GridPane.columnIndex="1"
+			styleClass="value,synth">
+		<columns>
+			<TableColumn text="name" fx:id="synthNameColumn"/>
+			<TableColumn text="vendor" fx:id="synthVendorColumn"/>
+			<TableColumn text="description" fx:id="synthDescriptionColumn"/>
+			<TableColumn text="version" fx:id="synthVersionColumn"/>
+		</columns>
+	</TableView>
+
+	<Label text="%midi.soundbank" GridPane.rowIndex="1" GridPane.columnIndex="0">
+		<tooltip>
+			<Tooltip text="%midi.soundbank.tt"/>
+		</tooltip>
+	</Label>
+	<HBox GridPane.rowIndex="1" GridPane.columnIndex="1"
+			styleClass="value,multicontrol,soundbank">
+		<TextField fx:id="soundbankText" styleClass="soundbank-text"
+				HBox.hgrow="ALWAYS"/>
+		<Button fx:id="soundbankFile" text="%midi.soundbank.browseFile"
+				styleClass="soundbank-file"/>
+	</HBox>
+</GridPane>

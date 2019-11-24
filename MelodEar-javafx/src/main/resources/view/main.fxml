@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="main"
+		minWidth="600" minHeight="400">
+	<top>
+		<MenuBar fx:id="menubar">
+			<Menu text="%menu.main">
+				<MenuItem text="%menu.main.exit" onAction="#exit"/>
+			</Menu>
+			<Menu text="%menu.settings">
+				<MenuItem text="%menu.settings" onAction="#openSettings"/>
+			</Menu>
+		</MenuBar>
+	</top>
+</BorderPane>
+

@@ -1,0 +1,19 @@
+.section-select {}
+.section-select .list-cell {
+	-fx-background-color: none;
+}
+.section-select .list-cell:selected {
+	-fx-background-color: #0096c9;
+	-fx-text-fill: white;
+}
+
+.settings-form {
+	-fx-hgap: 1em;
+	-fx-vgap: 0.5em;
+}
+.settings-form .value {
+	-fx-max-width: infinity;
+}
+.settings-form HBox.multicontrol.value {
+	-fx-spacing: 1em;
+}

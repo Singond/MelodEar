@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import com.github.singond.melodear.desktop.components.Keyboard?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" alignment="center"
+		styleClass="piano-pane">
+	<padding>
+		<Insets top="25" right="25" bottom="25" left="25" />
+	</padding>
+
+	<Keyboard fx:id="keyboard" from="C3" to="C6"/>
+
+</VBox>

@@ -1,0 +1,4 @@
+/* Should be in keyboard, but tooltips appear in different scene. */
+.piano-key-tooltip {
+	-fx-font-size: 16;
+}

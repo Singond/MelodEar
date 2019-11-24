@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml/1" styleClass="settings-form">
+
+	<columnConstraints>
+		<ColumnConstraints/>
+		<ColumnConstraints hgrow="ALWAYS"/>
+	</columnConstraints>
+
+	<Label text="%keyboard.key_duration" GridPane.rowIndex="0" GridPane.columnIndex="0">
+		<tooltip>
+			<Tooltip text="%keyboard.key_duration.tt"/>
+		</tooltip>
+	</Label>
+	<ChoiceBox fx:id="keyDuration" styleClass="value,key-duration"
+			GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+	<Label text="%keyboard.key_label_format" GridPane.rowIndex="1" GridPane.columnIndex="0">
+		<tooltip>
+			<Tooltip text="%keyboard.key_label_format.tt"/>
+		</tooltip>
+	</Label>
+	<ChoiceBox fx:id="keyLabelFormat" styleClass="value,key-label-format"
+			GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+</GridPane>

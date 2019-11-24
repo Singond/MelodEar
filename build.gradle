@@ -16,18 +16,21 @@ buildscript {
 }
 
 allprojects {
-	ext.versions = ['music': '0.4.0']
+	repositories {
+		mavenLocal()
+		jcenter()
+	}
+	ext.versions = ['music': '0.6.0']
 }
 
 repositories {
-	mavenLocal()
 	mavenCentral()
 }
 
 dependencies {
-	compile group: 'com.github.singond', name: 'com.github.singond.music',
+	compile group: 'com.github.singond', name: 'music',
 			version: "${versions.music}", changing: true
-	compile group: 'com.github.singond', name: 'com.github.singond.music',
+	compile group: 'com.github.singond', name: 'music',
 			classifier: 'javadoc', version: "${versions.music}", changing: true
 	compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.25'
 
