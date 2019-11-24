@@ -65,4 +65,9 @@ public abstract class AbstractSettingsNode<S extends AbstractSettingsNode<S>>
 		}
 	}
 
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName()
+				+ "(\'" + key + "\')@" + hashCode();
+	}
 }
