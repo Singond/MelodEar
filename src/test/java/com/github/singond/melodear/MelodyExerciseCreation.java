@@ -16,31 +16,31 @@ import com.github.singond.music.Keys;
 import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchClass;
 
-public class MelodyExcersizeCreation {
+public class MelodyExerciseCreation {
 
-	private static Logger logger = LoggerFactory.getLogger(MelodyExcersizeCreation.class);
+	private static Logger logger = LoggerFactory.getLogger(MelodyExerciseCreation.class);
 
-	public KeyedMelodyExcersizeFactory factory;
+	public KeyedMelodyExerciseFactory factory;
 
 	@Before
 	public void init() {
-		factory = new KeyedMelodyExcersizeFactory();
+		factory = new KeyedMelodyExerciseFactory();
 	}
 
 	@Test
 	public void createMelody() {
-		logger.info("Creating dummy melody excersize without any key:");
+		logger.info("Creating dummy melody exercise without any key:");
 		Set<PitchClass> pcs = new HashSet<>(Arrays.asList(D, E, F_SHARP, G, A, B, C_SHARP));
 		Pitch lowest = Pitch.of(C, 3);
 		Pitch highest = Pitch.of(C, 5);
-		MelodyExcersize exc = KeyedMelodyExcersize.randomWithPitchClasses(pcs, lowest, highest, 4, null);
-		logger.info("Created random melody excersize: {}", exc);
+		MelodyExercise exc = KeyedMelodyExercise.randomWithPitchClasses(pcs, lowest, highest, 4, null);
+		logger.info("Created random melody exercise: {}", exc);
 		logger.info("");
 	}
 
 	@Test
 	public void keyedExcFactory() {
-		logger.info("Using factory to generate melody excersizes in key:");
+		logger.info("Using factory to generate melody exercises in key:");
 		logger.info("Setting the available keys to: C, G, c");
 		factory.setKeysAvailable(Arrays.asList(Keys.C_MAJOR, Keys.G_MAJOR, Keys.C_MINOR));
 		logger.info("Setting the lower bound to C3");
@@ -51,7 +51,7 @@ public class MelodyExcersizeCreation {
 		factory.setLength(4);
 		logger.info("Generating key");
 		factory.newKey();
-		MelodyExcersize exc;
+		MelodyExercise exc;
 
 		exc = factory.make();
 		logger.info(exc.toString());

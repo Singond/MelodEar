@@ -21,25 +21,25 @@ import com.github.singond.music.PitchClass;
 import com.github.singond.music.Pitches;
 
 /**
- * Keeps track of constraints for creating new melodic excersizes in a key
- * and creates new instances of the excersizes based on these constraints.
+ * Keeps track of constraints for creating new melodic exercises in a key
+ * and creates new instances of the exercises based on these constraints.
  * <p>
  * This class is not thread-safe.
  *
  * @author Singon
  */
-public final class KeyedMelodyExcersizeFactory {
+public final class KeyedMelodyExerciseFactory {
 
-	private static Logger logger = LoggerFactory.getLogger(KeyedMelodyExcersizeFactory.class);
+	private static Logger logger = LoggerFactory.getLogger(KeyedMelodyExerciseFactory.class);
 
 	/**
-	 * Musical keys available for the musical excersize.
+	 * Musical keys available for the musical exercise.
 	 * These are stored as list to facilitate random element selection.
 	 */
 	private List<Key> keysAvailable;
 
 	/**
-	 * The current key used to generate excersizes.
+	 * The current key used to generate exercises.
 	 */
 	private Key key;
 
@@ -75,7 +75,7 @@ public final class KeyedMelodyExcersizeFactory {
 	 */
 	private Randomizer rnd;
 
-	public KeyedMelodyExcersizeFactory() {
+	public KeyedMelodyExerciseFactory() {
 		rnd = new Randomizer();
 
 		// Initialize the set of available degrees to the basic degrees
@@ -133,9 +133,9 @@ public final class KeyedMelodyExcersizeFactory {
 	}
 
 	/**
-	 * Sets the musical key of generated excersizes to the given value.
+	 * Sets the musical key of generated exercises to the given value.
 	 *
-	 * @param key the musical key to be used for generated excersizes
+	 * @param key the musical key to be used for generated exercises
 	 */
 	public void setKey(Key key) {
 		this.key = key;
@@ -143,7 +143,7 @@ public final class KeyedMelodyExcersizeFactory {
 	}
 
 	/**
-	 * Sets the musical key of future geneŕated excersizes to a random key
+	 * Sets the musical key of future geneŕated exercises to a random key
 	 * chosen from the collection of available keys.
 	 */
 	public void newKey() {
@@ -215,11 +215,11 @@ public final class KeyedMelodyExcersizeFactory {
 	}
 
 	/**
-	 * Creates a new excersize with a random melody in the current key.
+	 * Creates a new exercise with a random melody in the current key.
 	 *
-	 * @return a new melody excersize in the current key
+	 * @return a new melody exercise in the current key
 	 */
-	public KeyedMelodyExcersize make() {
-		return new KeyedMelodyExcersize(newMelody(), key);
+	public KeyedMelodyExercise make() {
+		return new KeyedMelodyExercise(newMelody(), key);
 	}
 }

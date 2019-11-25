@@ -8,30 +8,30 @@ import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchClass;
 
 /**
- * A melody dictation excersize which uses a musical key as a reference
+ * A melody dictation exercise which uses a musical key as a reference
  * for the notes to be identified.
  *
  * @author Singon
  */
-public class KeyedMelodyExcersize extends MelodyExcersize {
+public class KeyedMelodyExercise extends MelodyExercise {
 
 	private final Key key;
 
-	protected KeyedMelodyExcersize(List<Pitch> pitches, Key key) {
+	protected KeyedMelodyExercise(List<Pitch> pitches, Key key) {
 		super(pitches);
 		this.key = key;
 	}
 
-	public static KeyedMelodyExcersize randomWithPitchClasses(
+	public static KeyedMelodyExercise randomWithPitchClasses(
 			Set<PitchClass> pitchClasses, Pitch lBound, Pitch uBound,
 			int length, Key key) {
-		return new KeyedMelodyExcersize(randomMelody(pitchClasses, lBound, uBound, length), key);
+		return new KeyedMelodyExercise(randomMelody(pitchClasses, lBound, uBound, length), key);
 	}
 
 	/**
-	 * Returns the reference key for this melody excersize.
+	 * Returns the reference key for this melody exercise.
 	 *
-	 * @return the key of this excersize
+	 * @return the key of this exercise
 	 */
 	public Key key() {
 		return key;
