@@ -91,7 +91,7 @@ public abstract class MelodyExercise {
 
 	@Override
 	public String toString() {
-		return melody.toString() + "; at note " + identify;
+		return melody.toString() + "; identified " + identify + " notes";
 	}
 
 	public enum NoteEvaluationStatus {
