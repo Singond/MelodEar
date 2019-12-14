@@ -27,6 +27,8 @@ import com.github.singond.music.Pitches;
  * the exercise restarts, marking all notes as "unidentified" again.
  * Once all notes have been correctly identified, the exercise
  * is considered solved.
+ * <p>
+ * This class is not thread-safe.
  *
  * @author Singon
  */
@@ -35,7 +37,10 @@ public abstract class MelodyExercise {
 	/** The sequence of pitches comprising this melody. */
 	private final List<Pitch> melody;
 
-	/** The current note to be identified. */
+	/**
+	 * The index of the current note to be identified.
+	 * This is equal to the number of notes that have been identified so far.
+	 */
 	private int identify;
 
 	protected MelodyExercise(List<Pitch> pitches) {
@@ -89,14 +94,32 @@ public abstract class MelodyExercise {
 		}
 	}
 
+	/**
+	 * Returns the number of notes which have been correctly identified so far.
+	 *
+	 * @return the number of identified notes in thie exercise
+	 */
+	public int identifiedNotesCount() {
+		return identify;
+	}
+
 	@Override
 	public String toString() {
 		return melody.toString() + "; identified " + identify + " notes";
 	}
 
 	public enum NoteEvaluationStatus {
+		/**
+		 * Signifies that the note is correct, but unidentified notes remain.
+		 */
 		NOTE_CORRECT,
+		/**
+		 * Signifies that the note is not correct.
+		 */
 		NOTE_INCORRECT,
+		/**
+		 * Signifies that the note is correct and no unidentified notes remain.
+		 */
 		ALL_NOTES_CORRECT
 	}
 }

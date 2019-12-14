@@ -57,10 +57,11 @@ public class MelodyExerciseInCli {
 						newExercise();
 						break;
 					case NOTE_CORRECT:
-						System.out.println("So far, so good");
+						System.out.format("You have identified %d note(s) so far\n",
+								exercise.identifiedNotesCount());
 						break;
 					case NOTE_INCORRECT:
-						System.out.println("Wrong");
+						System.out.println("Wrong. Start again from the beginning");
 						break;
 					default:
 						throw new AssertionError(noteStatus);
