@@ -156,8 +156,10 @@ public final class KeyedMelodyExerciseFactory {
 	}
 
 	private void updatePitchClasses() {
-		if (key == null)
-			throw new IllegalStateException("No key is set");
+		if (key == null) {
+			logger.warn("No key was set, generating new");
+			newKey();
+		}
 		if (degreesAvailable == null || degreesAvailable.isEmpty())
 			throw new IllegalStateException("No available degrees are set");
 

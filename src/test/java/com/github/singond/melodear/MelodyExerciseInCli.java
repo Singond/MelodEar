@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.github.singond.melodear.MelodyExercise.NoteEvaluationStatus;
+import com.github.singond.music.Keys;
 import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchClass;
 
@@ -22,16 +23,21 @@ public class MelodyExerciseInCli {
 		private static final PitchParser parser = new ScientificPitchParser();
 
 		TextMelodicTrainer() {
+			exerciseFactory.setKeysAvailable(Arrays.asList(Keys.C_MAJOR,
+					Keys.G_MAJOR, Keys.D_MAJOR, Keys.A_MAJOR, Keys.E_MAJOR,
+					Keys.F_MAJOR, Keys.B_MAJOR, Keys.E_FLAT_MAJOR,
+					Keys.A_FLAT_MAJOR));
+			exerciseFactory.setLowerBound(Pitch.of(C_DBL_FLAT, 3));
+			exerciseFactory.setUpperBound(Pitch.of(C_DBL_SHARP, 5));
+			exerciseFactory.setLength(4);
 			System.out.println("Welcome to MelodEar");
 			System.out.println("This is a simple CLI imitation of real usage.");
 			System.out.println("Just copy the notes you see on the screen, one by one.");
 		}
 
+		private KeyedMelodyExerciseFactory exerciseFactory = new KeyedMelodyExerciseFactory();
 		private MelodyExercise exercise;
 		private Set<PitchClass> pitchClasses = new HashSet<>(Arrays.asList(C, D, E, F, G, A, B));
-		private Pitch lowest = Pitch.of(C_DBL_FLAT, 3);
-		private Pitch highest = Pitch.of(C_DBL_SHARP, 5);
-		private int length = 4;
 		private Status status = Status.IDLE;
 
 		@Override
@@ -63,7 +69,7 @@ public class MelodyExerciseInCli {
 		}
 
 		private void newExercise() {
-			exercise = KeyedMelodyExercise.randomWithPitchClasses(pitchClasses, lowest, highest, length, null);
+			exercise = exerciseFactory.make();
 			System.out.println("You hear: " + exercise);
 			status = Status.IDENTIFYING;
 		}
