@@ -42,6 +42,7 @@ public final class KeyedMelodyExerciseFactory {
 	 * The current key used to generate exercises.
 	 */
 	private Key key;
+	private transient boolean keyValid;
 
 	/**
 	 * The degrees allowed for a given key type.
@@ -49,7 +50,7 @@ public final class KeyedMelodyExerciseFactory {
 	private final Map<KeyType, Set<Degree>> degreesAvailable;
 
 	private transient Set<PitchClass> pitchClassesAvailable;
-	private boolean pitchClassesAvailableValid;
+	private transient boolean pitchClassesAvailableValid;
 
 	/**
 	 * Lower bound on the notes in the melody.
@@ -62,12 +63,14 @@ public final class KeyedMelodyExerciseFactory {
 	private Pitch upperBound;
 
 	private transient List<Pitch> pitchesAvailable;
-	private boolean pitchesAvailableValid;
+	private transient boolean pitchesAvailableValid;
 
 	/**
 	 * Length of the melody.
 	 */
 	private int length;
+
+	private Policy policy = new NoRepeatPolicy();
 
 	/**
 	 * Random element generator.
@@ -91,11 +94,19 @@ public final class KeyedMelodyExerciseFactory {
 	}
 
 	/**
+	 * Invalidates key and all dependent fields.
+	 */
+	private void invalidateKey() {
+		keyValid = false;
+		invalidatePitchClassesAvailable();
+	}
+
+	/**
 	 * Invalidates pitch classes cache and all dependent fields.
 	 */
 	private void invalidatePitchClassesAvailable() {
 		pitchClassesAvailableValid = false;
-		pitchesAvailableValid = false;
+		invalidatePitchesAvailable();
 	}
 
 	/**
@@ -150,23 +161,37 @@ public final class KeyedMelodyExerciseFactory {
 		if (keysAvailable == null || keysAvailable.isEmpty())
 			throw new IllegalStateException("No keys available");
 
+		logger.debug("Changing key...");
 		setKey(rnd.randomFrom(keysAvailable));
+		policy.reset();
+		keyValid = true;
+
 		if (logger.isDebugEnabled())
 			logger.debug("Setting the key to {}", key);
 	}
 
-	private void updatePitchClasses() {
-		if (key == null) {
-			logger.warn("No key was set, generating new");
-			newKey();
+	public void setKeyRepeat(int times) {
+		if (times < 1) {
+			throw new IllegalArgumentException(
+					"Number of repeats must be positive");
 		}
+		if (times == 1) {
+			policy = new NoRepeatPolicy();
+		} else {
+			policy = new RepeatKeyPolicy(times);
+		}
+	}
+
+	private void updatePitchClasses() {
+		// Check prerequisities
+		if (!keyValid) newKey();
 		if (degreesAvailable == null || degreesAvailable.isEmpty())
 			throw new IllegalStateException("No available degrees are set");
 
 		if (logger.isDebugEnabled())
 			logger.debug("Regenerating cache of available pitch classes...");
 
-		// Do the work
+		// Update pitch classes
 		Set<PitchClass> pitchClasses = new TreeSet<>();
 		for (Degree degree : degreesAvailable.get(key.type())) {
 			pitchClasses.add(key.degree(degree));
@@ -179,10 +204,9 @@ public final class KeyedMelodyExerciseFactory {
 	}
 
 	private void updatePitches() {
-		// Update prerequisities
+		// Check prerequisities
 		if (!pitchClassesAvailableValid)
 			updatePitchClasses();
-
 		if (pitchClassesAvailable == null
 		    || pitchClassesAvailable.isEmpty())
 			throw new IllegalStateException("No pitch classes available");
@@ -190,10 +214,11 @@ public final class KeyedMelodyExerciseFactory {
 			throw new IllegalStateException("No lower bound set on pitches");
 		if (upperBound == null)
 			throw new IllegalStateException("No upper bound set on pitches");
+
 		if (logger.isDebugEnabled())
 			logger.debug("Regenerating cache of available pitches...");
 
-		// Do the work
+		// Update pitches
 		pitchesAvailable = Pitches.allBetween(lowerBound, upperBound,
 				pitchClassesAvailable);
 		pitchesAvailableValid = true;
@@ -222,6 +247,60 @@ public final class KeyedMelodyExerciseFactory {
 	 * @return a new melody exercise in the current key
 	 */
 	public KeyedMelodyExercise make() {
-		return new KeyedMelodyExercise(newMelody(), key);
+		KeyedMelodyExercise exc = new KeyedMelodyExercise(newMelody(), key);
+		policy.exerciseUsed();
+		return exc;
+	}
+
+	private interface Policy {
+		public void exerciseUsed();
+		public void reset();
+	}
+
+	private class NoRepeatPolicy implements Policy {
+		@Override
+		public void exerciseUsed() {
+			invalidateKey();
+		}
+
+		@Override
+		public void reset() {
+			// Do nothing
+		}
+	}
+
+	private class RepeatKeyPolicy implements Policy {
+
+		/**
+		 * How many times a musical key should be used for subsequent
+		 * exercises.
+		 */
+		private final int repeatKeyTimes;
+
+		/**
+		 * How many times the current musical has been used for exercise
+		 * since the last key change.
+		 */
+		private int usedKeyTimes = 0;
+
+		public RepeatKeyPolicy(int repeatKeyTimes) {
+			if (repeatKeyTimes < 1) {
+				throw new IllegalArgumentException(
+						"Number of repeats must be positive");
+			}
+			this.repeatKeyTimes = repeatKeyTimes;
+		}
+
+		@Override
+		public void exerciseUsed() {
+			if (++usedKeyTimes == repeatKeyTimes) {
+				invalidateKey();
+			}
+		}
+
+		@Override
+		public void reset() {
+			usedKeyTimes = 0;
+		}
 	}
 }

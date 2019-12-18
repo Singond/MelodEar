@@ -30,6 +30,7 @@ public class MelodyExerciseInCli {
 			exerciseFactory.setLowerBound(Pitch.of(C_DBL_FLAT, 3));
 			exerciseFactory.setUpperBound(Pitch.of(C_DBL_SHARP, 5));
 			exerciseFactory.setLength(4);
+			exerciseFactory.setKeyRepeat(2);
 			System.out.println("Welcome to MelodEar");
 			System.out.println("This is a simple CLI imitation of real usage.");
 			System.out.println("Just copy the notes you see on the screen, one by one.");
