@@ -5,7 +5,7 @@ import java.util.prefs.Preferences;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.singond.melodear.desktop.Main;
+import com.github.singond.melodear.desktop.MelodEarApplication;
 
 /**
  * A provider object for MelodEar settings which enables persisting
@@ -31,7 +31,7 @@ public final class SettingsLoader {
 
 	private PreferencesStorage userPrefs() {
 		return new PreferencesStorage(
-				Preferences.userNodeForPackage(Main.class));
+				Preferences.userNodeForPackage(MelodEarApplication.class));
 	}
 
 	public void loadSettings() {
