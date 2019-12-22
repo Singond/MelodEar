@@ -1,0 +1,9 @@
+.toolbar {
+	-fx-spacing: 5;
+	-fx-padding: 5;
+}
+
+/* Remove white background of elements in the ScrollPane */
+ScrollPane.piano-pane > .viewport {
+	-fx-background-color: transparent;
+}

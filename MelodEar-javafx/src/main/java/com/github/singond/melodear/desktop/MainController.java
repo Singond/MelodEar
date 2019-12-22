@@ -10,9 +10,11 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Window;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +25,7 @@ import com.github.singond.melodear.desktop.piano.PianoController;
 import com.github.singond.melodear.desktop.settings.AllSettings;
 import com.github.singond.melodear.desktop.settings.SettingsController;
 import com.github.singond.melodear.desktop.settings.SettingsLoader;
+import com.github.singond.melodear.desktop.trainer.TrainerController;
 
 public class MainController {
 
@@ -35,6 +38,9 @@ public class MainController {
 	Lazy<PianoController> pianoController;
 
 	@Inject
+	Lazy<TrainerController> trainerController;
+
+	@Inject
 	SettingsLoader settingsLoader;
 
 	@Inject
@@ -45,11 +51,35 @@ public class MainController {
 		switchToPiano();
 	}
 
+	private void preSwitchView() {}
+
+	private void postSwitchView() {
+		Scene scene = main.getScene();
+		Window window = scene == null ? null : scene.getWindow();
+		if (window != null) {
+			window.sizeToScene();
+		}
+	}
+
 	public void switchToPiano() {
 		try {
-			main.setCenter(pianoPane());
+			Parent pane = pianoPane();
+			preSwitchView();
+			main.setCenter(pane);
+			postSwitchView();
 		} catch (IOException e) {
-			logger.error("Error loading piano pane", e);
+			logger.error("Error loading piano view", e);
+		}
+	}
+
+	public void switchToTrainer() {
+		try {
+			Parent pane = trainerPane();
+			preSwitchView();
+			main.setCenter(pane);
+			postSwitchView();
+		} catch (IOException e) {
+			logger.error("Error loading trainer view", e);
 		}
 	}
 
@@ -58,7 +88,15 @@ public class MainController {
 				getClass().getResource("/view/piano/piano.fxml"));
 		loader.setController(pianoController.get());
 		Parent pane = loader.load();
-		pane.getStylesheets().add("/view/piano/piano.css");
+		return pane;
+	}
+
+	private final Parent trainerPane() throws IOException {
+		ResourceBundle bundle = ResourceBundle.getBundle("loc/trainer");
+		FXMLLoader loader = new FXMLLoader(
+				getClass().getResource("/view/trainer/keymel.fxml"), bundle);
+		loader.setController(trainerController.get());
+		Parent pane = loader.load();
 		return pane;
 	}
 

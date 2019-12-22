@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import com.github.singond.melodear.desktop.components.Keyboard?>
+<?import javafx.scene.layout.HBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" alignment="center"
+		styleClass="keymel-pane" stylesheets="@keymel.css">
+
+	<HBox xmlns:fx="http://javafx.com/fxml" alignment="center_left"
+			styleClass="toolbar">
+		<Button text="%start_exercise" onAction="#startExercise">
+			<tooltip><Tooltip text="%start_exercise.tt"/></tooltip>
+		</Button>
+		<Button text="%keymel.replay_key" onAction="#replayKey">
+			<tooltip><Tooltip text="%keymel.replay_key.tt"/></tooltip>
+		</Button>
+		<Button text="%keymel.replay_melody" onAction="#replayMelody">
+			<tooltip><Tooltip text="%keymel.replay_melody.tt"/></tooltip>
+		</Button>
+	</HBox>
+
+	<ScrollPane vbarPolicy="NEVER"
+			styleClass="piano-pane" stylesheets="@../piano/piano.css">
+		<padding>
+			<Insets top="25" right="25" bottom="25" left="25" />
+		</padding>
+		<Keyboard fx:id="keyboard" from="C3" to="C6"/>
+	</ScrollPane>
+
+</VBox>
