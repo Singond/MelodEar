@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 
+import com.github.singond.melodear.desktop.audio.AudioModule;
 import com.github.singond.melodear.desktop.settings.SettingsModule;
 
 @Singleton

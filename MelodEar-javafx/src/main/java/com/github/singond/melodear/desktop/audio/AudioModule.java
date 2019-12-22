@@ -1,4 +1,4 @@
-package com.github.singond.melodear.desktop;
+package com.github.singond.melodear.desktop.audio;
 
 import javax.inject.Singleton;
 import javax.sound.midi.MidiUnavailableException;
@@ -10,7 +10,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-class AudioModule {
+public class AudioModule {
 
 	private static Logger logger = LogManager.getLogger(AudioModule.class);
 

@@ -5,7 +5,7 @@ import javax.sound.midi.InvalidMidiDataException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.singond.melodear.desktop.AudioDevice;
+import com.github.singond.melodear.desktop.audio.AudioDevice;
 import com.github.singond.melodear.desktop.components.KeyboardListener;
 import com.github.singond.music.Pitch;
 

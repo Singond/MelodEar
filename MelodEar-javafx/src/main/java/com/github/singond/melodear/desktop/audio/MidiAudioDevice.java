@@ -1,4 +1,4 @@
-package com.github.singond.melodear.desktop;
+package com.github.singond.melodear.desktop.audio;
 
 import static javax.sound.midi.ShortMessage.CONTROL_CHANGE;
 
