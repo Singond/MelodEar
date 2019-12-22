@@ -26,9 +26,6 @@
 
 	<ScrollPane vbarPolicy="NEVER"
 			styleClass="piano-pane" stylesheets="@../piano/piano.css">
-		<padding>
-			<Insets top="25" right="25" bottom="25" left="25" />
-		</padding>
 		<Keyboard fx:id="keyboard" from="C3" to="C6"/>
 	</ScrollPane>
 

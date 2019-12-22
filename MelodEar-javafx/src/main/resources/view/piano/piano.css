@@ -1,3 +1,4 @@
 .piano-pane {
+	-fx-padding: 25;
 	-fx-background-color: linear-gradient(to bottom, darkblue, mediumblue);
 }
