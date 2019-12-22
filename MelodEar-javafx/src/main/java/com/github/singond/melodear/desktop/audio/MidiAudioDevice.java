@@ -1,7 +1,5 @@
 package com.github.singond.melodear.desktop.audio;
 
-import static javax.sound.midi.ShortMessage.CONTROL_CHANGE;
-
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
@@ -17,7 +15,11 @@ class MidiAudioDevice implements AudioDevice {
 
 	private static Logger logger = LogManager.getLogger(MidiAudioDevice.class);
 
+	/** Reserved controller number for "all sound off". */
+	private static final int CONTROL_ALL_SOUND_OFF = 0x78;
+
 	private Receiver receiver;
+	private int channel;
 
 	public MidiAudioDevice() throws MidiUnavailableException {
 		logger.debug("Obtaining default MIDI receiver from system");
@@ -34,7 +36,6 @@ class MidiAudioDevice implements AudioDevice {
 	 */
 	@Override
 	public void playNote(Pitch pitch) throws InvalidMidiDataException {
-		int channel = 0;
 		int velocity = 93;
 		receiver.send(new ShortMessage(ShortMessage.NOTE_ON, channel,
 				pitch.midiNumber(), velocity), -1);
@@ -49,7 +50,6 @@ class MidiAudioDevice implements AudioDevice {
 	 */
 	@Override
 	public void stopNote(Pitch pitch) throws InvalidMidiDataException {
-		int channel = 0;
 		int velocity = 93;
 		receiver.send(new ShortMessage(ShortMessage.NOTE_OFF, channel,
 				pitch.midiNumber(), velocity), -1);
@@ -57,6 +57,7 @@ class MidiAudioDevice implements AudioDevice {
 
 	@Override
 	public void stopAllNotes() throws InvalidMidiDataException {
-		receiver.send(new ShortMessage(CONTROL_CHANGE, 0x78, 0), -1);
+		receiver.send(new ShortMessage(ShortMessage.CONTROL_CHANGE,
+				channel, CONTROL_ALL_SOUND_OFF, 0), -1);
 	}
 }
