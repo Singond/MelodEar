@@ -30,7 +30,6 @@ public class MelodEarApplication extends Application {
 		loader.setController(component.getMainController());
 		BorderPane root = (BorderPane) loader.load();
 		Scene scene = new Scene(root);
-		scene.getStylesheets().add("/view/main.css");
 
 		stage.setTitle("MelodEar");
 		stage.setScene(scene);

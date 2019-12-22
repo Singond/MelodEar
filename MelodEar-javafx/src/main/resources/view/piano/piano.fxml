@@ -8,7 +8,7 @@
 <?import com.github.singond.melodear.desktop.components.Keyboard?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" alignment="center"
-		styleClass="piano-pane">
+		styleClass="piano-pane" stylesheets="@piano.css">
 	<padding>
 		<Insets top="25" right="25" bottom="25" left="25" />
 	</padding>
