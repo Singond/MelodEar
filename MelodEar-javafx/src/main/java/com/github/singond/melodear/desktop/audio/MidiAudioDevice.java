@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.singond.music.Pitch;
 
-public class MidiAudioDevice implements AudioDevice {
+class MidiAudioDevice implements AudioDevice {
 
 	private static Logger logger = LogManager.getLogger(MidiAudioDevice.class);
 
