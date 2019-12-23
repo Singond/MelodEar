@@ -1,5 +1,7 @@
 package com.github.singond.melodear.desktop.audio;
 
+import java.util.List;
+
 import javax.sound.midi.InvalidMidiDataException;
 
 import com.github.singond.music.Pitch;
@@ -30,4 +32,11 @@ public interface AudioDevice {
 	 */
 	public void stopAllNotes() throws InvalidMidiDataException;
 
+	/**
+	 * Plays notes of the given pitches in sequence.
+	 *
+	 * @param pitches the pitches to be played
+	 * @param bpm the tempo to play the notes at (in notes per minute)
+	 */
+	void playSequentially(List<Pitch> pitches, double bpm);
 }

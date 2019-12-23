@@ -1,10 +1,18 @@
 package com.github.singond.melodear.desktop.audio;
 
+import java.util.List;
+
 import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MetaEventListener;
+import javax.sound.midi.MetaMessage;
+import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
 import javax.sound.midi.ShortMessage;
+import javax.sound.midi.Track;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,15 +23,21 @@ class MidiAudioDevice implements AudioDevice {
 
 	private static Logger logger = LogManager.getLogger(MidiAudioDevice.class);
 
-	/** Reserved controller number for "all sound off". */
+	/** Reserved controller number for "All Sound Off". */
 	private static final int CONTROL_ALL_SOUND_OFF = 0x78;
+	/** Meta type of the "End Of Track" MIDI message. */
+	private static final int META_END_OF_TRACK = 0x2F;
 
 	private Receiver receiver;
-	private int channel;
+	private Sequencer sequencer;
+	private int channel = 0;
+	private int velocity = 93;
 
 	public MidiAudioDevice() throws MidiUnavailableException {
 		logger.debug("Obtaining default MIDI receiver from system");
 		receiver = MidiSystem.getReceiver();
+		sequencer = MidiSystem.getSequencer();
+//		sequencer.addMetaEventListener(new EndListener());
 	}
 
 	/**
@@ -36,7 +50,6 @@ class MidiAudioDevice implements AudioDevice {
 	 */
 	@Override
 	public void playNote(Pitch pitch) throws InvalidMidiDataException {
-		int velocity = 93;
 		receiver.send(new ShortMessage(ShortMessage.NOTE_ON, channel,
 				pitch.midiNumber(), velocity), -1);
 	}
@@ -50,7 +63,6 @@ class MidiAudioDevice implements AudioDevice {
 	 */
 	@Override
 	public void stopNote(Pitch pitch) throws InvalidMidiDataException {
-		int velocity = 93;
 		receiver.send(new ShortMessage(ShortMessage.NOTE_OFF, channel,
 				pitch.midiNumber(), velocity), -1);
 	}
@@ -59,5 +71,65 @@ class MidiAudioDevice implements AudioDevice {
 	public void stopAllNotes() throws InvalidMidiDataException {
 		receiver.send(new ShortMessage(ShortMessage.CONTROL_CHANGE,
 				channel, CONTROL_ALL_SOUND_OFF, 0), -1);
+	}
+
+	@Override
+	public void playSequentially(List<Pitch> pitches, double bpm) {
+		try {
+			if (!sequencer.isOpen()) {
+				sequencer.open();
+			}
+			sequencer.setTempoInBPM((float)bpm);
+			sequencer.setSequence(makeSequence(pitches));
+			// Play the sequence
+			sequencer.start();
+		} catch (InvalidMidiDataException e) {
+			logger.error("Cannot load sequence into sequencer", e);
+		} catch (MidiUnavailableException e) {
+			logger.error("Cannot open sequencer", e);
+		}
+	}
+
+	private Sequence makeSequence(List<Pitch> pitches) {
+		Sequence sequence;
+		try {
+			// One tick per quarter note; one track
+			sequence = new Sequence(Sequence.PPQ, 1, 1);
+		} catch (InvalidMidiDataException e) {
+			logger.error("Error when constructing MIDI sequence", e);
+			return null;
+		}
+		// The constructor ensures there is one track in the sequence
+		Track track = sequence.getTracks()[0];
+
+		// Put all pitches into the track, one after anonether
+		int i = 0;
+		for (Pitch pitch : pitches) {
+			long startTicks = i;
+			long endTicks = ++i;
+			ShortMessage startMsg, endMsg;
+			try {
+				startMsg = new ShortMessage(ShortMessage.NOTE_ON, channel,
+						pitch.midiNumber(), velocity);
+				endMsg = new ShortMessage(ShortMessage.NOTE_OFF, channel,
+						pitch.midiNumber(), velocity);
+			} catch (InvalidMidiDataException e) {
+				logger.error("Error when constructing MIDI message", e);
+				e.printStackTrace();
+				return null;
+			}
+			track.add(new MidiEvent(startMsg, startTicks));
+			track.add(new MidiEvent(endMsg, endTicks));
+		}
+		return sequence;
+	}
+
+	private class EndListener implements MetaEventListener {
+		@Override
+		public void meta(MetaMessage meta) {
+			if (meta.getType() == META_END_OF_TRACK) {
+				logger.debug("End of track");
+			}
+		}
 	}
 }
