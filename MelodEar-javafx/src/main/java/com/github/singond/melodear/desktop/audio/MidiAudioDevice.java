@@ -1,10 +1,14 @@
 package com.github.singond.melodear.desktop.audio;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaEventListener;
 import javax.sound.midi.MetaMessage;
+import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
@@ -12,6 +16,8 @@ import javax.sound.midi.Receiver;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.ShortMessage;
+import javax.sound.midi.Soundbank;
+import javax.sound.midi.Synthesizer;
 import javax.sound.midi.Track;
 
 import org.apache.logging.log4j.LogManager;
@@ -28,16 +34,60 @@ class MidiAudioDevice implements AudioDevice {
 	/** Meta type of the "End Of Track" MIDI message. */
 	private static final int META_END_OF_TRACK = 0x2F;
 
+	private final MidiSettings settings;
 	private Receiver receiver;
 	private Sequencer sequencer;
 	private int channel = 0;
 	private int velocity = 93;
 
 	public MidiAudioDevice() throws MidiUnavailableException {
-		logger.debug("Obtaining default MIDI receiver from system");
+		logger.debug("Initializing MIDI device with default settings");
+		settings = null;
 		receiver = MidiSystem.getReceiver();
 		sequencer = MidiSystem.getSequencer();
 //		sequencer.addMetaEventListener(new EndListener());
+	}
+
+	public MidiAudioDevice(MidiSettings settings) throws MidiUnavailableException {
+		logger.debug("Initializing MIDI device with given settings");
+		this.settings = settings;
+
+		// Initialize synthesizer
+		MidiDevice.Info synthInfo = settings.getSynth();
+		MidiDevice device = null;
+		if (synthInfo != null) {
+			device = MidiSystem.getMidiDevice(synthInfo);
+		}
+		Synthesizer synthesizer;
+		if (device != null && device instanceof Synthesizer) {
+			logger.debug("Obtaining selected synthesizer: {}", synthInfo.getName());
+			synthesizer = (Synthesizer) device;
+		} else {
+			logger.debug("Obtaining default synthesizer");
+			synthesizer = MidiSystem.getSynthesizer();
+		}
+		if (!synthesizer.isOpen()) {
+			logger.debug("Opening synthesizer");
+			synthesizer.open();
+		}
+		receiver = synthesizer.getReceiver();
+		sequencer = MidiSystem.getSequencer();
+		sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
+
+		// Load soundbank
+		Path sbFile = settings.getSoundbank();
+		if (Files.exists(sbFile)) {
+			logger.debug("Loading soundbank from {}", sbFile);
+			try {
+				Soundbank soundbank = MidiSystem.getSoundbank(sbFile.toFile());
+				synthesizer.loadAllInstruments(soundbank);
+				logger.debug("Loaded instruments from soundbank");
+			} catch (InvalidMidiDataException | IOException e) {
+				logger.error("Unable to load soundbank", e);
+			} catch (IllegalArgumentException e) {
+				logger.error("Soundbank is incompatible with current synthesizer");
+			}
+		}
 	}
 
 	/**
