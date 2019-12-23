@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.singond.melodear.desktop.settings.PathStringConverter;
 
-class MidiSettingsController {
+public class MidiSettingsController {
 
 	private static Logger logger
 			= LogManager.getLogger(MidiSettingsController.class);
