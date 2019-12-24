@@ -1,5 +1,6 @@
 package com.github.singond.melodear.desktop.audio;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,7 +26,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.singond.music.Pitch;
 
-class MidiAudioDevice implements AudioDevice {
+class MidiAudioDevice implements AudioDevice, Closeable {
 
 	private static Logger logger = LogManager.getLogger(MidiAudioDevice.class);
 
@@ -35,6 +36,7 @@ class MidiAudioDevice implements AudioDevice {
 	private static final int META_END_OF_TRACK = 0x2F;
 
 	private final MidiSettings settings;
+	private Synthesizer synthesizer;
 	private Receiver receiver;
 	private Sequencer sequencer;
 	private int channel = 0;
@@ -54,15 +56,16 @@ class MidiAudioDevice implements AudioDevice {
 
 		// Initialize synthesizer
 		MidiDevice.Info synthInfo = settings.getSynth();
-		MidiDevice device = null;
 		if (synthInfo != null) {
-			device = MidiSystem.getMidiDevice(synthInfo);
+			try (MidiDevice device = MidiSystem.getMidiDevice(synthInfo)) {
+				if (device != null && device instanceof Synthesizer) {
+					logger.debug("Obtaining selected synthesizer: {}",
+							synthInfo.getName());
+					synthesizer = (Synthesizer) device;
+				}
+			}
 		}
-		Synthesizer synthesizer;
-		if (device != null && device instanceof Synthesizer) {
-			logger.debug("Obtaining selected synthesizer: {}", synthInfo.getName());
-			synthesizer = (Synthesizer) device;
-		} else {
+		if (synthesizer == null) {      // Fallback if the above fails
 			logger.debug("Obtaining default synthesizer");
 			synthesizer = MidiSystem.getSynthesizer();
 		}
@@ -88,6 +91,12 @@ class MidiAudioDevice implements AudioDevice {
 				logger.error("Soundbank is incompatible with current synthesizer");
 			}
 		}
+	}
+
+	@Override
+	public void close() throws IOException {
+		logger.debug("Closing synthesizer");
+		synthesizer.close();
 	}
 
 	/**
