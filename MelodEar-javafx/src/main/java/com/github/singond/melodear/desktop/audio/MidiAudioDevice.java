@@ -50,10 +50,15 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 //		sequencer.addMetaEventListener(new EndListener());
 	}
 
-	public MidiAudioDevice(MidiSettings settings) throws MidiUnavailableException {
+	public MidiAudioDevice(MidiSettings settings)
+			throws MidiUnavailableException {
 		logger.debug("Initializing MIDI device with given settings");
 		this.settings = settings;
+		setup(settings);
+	}
 
+	private final void setup(MidiSettings settings)
+			throws MidiUnavailableException {
 		// Initialize synthesizer
 		MidiDevice.Info synthInfo = settings.getSynth();
 		if (synthInfo != null) {
