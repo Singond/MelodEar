@@ -1,7 +1,6 @@
 package com.github.singond.melodear.desktop;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javax.inject.Inject;
@@ -42,6 +41,11 @@ public class MainController {
 
 	@Inject
 	SettingsLoader settingsLoader;
+
+	@Inject
+	SettingsController settingsController;
+
+	private transient DialogPane settingsDlgPane;
 
 	@Inject
 	public MainController() {}
@@ -102,28 +106,37 @@ public class MainController {
 
 	public void openSettings() {
 		logger.debug("Opening settings");
+		try {
+			if (settingsDlgPane == null) {
+				settingsDlgPane = createSettingsDialogPane();
+			}
+			createSettingsDialog(settingsDlgPane).showAndWait();
+		} catch (IOException e) {
+			logger.error("Error creating settings dialog", e);
+			// TODO: Display error?
+			return;
+		}
+	}
+
+	private Dialog<AllSettings> createSettingsDialog(DialogPane dlgPane)
+			throws IOException {
+		logger.debug("Creating settings dialog");
+		ResourceBundle bundle = ResourceBundle.getBundle("loc/settings");
+		Dialog<AllSettings> dlg = new Dialog<>();
+		dlg.setTitle(bundle.getString("title"));
+		dlg.setDialogPane(dlgPane);
+		return dlg;
+	}
+
+	private DialogPane createSettingsDialogPane() throws IOException {
+		logger.debug("Creating settings dialog pane");
 		ResourceBundle bundle = ResourceBundle.getBundle("loc/settings");
 		FXMLLoader loader = new FXMLLoader(
 				getClass().getResource("/view/settings.fxml"), bundle);
-		loader.setController(new SettingsController(settingsLoader));
-		try {
-			Dialog<AllSettings> dlg = new Dialog<>();
-			dlg.setTitle(bundle.getString("title"));
-			DialogPane dlgPane = loader.load();
-			dlgPane.getStylesheets().add("/view/settings.css");
-			dlg.setDialogPane(dlgPane);
-//			dlg.setResultConverter(t -> dlgPane.getS);
-			Optional<AllSettings> result = dlg.showAndWait();
-//			if (result.isPresent()) {
-//				if (result.get() == ButtonType.APPLY) {
-//					logger.debug("Applying settings");
-//				} else if (result.get() == ButtonType.CANCEL) {
-//					logger.debug("Canceled");
-//				}
-//			}
-		} catch (IOException e) {
-			logger.error("Error loading settings", e);
-		}
+		loader.setController(settingsController);
+		DialogPane dlgPane = loader.load();
+		dlgPane.getStylesheets().add("/view/settings.css");
+		return dlgPane;
 	}
 
 	public void exit() {

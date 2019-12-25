@@ -3,6 +3,8 @@ package com.github.singond.melodear.desktop.settings;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -37,6 +39,7 @@ public class SettingsController {
 	@FXML
 	ListView<SettingsView<?>> sectionSelect;
 
+	@Inject
 	public SettingsController(SettingsLoader settingsLoader) {
 		logger.debug("Creating SettingsController");
 		this.settingsLoader = settingsLoader;
