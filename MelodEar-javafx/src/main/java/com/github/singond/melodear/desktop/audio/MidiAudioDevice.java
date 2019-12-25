@@ -41,6 +41,7 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 	private Sequencer sequencer;
 	private int channel = 0;
 	private int velocity = 93;
+	private SoundbankStatus soundbankStatus;
 
 	public MidiAudioDevice() throws MidiUnavailableException {
 		logger.debug("Initializing MIDI device with default settings");
@@ -88,13 +89,21 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 			logger.debug("Loading soundbank from {}", sbFile);
 			try {
 				Soundbank soundbank = MidiSystem.getSoundbank(sbFile.toFile());
-				synthesizer.loadAllInstruments(soundbank);
+				if (synthesizer.loadAllInstruments(soundbank)) {
+					soundbankStatus = SoundbankStatus.LOADED;
+				} else {
+					soundbankStatus = SoundbankStatus.ERROR_LOADING;
+				}
 				logger.debug("Loaded instruments from soundbank");
-			} catch (InvalidMidiDataException | IOException e) {
+			} catch (InvalidMidiDataException e) {
+				soundbankStatus = SoundbankStatus.DATA_INVALID;
+				logger.error("Soundbank is incompatible with current MIDI system");
+			} catch (IllegalArgumentException | IOException e) {
+				soundbankStatus = SoundbankStatus.DATA_INVALID;
 				logger.error("Unable to load soundbank", e);
-			} catch (IllegalArgumentException e) {
-				logger.error("Soundbank is incompatible with current synthesizer");
 			}
+		} else {
+			soundbankStatus = SoundbankStatus.FILE_NOT_FOUND;
 		}
 	}
 
@@ -102,6 +111,10 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 	public void close() throws IOException {
 		logger.debug("Closing synthesizer");
 		synthesizer.close();
+	}
+
+	public SoundbankStatus getSoundbankStatus() {
+		return soundbankStatus;
 	}
 
 	/**
@@ -195,5 +208,18 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 				logger.debug("End of track");
 			}
 		}
+	}
+
+	public enum SoundbankStatus {
+		/** The soundbank has been loaded correctly. */
+		LOADED,
+		/** The data in the file were not recognized as soundbank. */
+		DATA_INVALID,
+		/** The soundbank file does not exist. */
+		FILE_NOT_FOUND,
+		/** An error occured when loading the soundbank. */
+		ERROR_LOADING,
+		/** Other error. */
+		ERROR;
 	}
 }
