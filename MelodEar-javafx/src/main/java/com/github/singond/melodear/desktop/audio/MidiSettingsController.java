@@ -54,7 +54,7 @@ public class MidiSettingsController {
 
 	public void initialize() {
 		logger.debug("Initializing MIDI settings");
-		initSynth();
+		initSynthList();
 
 		soundbankFile.addEventHandler(ActionEvent.ACTION,
 				e -> selectSoundbankFile());
@@ -62,7 +62,7 @@ public class MidiSettingsController {
 				settings.soundbankProperty(), new PathStringConverter());
 	}
 
-	private void initSynth() {
+	private void initSynthList() {
 		logger.debug("Initializing synthesizer list");
 		synth.setItems(settings.getAvailableSynthesizers());
 		synth.getSelectionModel().select(settings.getSynth());
