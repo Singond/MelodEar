@@ -30,6 +30,11 @@ public class SettingsController {
 	private SettingsLoader settingsLoader;
 	private AllSettings settingsNew;
 
+	@Inject
+	KeyboardSettingsView keyboardSettingsView;
+	@Inject
+	MidiSettingsView midiSettingsView;
+
 	@FXML
 	DialogPane settingsDlg;
 
@@ -76,8 +81,8 @@ public class SettingsController {
 
 	private List<SettingsView<?>> buildSections() {
 		List<SettingsView<?>> sections = new ArrayList<>();
-		sections.add(new KeyboardSettingsView());
-		sections.add(new MidiSettingsView());
+		sections.add(keyboardSettingsView);
+		sections.add(midiSettingsView);
 		return sections;
 	}
 }

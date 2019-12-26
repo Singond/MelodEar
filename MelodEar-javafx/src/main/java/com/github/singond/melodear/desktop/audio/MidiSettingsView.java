@@ -1,5 +1,7 @@
 package com.github.singond.melodear.desktop.audio;
 
+import javax.inject.Inject;
+
 import com.github.singond.melodear.desktop.settings.AllSettings;
 import com.github.singond.melodear.desktop.settings.BasicSettingsView;
 import com.github.singond.melodear.desktop.settings.SettingsView;
@@ -7,6 +9,7 @@ import com.github.singond.melodear.desktop.settings.SettingsView;
 public class MidiSettingsView extends BasicSettingsView<MidiSettings>
 		implements SettingsView<MidiSettings> {
 
+	@Inject
 	public MidiSettingsView() {
 		super("midi");
 	}
