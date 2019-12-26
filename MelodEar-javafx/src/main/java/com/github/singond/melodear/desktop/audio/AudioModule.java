@@ -17,7 +17,14 @@ public class AudioModule {
 	private static Logger logger = LogManager.getLogger(AudioModule.class);
 
 	@Provides @Singleton
-	static AudioDevice provideAudioDevice(AllSettings settings) {
+	static AudioDevice provideAudioDevice(MidiAudioDevice midiDev) {
+		// If multiple audio devices are available, determine the device
+		// to be returned here.
+		return midiDev;
+	}
+
+	@Provides @Singleton
+	static MidiAudioDevice provideMidiAudioDevice(AllSettings settings) {
 		try {
 			return new MidiAudioDevice(settings.midi());
 		} catch (MidiUnavailableException e) {

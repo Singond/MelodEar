@@ -30,6 +30,7 @@ public class MidiSettingsController {
 			= ResourceBundle.getBundle("loc/settings");
 
 	private final MidiSettings settings;
+	private final MidiAudioDevice device;
 
 	@FXML
 	TableView<MidiDevice.Info> synth;
@@ -47,9 +48,11 @@ public class MidiSettingsController {
 	@FXML
 	Button soundbankFile;
 
-	public MidiSettingsController(MidiSettings settings) {
+	public MidiSettingsController(MidiSettings settings,
+			MidiAudioDevice device) {
 		logger.debug("Creating MidiSettingsController");
 		this.settings = settings;
+		this.device = device;
 	}
 
 	public void initialize() {

@@ -10,13 +10,16 @@ public class MidiSettingsView extends BasicSettingsView<MidiSettings>
 		implements SettingsView<MidiSettings> {
 
 	@Inject
+	MidiAudioDevice device;
+
+	@Inject
 	public MidiSettingsView() {
 		super("midi");
 	}
 
 	@Override
 	protected Object makeController(AllSettings settings) {
-		return new MidiSettingsController(settings.midi());
+		return new MidiSettingsController(settings.midi(), device);
 	}
 
 }
