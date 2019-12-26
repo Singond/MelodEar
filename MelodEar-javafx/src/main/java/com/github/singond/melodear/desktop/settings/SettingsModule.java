@@ -5,7 +5,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(subcomponents = {SettingsControllerComponent.class})
 public class SettingsModule {
 
 	@Provides @Singleton

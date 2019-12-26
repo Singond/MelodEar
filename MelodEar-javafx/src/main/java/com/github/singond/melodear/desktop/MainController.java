@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -22,7 +23,7 @@ import dagger.Lazy;
 
 import com.github.singond.melodear.desktop.piano.PianoController;
 import com.github.singond.melodear.desktop.settings.AllSettings;
-import com.github.singond.melodear.desktop.settings.SettingsController;
+import com.github.singond.melodear.desktop.settings.SettingsControllerComponent;
 import com.github.singond.melodear.desktop.settings.SettingsLoader;
 import com.github.singond.melodear.desktop.trainer.TrainerController;
 
@@ -42,10 +43,12 @@ public class MainController {
 	@Inject
 	SettingsLoader settingsLoader;
 
+	/**
+	 * Creates fresh instance of SettingsController based on a copy of
+	 * the current settings on every invocation.
+	 */
 	@Inject
-	SettingsController settingsController;
-
-	private transient DialogPane settingsDlgPane;
+	Provider<SettingsControllerComponent.Builder> settingsControllerProvider;
 
 	@Inject
 	public MainController() {}
@@ -107,10 +110,7 @@ public class MainController {
 	public void openSettings() {
 		logger.debug("Opening settings");
 		try {
-			if (settingsDlgPane == null) {
-				settingsDlgPane = createSettingsDialogPane();
-			}
-			createSettingsDialog(settingsDlgPane).showAndWait();
+			createSettingsDialog().showAndWait();
 		} catch (IOException e) {
 			logger.error("Error creating settings dialog", e);
 			// TODO: Display error?
@@ -118,22 +118,23 @@ public class MainController {
 		}
 	}
 
-	private Dialog<AllSettings> createSettingsDialog(DialogPane dlgPane)
-			throws IOException {
+	private Dialog<AllSettings> createSettingsDialog() throws IOException {
 		logger.debug("Creating settings dialog");
 		ResourceBundle bundle = ResourceBundle.getBundle("loc/settings");
 		Dialog<AllSettings> dlg = new Dialog<>();
 		dlg.setTitle(bundle.getString("title"));
-		dlg.setDialogPane(dlgPane);
+		dlg.setDialogPane(createSettingsDialogPane());
 		return dlg;
 	}
 
 	private DialogPane createSettingsDialogPane() throws IOException {
-		logger.debug("Creating settings dialog pane");
+		logger.debug("Creating settings dialog contents");
 		ResourceBundle bundle = ResourceBundle.getBundle("loc/settings");
 		FXMLLoader loader = new FXMLLoader(
 				getClass().getResource("/view/settings.fxml"), bundle);
-		loader.setController(settingsController);
+		SettingsControllerComponent bldr
+				= settingsControllerProvider.get().build();
+		loader.setController(bldr.getSettingsController());
 		DialogPane dlgPane = loader.load();
 		dlgPane.getStylesheets().add("/view/settings.css");
 		return dlgPane;

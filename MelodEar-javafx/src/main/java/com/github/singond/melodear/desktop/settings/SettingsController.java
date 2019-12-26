@@ -44,6 +44,13 @@ public class SettingsController {
 	@FXML
 	ListView<SettingsView<?>> sectionSelect;
 
+	/**
+	 * Creates a new settings controller using a copy of the current settings.
+	 * These settings are copied back to the global instance of settings
+	 * if the "Apply" button is pressed.
+	 *
+	 * @param settingsLoader object providing current settings
+	 */
 	@Inject
 	public SettingsController(SettingsLoader settingsLoader) {
 		logger.debug("Creating SettingsController");
