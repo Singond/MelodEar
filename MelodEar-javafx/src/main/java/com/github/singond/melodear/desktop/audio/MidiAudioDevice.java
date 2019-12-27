@@ -53,13 +53,15 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 
 	public MidiAudioDevice(MidiSettings settings)
 			throws MidiUnavailableException {
-		logger.debug("Initializing MIDI device with given settings");
 		this.settings = settings;
 		setup(settings);
+		settings.soundbankProperty().addListener(o -> trySetup(settings));
+		settings.synthProperty().addListener(o -> trySetup(settings));
 	}
 
 	private final void setup(MidiSettings settings)
 			throws MidiUnavailableException {
+		logger.debug("Initializing MIDI device with given settings");
 		// Initialize synthesizer
 		MidiDevice.Info synthInfo = settings.getSynth();
 		if (synthInfo != null) {
@@ -104,6 +106,14 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 			}
 		} else {
 			soundbankStatus = SoundbankStatus.FILE_NOT_FOUND;
+		}
+	}
+
+	private void trySetup(MidiSettings settings) {
+		try {
+			setup(settings);
+		} catch (MidiUnavailableException e) {
+			logger.error("Unable to initialize MIDI device", e);
 		}
 	}
 
