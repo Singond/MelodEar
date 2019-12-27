@@ -46,7 +46,7 @@ public class MidiSettingsController {
 	@FXML
 	TextField soundbankText;
 	@FXML
-	Button soundbankFile;
+	Button soundbankBtn;
 
 	public MidiSettingsController(MidiSettings settings,
 			MidiAudioDevice device) {
@@ -59,7 +59,7 @@ public class MidiSettingsController {
 		logger.debug("Initializing MIDI settings");
 		initSynthList();
 
-		soundbankFile.addEventHandler(ActionEvent.ACTION,
+		soundbankBtn.addEventHandler(ActionEvent.ACTION,
 				e -> selectSoundbankFile());
 		soundbankText.textProperty().bindBidirectional(
 				settings.soundbankProperty(), new PathStringConverter());
@@ -94,7 +94,7 @@ public class MidiSettingsController {
 		}
 
 		// Launch it and evaluate
-		File file = chooser.showOpenDialog(soundbankFile.getScene().getWindow());
+		File file = chooser.showOpenDialog(soundbankBtn.getScene().getWindow());
 		if (file != null) {
 			logger.debug("Selected {}", file);
 			Path path = file.toPath();
