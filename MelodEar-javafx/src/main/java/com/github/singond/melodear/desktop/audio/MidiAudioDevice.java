@@ -35,7 +35,6 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 	/** Meta type of the "End Of Track" MIDI message. */
 	private static final int META_END_OF_TRACK = 0x2F;
 
-	private final MidiSettings settings;
 	private Synthesizer synthesizer;
 	private Receiver receiver;
 	private Sequencer sequencer;
@@ -45,7 +44,6 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 
 	public MidiAudioDevice() throws MidiUnavailableException {
 		logger.debug("Initializing MIDI device with default settings");
-		settings = null;
 		receiver = MidiSystem.getReceiver();
 		sequencer = MidiSystem.getSequencer();
 //		sequencer.addMetaEventListener(new EndListener());
@@ -53,13 +51,10 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 
 	public MidiAudioDevice(MidiSettings settings)
 			throws MidiUnavailableException {
-		this.settings = settings;
-		setup(settings);
-		settings.soundbankProperty().addListener(o -> trySetup(settings));
-		settings.synthProperty().addListener(o -> trySetup(settings));
+		configure(settings);
 	}
 
-	private final void setup(MidiSettings settings)
+	public final void configure(MidiSettings settings)
 			throws MidiUnavailableException {
 		logger.debug("Initializing MIDI device with given settings");
 		// Initialize synthesizer
@@ -109,20 +104,18 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 		}
 	}
 
-	private void trySetup(MidiSettings settings) {
-		try {
-			setup(settings);
-		} catch (MidiUnavailableException e) {
-			logger.error("Unable to initialize MIDI device", e);
-		}
-	}
-
 	@Override
 	public void close() throws IOException {
 		logger.debug("Closing synthesizer");
 		synthesizer.close();
 	}
 
+	/**
+	 * Returns the status of the soundbank which was present in the most
+	 * recent settings object used to call {@link #configure}.
+	 *
+	 * @return the status of the last soundbank
+	 */
 	public SoundbankStatus getSoundbankStatus() {
 		return soundbankStatus;
 	}
@@ -236,9 +229,16 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 		ERROR(false);
 
 		private final boolean valid;
+		private final String key;
+
+		private SoundbankStatus(boolean valid, String key) {
+			this.valid = valid;
+			this.key = key;
+		}
 
 		private SoundbankStatus(boolean valid) {
 			this.valid = valid;
+			this.key = name().toLowerCase();
 		}
 
 		/**
@@ -249,6 +249,10 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 		 */
 		public boolean valid() {
 			return valid;
+		}
+
+		public String key() {
+			return key;
 		}
 	}
 }

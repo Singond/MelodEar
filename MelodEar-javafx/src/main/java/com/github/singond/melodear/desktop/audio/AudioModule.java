@@ -24,6 +24,13 @@ public class AudioModule {
 	}
 
 	@Provides @Singleton
+	static AudioController provideAudioController(MidiAudioController ctrl) {
+		// If multiple audio devices are available, determine the controller
+		// to be returned here.
+		return ctrl;
+	}
+
+	@Provides @Singleton
 	static MidiAudioDevice provideMidiAudioDevice(AllSettings settings) {
 		try {
 			return new MidiAudioDevice(settings.midi());

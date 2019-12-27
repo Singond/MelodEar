@@ -21,10 +21,10 @@ import org.apache.logging.log4j.Logger;
 
 import dagger.Lazy;
 
+import com.github.singond.melodear.desktop.audio.AudioController;
 import com.github.singond.melodear.desktop.piano.PianoController;
 import com.github.singond.melodear.desktop.settings.AllSettings;
 import com.github.singond.melodear.desktop.settings.SettingsControllerComponent;
-import com.github.singond.melodear.desktop.settings.SettingsLoader;
 import com.github.singond.melodear.desktop.trainer.TrainerController;
 
 public class MainController {
@@ -41,7 +41,7 @@ public class MainController {
 	Lazy<TrainerController> trainerController;
 
 	@Inject
-	SettingsLoader settingsLoader;
+	AudioController audioController;
 
 	/**
 	 * Creates fresh instance of SettingsController based on a copy of
