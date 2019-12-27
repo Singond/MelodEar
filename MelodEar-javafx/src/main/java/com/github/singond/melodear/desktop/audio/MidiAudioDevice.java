@@ -220,16 +220,35 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 		}
 	}
 
+	/**
+	 * Status of loading a soundbank file into a synthesizer.
+	 */
 	public enum SoundbankStatus {
 		/** The soundbank has been loaded correctly. */
-		LOADED,
+		LOADED(true),
 		/** The data in the file were not recognized as soundbank. */
-		DATA_INVALID,
+		DATA_INVALID(false),
 		/** The soundbank file does not exist. */
-		FILE_NOT_FOUND,
+		FILE_NOT_FOUND(false),
 		/** An error occured when loading the soundbank. */
-		ERROR_LOADING,
+		ERROR_LOADING(false),
 		/** Other error. */
-		ERROR;
+		ERROR(false);
+
+		private final boolean valid;
+
+		private SoundbankStatus(boolean valid) {
+			this.valid = valid;
+		}
+
+		/**
+		 * Returns {@code true} if this status represents a soundbank
+		 * successfully loaded into the synthesizer.
+		 *
+		 * @return {@code true} if this status represents a valid soundbank
+		 */
+		public boolean valid() {
+			return valid;
+		}
 	}
 }
