@@ -1,5 +1,6 @@
 package com.github.singond.melodear.desktop.audio;
 
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 import javax.inject.Inject;
@@ -45,7 +46,7 @@ class MidiAudioController implements AudioController {
 			SoundbankStatus sbStatus = device.getSoundbankStatus();
 			if (!sbStatus.valid()) {
 				String key = "soundbank_status." + sbStatus.key();
-				error(key, key + ".desc");
+				error(key, key + ".desc", settings.getSoundbank());
 			}
 		} catch (MidiUnavailableException e) {
 			error("soundbank.midi_unavailable",
@@ -54,9 +55,28 @@ class MidiAudioController implements AudioController {
 		}
 	}
 
-	public void error(String titleKey, String msgKey) {
-		Alert a = new Alert(Alert.AlertType.ERROR, bundle.getString(msgKey));
-		a.setHeaderText(bundle.getString(titleKey));
+	private void error(String titleKey, String msgKey) {
+		errorBase(bundle.getString(titleKey), bundle.getString(msgKey));
+	}
+
+	/**
+	 * Displays a parameterized error dialog.
+	 * The messages are formatted with
+	 * {@link MessageFormat#format(String, Object...)}.
+	 *
+	 * @param titleKey properties key to the dialog title
+	 * @param msgKey properties key to the dialog message content
+	 * @param params parameters to be used both in the title and the message
+	 */
+	private void error(String titleKey, String msgKey, Object... params) {
+		errorBase(MessageFormat.format(bundle.getString(titleKey), params),
+				MessageFormat.format(bundle.getString(msgKey), params));
+	}
+
+	private void errorBase(String title, String msg) {
+		Alert a = new Alert(Alert.AlertType.ERROR, msg);
+		a.setHeaderText(title);
+		// TODO: Make dialog not truncate the text
 		a.show();   // showAndWait() leaves the dialog empty
 	}
 }
