@@ -32,7 +32,7 @@ public class MidiSettingsController {
 			= LogManager.getLogger(MidiSettingsController.class);
 
 	private static final ResourceBundle bundle
-			= ResourceBundle.getBundle("loc/settings");
+			= ResourceBundle.getBundle("loc/audio");
 
 	private final MidiSettings settings;
 
@@ -89,7 +89,8 @@ public class MidiSettingsController {
 		logger.debug("Selecting soundbank file");
 		// Setup file chooser
 		FileChooser chooser = new FileChooser();
-		chooser.setTitle(bundle.getString("midi.soundbank.browser.title"));
+		chooser.setTitle(bundle.getString(
+				"midi.settings.soundbank.browser.title"));
 		Path defaultDir = settings.getSoundbankDefaultDir();
 		if (defaultDir != null) {
 			chooser.setInitialDirectory(defaultDir.toFile());

@@ -45,12 +45,11 @@ class MidiAudioController implements AudioController {
 			device.configure(settings);
 			SoundbankStatus sbStatus = device.getSoundbankStatus();
 			if (!sbStatus.valid()) {
-				String key = "soundbank_status." + sbStatus.key();
+				String key = "midi.sbstat." + sbStatus.key();
 				error(key, key + ".desc", settings.getSoundbank());
 			}
 		} catch (MidiUnavailableException e) {
-			error("soundbank.midi_unavailable",
-					"soundbank.midi_unavailable.desc");
+			error("midi.nodev", "midi.nodev.desc");
 			logger.error("Unable to initialize MIDI device", e);
 		}
 	}
