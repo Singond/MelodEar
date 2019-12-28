@@ -12,6 +12,11 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.singond.melodear.desktop.audio.MidiAudioDevice.SoundbankStatus;
 
+/**
+ * A manager of the MIDI audio system and its settings.
+ *
+ * @author Singon
+ */
 class MidiAudioController implements AudioController {
 
 	private static Logger logger = LogManager.getLogger(MidiAudioController.class);

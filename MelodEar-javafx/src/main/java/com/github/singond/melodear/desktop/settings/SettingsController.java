@@ -23,6 +23,11 @@ import org.apache.logging.log4j.Logger;
 import com.github.singond.melodear.desktop.audio.MidiSettingsView;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettingsView;
 
+/**
+ * JavaFX controller class for the settings dialog window.
+ *
+ * @author Singon
+ */
 public class SettingsController {
 
 	private static Logger logger = LogManager.getLogger(SettingsController.class);

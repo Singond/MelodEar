@@ -21,6 +21,11 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.singond.melodear.desktop.settings.PathStringConverter;
 
+/**
+ * JavaFX controller class for the MIDI settings page.
+ *
+ * @author Singon
+ */
 public class MidiSettingsController {
 
 	private static Logger logger
