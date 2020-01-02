@@ -34,3 +34,14 @@ eclipse {
 tasks.eclipse.dependsOn tasks.eclipseJdt
 tasks.eclipseJdt.dependsOn tasks.eclipseFactorypath
 tasks.eclipseFactorypath.dependsOn tasks.eclipseJdtApt
+
+jar {
+	destinationDirectory = file("${buildDir}/distributions")
+	baseName = 'melodear'
+	manifest {
+		attributes 'Main-Class': 'com.github.singond.melodear.desktop.MelodEarApplication'
+	}
+	from {
+        configurations.compile.collect {it.isDirectory() ? it : zipTree(it)}
+    }
+}
