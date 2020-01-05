@@ -6,10 +6,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.github.singond.music.Degree;
 import com.github.singond.music.Keys;
@@ -18,7 +18,7 @@ import com.github.singond.music.PitchClass;
 
 public class MelodyExerciseCreation {
 
-	private static Logger logger = LoggerFactory.getLogger(MelodyExerciseCreation.class);
+	private static Logger logger = LogManager.getLogger(MelodyExerciseCreation.class);
 
 	public KeyedMelodyExerciseFactory factory;
 

@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.github.singond.music.Degree;
 import com.github.singond.music.Key;
@@ -32,7 +32,7 @@ public final class KeyedMelodyExerciseFactory
 		implements ExerciseFactory<KeyedMelodyExercise> {
 
 	private static Logger logger
-			= LoggerFactory.getLogger(KeyedMelodyExerciseFactory.class);
+			= LogManager.getLogger(KeyedMelodyExerciseFactory.class);
 
 	/**
 	 * Musical keys available for the musical exercise.
