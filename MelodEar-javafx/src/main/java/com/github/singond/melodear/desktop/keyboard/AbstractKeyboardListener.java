@@ -26,7 +26,7 @@ public abstract class AbstractKeyboardListener implements KeyboardListener {
 
 	public AbstractKeyboardListener(
 			AudioDevice audio, KeyboardSettings settings) {
-		logger.debug("Creating KeyboardAudio");
+		logger.debug("Creating AbstractKeyboardListener");
 		if (audio == null) {
 			throw new NullPointerException("Audio device must not be null");
 		}
