@@ -6,25 +6,26 @@ package com.github.singond.melodear;
  * melodic dictation exercises.
  *
  * @author Singon
+ * @param <T> type of exercises used by this trainer
  */
-public class MelodyTrainer {
+public class MelodyTrainer<T extends MelodyExercise> {
 
 	/**
 	 * Factory for creating new exercises.
 	 */
-	private MelodyExerciseFactory exerciseFactory;
+	private ExerciseFactory<T> exerciseFactory;
 
 	/**
 	 * The active exercise;
 	 */
-	private MelodyExercise exercise;
+	private T exercise;
 
 	/**
 	 * Returns the factory used for creating new exercises.
 	 *
 	 * @return the current exercise factory
 	 */
-	public MelodyExerciseFactory getExerciseFactory() {
+	public ExerciseFactory<T> getExerciseFactory() {
 		return exerciseFactory;
 	}
 
@@ -33,7 +34,7 @@ public class MelodyTrainer {
 	 *
 	 * @param factory the factory to be set
 	 */
-	public void setExerciseFactory(MelodyExerciseFactory factory) {
+	public void setExerciseFactory(ExerciseFactory<T> factory) {
 		this.exerciseFactory = factory;
 	}
 
@@ -59,7 +60,7 @@ public class MelodyTrainer {
 	 *
 	 * @return the active exercise
 	 */
-	public MelodyExercise getExercise() {
+	public T getExercise() {
 		return exercise;
 	}
 }

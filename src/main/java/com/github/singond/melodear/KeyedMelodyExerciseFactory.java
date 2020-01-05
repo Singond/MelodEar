@@ -21,17 +21,18 @@ import com.github.singond.music.PitchClass;
 import com.github.singond.music.Pitches;
 
 /**
- * A factory for melody exercises in a key.
- * Keeps track of constraints for creating new melodic exercises in a key
- * and creates new instances of the exercises based on these constraints.
+ * An implementation of {@link ExerciseFactory} which creates exercises
+ * of type {@link KeyedMelodyExercise}.
  * <p>
  * This class is not thread-safe.
  *
  * @author Singon
  */
-public final class KeyedMelodyExerciseFactory implements MelodyExerciseFactory {
+public final class KeyedMelodyExerciseFactory
+		implements ExerciseFactory<KeyedMelodyExercise> {
 
-	private static Logger logger = LoggerFactory.getLogger(KeyedMelodyExerciseFactory.class);
+	private static Logger logger
+			= LoggerFactory.getLogger(KeyedMelodyExerciseFactory.class);
 
 	/**
 	 * Musical keys available for the musical exercise.
@@ -242,11 +243,6 @@ public final class KeyedMelodyExerciseFactory implements MelodyExerciseFactory {
 		return melody;
 	}
 
-	/**
-	 * Creates a new exercise with a random melody in the current key.
-	 *
-	 * @return a new melody exercise in the current key
-	 */
 	@Override
 	public KeyedMelodyExercise make() {
 		KeyedMelodyExercise exc = new KeyedMelodyExercise(newMelody(), key);
