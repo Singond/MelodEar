@@ -66,7 +66,7 @@ public abstract class MelodyExercise {
 	 *
 	 * @return an unmodifiable copy of the list of pitches to be identified
 	 */
-	protected final List<Pitch> melody() {
+	public final List<Pitch> melody() {
 		return Collections.unmodifiableList(melody);
 	}
 
