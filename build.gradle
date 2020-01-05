@@ -28,14 +28,19 @@ repositories {
 }
 
 dependencies {
-	compile group: 'com.github.singond', name: 'music',
-			version: "${versions.music}", changing: true
-	compile group: 'com.github.singond', name: 'music',
+	implementation group: 'com.github.singond', name: 'music',
+			version: "${versions.music}", changing: true // Occurs in API!
+	implementation group: 'com.github.singond', name: 'music',
 			classifier: 'javadoc', version: "${versions.music}", changing: true
-	implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.1'
 
-	testCompile group: 'junit', name: 'junit', version: '4.12'
-	testImplementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.1'
+	// Logging
+	implementation group: 'org.apache.logging.log4j', name: 'log4j-api',
+			version: '2.1'
+	testImplementation group: 'org.apache.logging.log4j',
+			name: 'log4j-core', version: '2.1'
+
+	// Tests
+	testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
 eclipse {
