@@ -26,9 +26,9 @@ repositories {
 dependencies {
 	implementation project(":")
 	implementation 'com.github.billthefarmer:mididriver:v1.14'
-	implementation group: "com.github.singond", name: "com.github.singond.music",
+	implementation group: "com.github.singond", name: "music",
 			version: "${versions.music}", changing: true
-	implementation group: "com.github.singond", name: "com.github.singond.music",
+	implementation group: "com.github.singond", name: "music",
 			classifier: "javadoc", version: "${versions.music}", changing: true
 }
 
