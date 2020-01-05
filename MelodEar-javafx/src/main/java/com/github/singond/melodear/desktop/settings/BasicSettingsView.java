@@ -9,7 +9,7 @@ import javafx.scene.Parent;
 
 import com.github.singond.settings.SettingsTreeNode;
 
-public abstract class BasicSettingsView <T extends SettingsTreeNode>
+public abstract class BasicSettingsView<T extends SettingsTreeNode<?>>
 		implements SettingsView<T> {
 
 	protected final String id;

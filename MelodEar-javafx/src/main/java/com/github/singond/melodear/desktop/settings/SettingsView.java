@@ -4,7 +4,7 @@ import javafx.scene.Node;
 
 import com.github.singond.settings.SettingsTreeNode;
 
-public interface SettingsView<T extends SettingsTreeNode> {
+public interface SettingsView<T extends SettingsTreeNode<?>> {
 
 	/**
 	 * Returns a node containing all controls for this part of settings.
