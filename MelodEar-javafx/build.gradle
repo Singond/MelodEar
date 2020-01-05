@@ -6,6 +6,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 
 dependencies {
+	compile rootProject
 	compile group: "com.github.singond", name: "music",
 			version: "${versions.music}", changing: true
 	compile group: "com.github.singond", name: "music",

@@ -22,9 +22,6 @@
 		<Button text="%keymel.replay_melody" onAction="#replayMelody">
 			<tooltip><Tooltip text="%keymel.replay_melody.tt"/></tooltip>
 		</Button>
-		<Button text="Demo" onAction="#demo">
-			<tooltip><Tooltip text="Demonstrate melody playback"/></tooltip>
-		</Button>
 	</HBox>
 
 	<ScrollPane vbarPolicy="NEVER"
