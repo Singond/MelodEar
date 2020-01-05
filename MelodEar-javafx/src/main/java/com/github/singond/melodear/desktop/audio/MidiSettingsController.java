@@ -21,13 +21,18 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.singond.melodear.desktop.settings.PathStringConverter;
 
+/**
+ * JavaFX controller class for the MIDI settings page.
+ *
+ * @author Singon
+ */
 public class MidiSettingsController {
 
 	private static Logger logger
 			= LogManager.getLogger(MidiSettingsController.class);
 
 	private static final ResourceBundle bundle
-			= ResourceBundle.getBundle("loc/settings");
+			= ResourceBundle.getBundle("loc/audio");
 
 	private final MidiSettings settings;
 
@@ -45,7 +50,7 @@ public class MidiSettingsController {
 	@FXML
 	TextField soundbankText;
 	@FXML
-	Button soundbankFile;
+	Button soundbankBtn;
 
 	public MidiSettingsController(MidiSettings settings) {
 		logger.debug("Creating MidiSettingsController");
@@ -54,15 +59,15 @@ public class MidiSettingsController {
 
 	public void initialize() {
 		logger.debug("Initializing MIDI settings");
-		initSynth();
+		initSynthList();
 
-		soundbankFile.addEventHandler(ActionEvent.ACTION,
+		soundbankBtn.addEventHandler(ActionEvent.ACTION,
 				e -> selectSoundbankFile());
 		soundbankText.textProperty().bindBidirectional(
 				settings.soundbankProperty(), new PathStringConverter());
 	}
 
-	private void initSynth() {
+	private void initSynthList() {
 		logger.debug("Initializing synthesizer list");
 		synth.setItems(settings.getAvailableSynthesizers());
 		synth.getSelectionModel().select(settings.getSynth());
@@ -84,14 +89,15 @@ public class MidiSettingsController {
 		logger.debug("Selecting soundbank file");
 		// Setup file chooser
 		FileChooser chooser = new FileChooser();
-		chooser.setTitle(bundle.getString("midi.soundbank.browser.title"));
+		chooser.setTitle(bundle.getString(
+				"midi.settings.soundbank.browser.title"));
 		Path defaultDir = settings.getSoundbankDefaultDir();
 		if (defaultDir != null) {
 			chooser.setInitialDirectory(defaultDir.toFile());
 		}
 
 		// Launch it and evaluate
-		File file = chooser.showOpenDialog(soundbankFile.getScene().getWindow());
+		File file = chooser.showOpenDialog(soundbankBtn.getScene().getWindow());
 		if (file != null) {
 			logger.debug("Selected {}", file);
 			Path path = file.toPath();

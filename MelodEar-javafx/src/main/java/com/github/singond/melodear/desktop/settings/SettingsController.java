@@ -3,6 +3,8 @@ package com.github.singond.melodear.desktop.settings;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,12 +23,22 @@ import org.apache.logging.log4j.Logger;
 import com.github.singond.melodear.desktop.audio.MidiSettingsView;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettingsView;
 
+/**
+ * JavaFX controller class for the settings dialog window.
+ *
+ * @author Singon
+ */
 public class SettingsController {
 
 	private static Logger logger = LogManager.getLogger(SettingsController.class);
 
 	private SettingsLoader settingsLoader;
 	private AllSettings settingsNew;
+
+	@Inject
+	KeyboardSettingsView keyboardSettingsView;
+	@Inject
+	MidiSettingsView midiSettingsView;
 
 	@FXML
 	DialogPane settingsDlg;
@@ -37,6 +49,14 @@ public class SettingsController {
 	@FXML
 	ListView<SettingsView<?>> sectionSelect;
 
+	/**
+	 * Creates a new settings controller using a copy of the current settings.
+	 * These settings are copied back to the global instance of settings
+	 * if the "Apply" button is pressed.
+	 *
+	 * @param settingsLoader object providing current settings
+	 */
+	@Inject
 	public SettingsController(SettingsLoader settingsLoader) {
 		logger.debug("Creating SettingsController");
 		this.settingsLoader = settingsLoader;
@@ -73,8 +93,8 @@ public class SettingsController {
 
 	private List<SettingsView<?>> buildSections() {
 		List<SettingsView<?>> sections = new ArrayList<>();
-		sections.add(new KeyboardSettingsView());
-		sections.add(new MidiSettingsView());
+		sections.add(keyboardSettingsView);
+		sections.add(midiSettingsView);
 		return sections;
 	}
 }

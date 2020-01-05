@@ -3,15 +3,20 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="main"
-		minWidth="600" minHeight="400">
+		minWidth="600" minHeight="400"
+		stylesheets="@main.css">
 	<top>
 		<MenuBar fx:id="menubar">
 			<Menu text="%menu.main">
 				<MenuItem text="%menu.main.exit" onAction="#exit"/>
 			</Menu>
-			<Menu text="%menu.settings">
+			<Menu text="%menu.view">
+				<MenuItem text="%menu.view.piano" onAction="#switchToPiano"/>
+				<MenuItem text="%menu.view.trainer" onAction="#switchToTrainer"/>
+				<SeparatorMenuItem/>
 				<MenuItem text="%menu.settings" onAction="#openSettings"/>
 			</Menu>
 		</MenuBar>

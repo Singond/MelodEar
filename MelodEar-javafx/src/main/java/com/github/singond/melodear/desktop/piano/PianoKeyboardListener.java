@@ -2,7 +2,7 @@ package com.github.singond.melodear.desktop.piano;
 
 import javax.inject.Inject;
 
-import com.github.singond.melodear.desktop.AudioDevice;
+import com.github.singond.melodear.desktop.audio.AudioDevice;
 import com.github.singond.melodear.desktop.keyboard.AbstractKeyboardListener;
 import com.github.singond.melodear.desktop.settings.AllSettings;
 import com.github.singond.music.Pitch;

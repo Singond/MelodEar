@@ -1,6 +1,6 @@
 plugins {
-  id "net.ltgt.apt" version "0.21"
-  id "net.ltgt.apt-eclipse" version "0.21"
+	id "net.ltgt.apt" version "0.21"
+	id "net.ltgt.apt-eclipse" version "0.21"
 }
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -23,7 +23,14 @@ dependencies {
 }
 
 sourceSets {
-	dev
+	root {
+		resources {
+			srcDirs = [rootProject.file("res")]
+			include "img/icon-clef*"
+		}
+	}
+	main.resources.source sourceSets.root.resources
+	dev // For development
 }
 
 eclipse {
@@ -34,3 +41,15 @@ eclipse {
 tasks.eclipse.dependsOn tasks.eclipseJdt
 tasks.eclipseJdt.dependsOn tasks.eclipseFactorypath
 tasks.eclipseFactorypath.dependsOn tasks.eclipseJdtApt
+
+jar {
+	destinationDir = file("${buildDir}/distributions")
+	baseName = 'melodear'
+	manifest {
+		attributes 'Main-Class': 'com.github.singond.melodear.desktop.MelodEarApplication'
+	}
+	from {
+		configurations.compile.collect {it.isDirectory() ? it : zipTree(it)}
+	}
+	rename 'icon-clef(.*)', 'icon$1'
+}

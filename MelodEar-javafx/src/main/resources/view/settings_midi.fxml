@@ -12,9 +12,10 @@
 		<ColumnConstraints hgrow="ALWAYS"/>
 	</columnConstraints>
 
-	<Label text="%midi.synth" GridPane.rowIndex="0" GridPane.columnIndex="0">
+	<Label text="%midi.settings.synth"
+			GridPane.rowIndex="0" GridPane.columnIndex="0">
 		<tooltip>
-			<Tooltip text="%midi.synth.tt"/>
+			<Tooltip text="%midi.settings.synth.tt"/>
 		</tooltip>
 	</Label>
 	<TableView fx:id="synth" GridPane.rowIndex="0" GridPane.columnIndex="1"
@@ -27,16 +28,17 @@
 		</columns>
 	</TableView>
 
-	<Label text="%midi.soundbank" GridPane.rowIndex="1" GridPane.columnIndex="0">
+	<Label text="%midi.settings.soundbank"
+			GridPane.rowIndex="1" GridPane.columnIndex="0">
 		<tooltip>
-			<Tooltip text="%midi.soundbank.tt"/>
+			<Tooltip text="%midi.settings.soundbank.tt"/>
 		</tooltip>
 	</Label>
 	<HBox GridPane.rowIndex="1" GridPane.columnIndex="1"
 			styleClass="value,multicontrol,soundbank">
 		<TextField fx:id="soundbankText" styleClass="soundbank-text"
 				HBox.hgrow="ALWAYS"/>
-		<Button fx:id="soundbankFile" text="%midi.soundbank.browseFile"
-				styleClass="soundbank-file"/>
+		<Button fx:id="soundbankBtn" text="%midi.settings.soundbank.browseFile"
+				styleClass="soundbank-btn"/>
 	</HBox>
 </GridPane>

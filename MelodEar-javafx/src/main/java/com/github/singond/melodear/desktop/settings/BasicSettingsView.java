@@ -12,16 +12,22 @@ import com.github.singond.settings.SettingsTreeNode;
 public abstract class BasicSettingsView <T extends SettingsTreeNode>
 		implements SettingsView<T> {
 
-	protected static final ResourceBundle bundle
-			= ResourceBundle.getBundle("loc/settings");
-
 	protected final String id;
+	protected final ResourceBundle bundle;
 	private transient String uiName;
 	private transient String intName;
 
 	protected BasicSettingsView(String id) {
 		this.id = id;
+		this.bundle = ResourceBundle.getBundle("loc/settings");
 		this.uiName = bundle.getString(id + ".title");
+		this.intName = id + " settings";
+	}
+
+	protected BasicSettingsView(String id, ResourceBundle bundle) {
+		this.id = id;
+		this.bundle = bundle;
+		this.uiName = bundle.getString(id + ".settings.title");
 		this.intName = id + " settings";
 	}
 

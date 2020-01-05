@@ -5,7 +5,10 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+import com.github.singond.melodear.desktop.audio.MidiSettings;
+import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
+
+@Module(subcomponents = {SettingsControllerComponent.class})
 public class SettingsModule {
 
 	@Provides @Singleton
@@ -16,6 +19,16 @@ public class SettingsModule {
 	@Provides
 	public static AllSettings provideSettings(SettingsLoader loader) {
 		return loader.getSettings();
+	}
+
+	@Provides
+	public static KeyboardSettings provideKeyboardSettings(AllSettings s) {
+		return s.keyboard();
+	}
+
+	@Provides
+	public static MidiSettings provideMidiSettings(AllSettings s) {
+		return s.midi();
 	}
 
 }
