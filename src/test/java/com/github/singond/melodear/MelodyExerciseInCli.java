@@ -1,15 +1,13 @@
 package com.github.singond.melodear;
 
-import static com.github.singond.music.PitchClass.*;
+import static com.github.singond.music.PitchClass.C_DBL_FLAT;
+import static com.github.singond.music.PitchClass.C_DBL_SHARP;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import com.github.singond.melodear.MelodyExercise.NoteEvaluationStatus;
 import com.github.singond.music.Keys;
 import com.github.singond.music.Pitch;
-import com.github.singond.music.PitchClass;
 
 public class MelodyExerciseInCli {
 
@@ -38,7 +36,6 @@ public class MelodyExerciseInCli {
 
 		private KeyedMelodyExerciseFactory exerciseFactory = new KeyedMelodyExerciseFactory();
 		private MelodyExercise exercise;
-		private Set<PitchClass> pitchClasses = new HashSet<>(Arrays.asList(C, D, E, F, G, A, B));
 		private Status status = Status.IDLE;
 
 		@Override

@@ -21,16 +21,18 @@ import com.github.singond.music.PitchClass;
 import com.github.singond.music.Pitches;
 
 /**
- * Keeps track of constraints for creating new melodic exercises in a key
- * and creates new instances of the exercises based on these constraints.
+ * An implementation of {@link ExerciseFactory} which creates exercises
+ * of type {@link KeyedMelodyExercise}.
  * <p>
  * This class is not thread-safe.
  *
  * @author Singon
  */
-public final class KeyedMelodyExerciseFactory {
+public final class KeyedMelodyExerciseFactory
+		implements ExerciseFactory<KeyedMelodyExercise> {
 
-	private static Logger logger = LoggerFactory.getLogger(KeyedMelodyExerciseFactory.class);
+	private static Logger logger
+			= LoggerFactory.getLogger(KeyedMelodyExerciseFactory.class);
 
 	/**
 	 * Musical keys available for the musical exercise.
@@ -54,21 +56,24 @@ public final class KeyedMelodyExerciseFactory {
 
 	/**
 	 * Lower bound on the notes in the melody.
+	 * The default is the lowest key on the 88-key piano.
 	 */
-	private Pitch lowerBound;
+	private Pitch lowerBound = Pitch.A0;
 
 	/**
 	 * Upper bound on the notes in the melody.
+	 * The default is the highest key on the 88-key piano.
 	 */
-	private Pitch upperBound;
+	private Pitch upperBound = Pitch.C8;
 
 	private transient List<Pitch> pitchesAvailable;
 	private transient boolean pitchesAvailableValid;
 
 	/**
 	 * Length of the melody.
+	 * The default value is 1.
 	 */
-	private int length;
+	private int length = 1;
 
 	private Policy policy = new NoRepeatPolicy();
 
@@ -241,11 +246,7 @@ public final class KeyedMelodyExerciseFactory {
 		return melody;
 	}
 
-	/**
-	 * Creates a new exercise with a random melody in the current key.
-	 *
-	 * @return a new melody exercise in the current key
-	 */
+	@Override
 	public KeyedMelodyExercise make() {
 		KeyedMelodyExercise exc = new KeyedMelodyExercise(newMelody(), key);
 		policy.exerciseUsed();
