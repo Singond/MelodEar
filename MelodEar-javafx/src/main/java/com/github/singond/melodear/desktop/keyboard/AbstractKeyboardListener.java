@@ -47,6 +47,13 @@ public abstract class AbstractKeyboardListener implements KeyboardListener {
 		onKeyDown(pitch);
 	}
 
+	/**
+	 * Called in {@link #keyDown} after the default action.
+	 * Override this method in subclass to execute additional action
+	 * on "key down" event apart from handling sound.
+	 *
+	 * @param pitch the pitch of the key pressed
+	 */
 	protected abstract void onKeyDown(Pitch pitch);
 
 	@Override
@@ -62,6 +69,13 @@ public abstract class AbstractKeyboardListener implements KeyboardListener {
 		onKeyUp(pitch);
 	}
 
+	/**
+	 * Called in {@link #keyUp} after the default action.
+	 * Override this method in subclass to execute additional action
+	 * on "key up" event apart from handling sound.
+	 *
+	 * @param pitch the pitch of the key pressed
+	 */
 	protected abstract void onKeyUp(Pitch pitch);
 
 }
