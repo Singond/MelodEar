@@ -56,21 +56,24 @@ public final class KeyedMelodyExerciseFactory
 
 	/**
 	 * Lower bound on the notes in the melody.
+	 * The default is the lowest key on the 88-key piano.
 	 */
-	private Pitch lowerBound;
+	private Pitch lowerBound = Pitch.A0;
 
 	/**
 	 * Upper bound on the notes in the melody.
+	 * The default is the highest key on the 88-key piano.
 	 */
-	private Pitch upperBound;
+	private Pitch upperBound = Pitch.C8;
 
 	private transient List<Pitch> pitchesAvailable;
 	private transient boolean pitchesAvailableValid;
 
 	/**
 	 * Length of the melody.
+	 * The default value is 1.
 	 */
-	private int length;
+	private int length = 1;
 
 	private Policy policy = new NoRepeatPolicy();
 
