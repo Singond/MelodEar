@@ -17,10 +17,9 @@ buildscript {
 
 allprojects {
 	repositories {
-		mavenLocal()
 		jcenter()
 	}
-	ext.versions = ['music': '0.6.0']
+	ext.versions = ['music': '0.6.1']
 }
 
 repositories {
