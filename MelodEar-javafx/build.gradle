@@ -2,7 +2,7 @@ plugins {
 	id "net.ltgt.apt" version "0.21"
 	id "net.ltgt.apt-eclipse" version "0.21"
 }
-apply plugin: 'java'
+apply plugin: 'application'
 apply plugin: 'eclipse'
 
 dependencies {
@@ -47,14 +47,27 @@ tasks.eclipse.dependsOn tasks.eclipseJdt
 tasks.eclipseJdt.dependsOn tasks.eclipseFactorypath
 tasks.eclipseFactorypath.dependsOn tasks.eclipseJdtApt
 
-jar {
+task fatJar(type: Jar) {
 	destinationDir = file("${buildDir}/distributions")
 	archiveBaseName = 'melodear'
+	archiveAppendix = 'fat'
 	manifest {
 		attributes 'Main-Class': 'com.github.singond.melodear.desktop.MelodEarApplication'
 	}
+	from sourceSets.main.output
 	from {
-		configurations.compile.collect {it.isDirectory() ? it : zipTree(it)}
+		configurations.compileClasspath.collect {
+			if (it.exists()) {
+				it.isDirectory() ? it : zipTree(it)
+			} else {
+				logger.error("Cannot find ${it}")
+			}
+		}
 	}
 	rename 'icon-clef(.*)', 'icon$1'
+}
+
+application {
+	mainClassName = 'com.github.singond.melodear.desktop.MelodEarApplication'
+	applicationName = 'melodear'
 }
