@@ -25,7 +25,7 @@ import com.github.singond.melodear.desktop.audio.AudioController;
 import com.github.singond.melodear.desktop.piano.PianoController;
 import com.github.singond.melodear.desktop.settings.AllSettings;
 import com.github.singond.melodear.desktop.settings.SettingsControllerComponent;
-import com.github.singond.melodear.desktop.trainer.TrainerController;
+import com.github.singond.melodear.desktop.trainer.MelodyTrainerController;
 
 public class MainController {
 
@@ -38,7 +38,7 @@ public class MainController {
 	Lazy<PianoController> pianoController;
 
 	@Inject
-	Lazy<TrainerController> trainerController;
+	Lazy<MelodyTrainerController> trainerController;
 
 	@Inject
 	AudioController audioController;
@@ -79,7 +79,7 @@ public class MainController {
 		}
 	}
 
-	public void switchToTrainer() {
+	public void switchToMelodyTrainer() {
 		try {
 			Parent pane = trainerPane();
 			preSwitchView();

@@ -16,11 +16,11 @@ import com.github.singond.melodear.desktop.components.Keyboard;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
 import com.github.singond.melodear.desktop.settings.AllSettings;
 
-public class TrainerController {
+public class MelodyTrainerController {
 
-	private static Logger logger = LogManager.getLogger(TrainerController.class);
+	private static Logger logger = LogManager.getLogger(MelodyTrainerController.class);
 
-	private TrainerModel trainerModel;
+	private MelodyTrainerModel trainerModel;
 
 	@Inject
 	AudioDevice audio;
@@ -37,7 +37,7 @@ public class TrainerController {
 	private Button blah;
 
 	@Inject
-	public TrainerController(AllSettings settings) {
+	public MelodyTrainerController(AllSettings settings) {
 		kbdSettings = settings.keyboard();
 	}
 
@@ -58,7 +58,7 @@ public class TrainerController {
 	}
 
 	private MelodyTrainer<KeyedMelodyExercise> trainer() {
-		final TrainerModel tm = trainerModel;
+		final MelodyTrainerModel tm = trainerModel;
 		if (tm == null) {
 			throw new IllegalStateException("Trainer has not been initialized");
 		}

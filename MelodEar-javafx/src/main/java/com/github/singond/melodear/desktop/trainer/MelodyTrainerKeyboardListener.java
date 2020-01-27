@@ -10,13 +10,13 @@ import com.github.singond.melodear.desktop.piano.PianoKeyboardListener;
 import com.github.singond.melodear.desktop.settings.AllSettings;
 import com.github.singond.music.Pitch;
 
-public class TrainerKeyboardListener extends PianoKeyboardListener {
+public class MelodyTrainerKeyboardListener extends PianoKeyboardListener {
 
 	private final MelodyTrainer<KeyedMelodyExercise> trainer;
 
 	@Inject
-	public TrainerKeyboardListener(AudioDevice audio, AllSettings settings,
-			TrainerModel trainerModel) {
+	public MelodyTrainerKeyboardListener(AudioDevice audio, AllSettings settings,
+			MelodyTrainerModel trainerModel) {
 		super(audio, settings);
 		trainer = trainerModel.trainer();
 	}
