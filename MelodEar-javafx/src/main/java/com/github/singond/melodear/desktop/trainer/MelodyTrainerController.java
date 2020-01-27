@@ -69,8 +69,8 @@ public class MelodyTrainerController {
 		logger.debug("'Start exercise' pressed");
 	}
 
-	public void replayKey() {
-		logger.debug("'Replay key' pressed");
+	public void replayReference() {
+		logger.debug("'Replay reference' pressed");
 	}
 
 	public void replayMelody() {

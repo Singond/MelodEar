@@ -16,7 +16,7 @@
 		<Button text="%start_exercise" onAction="#startExercise">
 			<tooltip><Tooltip text="%start_exercise.tt"/></tooltip>
 		</Button>
-		<Button text="%keymel.replay_key" onAction="#replayKey">
+		<Button text="%keymel.replay_key" onAction="#replayReference">
 			<tooltip><Tooltip text="%keymel.replay_key.tt"/></tooltip>
 		</Button>
 		<Button text="%keymel.replay_melody" onAction="#replayMelody">
