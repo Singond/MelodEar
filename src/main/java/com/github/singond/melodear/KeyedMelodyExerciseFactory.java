@@ -166,13 +166,12 @@ public final class KeyedMelodyExerciseFactory
 		if (keysAvailable == null || keysAvailable.isEmpty())
 			throw new IllegalStateException("No keys available");
 
-		logger.debug("Changing key...");
-		setKey(rnd.randomFrom(keysAvailable));
+		Key newKey = rnd.randomFrom(keysAvailable);
+		setKey(newKey);
+		if (logger.isDebugEnabled())
+			logger.debug("Changing key to {}", newKey);
 		policy.reset();
 		keyValid = true;
-
-		if (logger.isDebugEnabled())
-			logger.debug("Setting the key to {}", key);
 	}
 
 	public void setKeyRepeat(int times) {
