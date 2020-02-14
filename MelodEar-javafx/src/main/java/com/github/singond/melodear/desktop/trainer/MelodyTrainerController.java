@@ -102,6 +102,7 @@ public class MelodyTrainerController {
 		voice.add(Chords.chordAtRoot(
 				tonic.transposeUp(SimpleInterval.PERFECT_FIFTH),
 				Chords.MAJOR_TRIAD.invert(1)));
+		voice.add(Chords.chordAtRoot(tonic, Chords.MAJOR_TRIAD));
 		audio.playSequentially(voice, 120);
 	}
 
@@ -121,6 +122,7 @@ public class MelodyTrainerController {
 		voice.add(Chords.chordAtRoot(Pitch.D4, Chords.MAJOR_TRIAD));
 		voice.add(Chords.chordAtRoot(Pitch.G4, Chords.MAJOR_TRIAD.invert(2)));
 		voice.add(Chords.chordAtRoot(Pitch.A4, Chords.MAJOR_TRIAD.invert(1)));
+		voice.add(Chords.chordAtRoot(Pitch.D4, Chords.MAJOR_TRIAD));
 		audio.playSequentially(voice, 120);
 	}
 }
