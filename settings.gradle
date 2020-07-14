@@ -1,5 +1,10 @@
 rootProject.name = name
-include ':MelodEar-android'
-project(':MelodEar-android').name = "melodear-android"
+// Include the Android project only if the Android SDK is available.
+// Assume it is available if the ANDROID_HOME environment variable
+// or the sdk.dir property is set, as required by the android plugin.
+if (System.getenv()['ANDROID_HOME'] || hasProperty("sdk.dir")) {
+	include ':MelodEar-android'
+	project(':MelodEar-android').name = "melodear-android"
+}
 include ':MelodEar-javafx'
 project(':MelodEar-javafx').name = "melodear-javafx"
