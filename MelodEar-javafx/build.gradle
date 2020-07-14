@@ -1,6 +1,7 @@
 plugins {
 	id "net.ltgt.apt" version "0.21"
 	id "net.ltgt.apt-eclipse" version "0.21"
+	id 'org.openjfx.javafxplugin' version '0.0.9'
 }
 apply plugin: 'application'
 apply plugin: 'eclipse'
@@ -11,6 +12,8 @@ dependencies {
 			version: "${versions.music}", changing: true
 	implementation group: "com.github.singond", name: "music",
 			classifier: "javadoc", version: "${versions.music}", changing: true
+	implementation group: 'org.openjfx', name: 'javafx', version: '11.0.2',
+			ext: 'pom'
 
 	// Logging
 	implementation group: 'org.apache.logging.log4j',
@@ -36,6 +39,10 @@ sourceSets {
 	}
 	main.resources.source sourceSets.root.resources
 	dev // For development
+}
+
+javafx {
+	modules = ['javafx.controls', 'javafx.fxml']
 }
 
 eclipse {
