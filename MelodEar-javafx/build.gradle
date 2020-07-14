@@ -48,7 +48,7 @@ tasks.eclipseJdt.dependsOn tasks.eclipseFactorypath
 tasks.eclipseFactorypath.dependsOn tasks.eclipseJdtApt
 
 task fatJar(type: Jar) {
-	destinationDir = file("${buildDir}/distributions")
+	destinationDirectory = file("${buildDir}/distributions")
 	archiveBaseName = 'melodear'
 	archiveAppendix = 'fat'
 	manifest {
