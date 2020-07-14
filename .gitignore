@@ -8,6 +8,6 @@ build/
 .project
 local.properties
 EarTrainer.jar
-melodear.jar
+melodear-old.jar
 out.midi
 test.mid
