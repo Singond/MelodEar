@@ -108,6 +108,20 @@ public abstract class PropertyAbstractSettingsTree
 			property.setValue(value);
 		}
 
+		/**
+		 * {@inheritDoc}
+		 * This default implementation calls {@link Object#toString()}.
+		 */
+		@Override
+		public String valueToString() {
+			T value = value();
+			if (value != null) {
+				return value.toString();
+			} else {
+				return null;
+			}
+		}
+
 		@Override
 		public final void setValueFromString(String string) {
 			setValue(valueFromString(string));
@@ -186,12 +200,21 @@ public abstract class PropertyAbstractSettingsTree
 
 		@Override
 		public String valueToString() {
-			return stringConverter.toString(value());
+			T value = value();
+			if (value != null) {
+				return stringConverter.toString(value);
+			} else {
+				return null;
+			}
 		}
 
 		@Override
 		public T valueFromString(String string) {
-			return stringConverter.fromString(string);
+			if (string != null) {
+				return stringConverter.fromString(string);
+			} else {
+				return null;
+			}
 		}
 	}
 
@@ -205,11 +228,6 @@ public abstract class PropertyAbstractSettingsTree
 		@Override
 		public Integer valueCopy() {
 			return (Integer) value();
-		}
-
-		@Override
-		public String valueToString() {
-			return value().toString();
 		}
 
 		@Override
@@ -228,11 +246,6 @@ public abstract class PropertyAbstractSettingsTree
 		@Override
 		public Double valueCopy() {
 			return (Double) value();
-		}
-
-		@Override
-		public String valueToString() {
-			return value().toString();
 		}
 
 		@Override
@@ -274,11 +287,6 @@ public abstract class PropertyAbstractSettingsTree
 		@Override
 		public Path valueCopy() {
 			return value();
-		}
-
-		@Override
-		public String valueToString() {
-			return value().toString();
 		}
 
 		@Override

@@ -72,7 +72,11 @@ public class PreferencesStorage {
 
 		@Override
 		public void visitValue(SettingsValueNode<?, ?> value) {
-			prefs.put(wholeKey(value), value.valueToString());
+			String key = wholeKey(value);
+			String stringValue = value.valueToString();
+			if (key != null && stringValue != null) {
+				prefs.put(key, stringValue);
+			}
 		}
 
 		@Override
