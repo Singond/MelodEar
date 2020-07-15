@@ -26,8 +26,8 @@ import org.apache.logging.log4j.Logger;
 public class MelodEarApplication extends Application {
 
 	private static final List<String> iconNames = Arrays.asList(
-			"icon-48.png",
-			"icon-256.png"
+			"melodear-clefear-48.png",
+			"melodear-clefear-256.png"
 			);
 	private static final String iconPrefix = "/img/";
 

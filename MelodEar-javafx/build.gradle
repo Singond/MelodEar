@@ -34,7 +34,7 @@ sourceSets {
 	root {
 		resources {
 			srcDirs = [rootProject.file("res")]
-			include "img/icon-clef*"
+			include "img/melodear-clefear*"
 		}
 	}
 	main.resources.source sourceSets.root.resources
@@ -72,7 +72,6 @@ task fatJar(type: Jar) {
 			}
 		}
 	}
-	rename 'icon-clef(.*)', 'icon$1'
 }
 
 application {
