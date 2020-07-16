@@ -12,12 +12,12 @@ import com.github.singond.music.Pitches;
 
 /**
  * A single melodic dictation exercise to practice pitch identification.
- * This takes a simple melody (a sequence of random pitches) and expects
+ * This generates a simple melody (a sequence of random pitches) and expects
  * the user to identify the pitches one by one, in the order they appear
- * in the melody. Note lengths play no difference in this exercise.
+ * in the melody.
  * <p>
  * The exercise starts with a sequence of notes, none of which has been
- * identified yet by the user, and evaluates notes input sequentially:
+ * identified yet by the user, and waits for a note input by the user.
  * Once a note is received, it is compared with the note to be identified
  * (which is the first of the notes that have not been identified yet).
  * If the received note matches the pitch of the unidentified note,

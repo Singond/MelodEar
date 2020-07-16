@@ -8,8 +8,7 @@ import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchClass;
 
 /**
- * A melody dictation exercise which uses a musical key as a reference
- * for the notes to be identified.
+ * A melody dictation exercise where the melody has an associated key.
  *
  * @author Singon
  */
