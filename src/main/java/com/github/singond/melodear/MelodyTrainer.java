@@ -35,18 +35,27 @@ public class MelodyTrainer<T extends MelodyExercise> {
 	 * @param factory the factory to be set
 	 */
 	public void setExerciseFactory(ExerciseFactory<T> factory) {
+		if (factory == null) {
+			throw new NullPointerException("Factory must not be null");
+		}
 		this.exerciseFactory = factory;
 	}
 
 	/**
 	 * Returns {@code true} if an exercise is ready in this trainer.
 	 *
-	 * @return {@code true} if {@link #getExercise} would not return {@code null}
+	 * @return {@code true} if {@link #getExercise} would not throw
+	 *         an {@code IllegalStateException}
 	 */
 	public boolean hasExercise() {
 		return exercise != null;
 	}
 
+	/**
+	 * Instantiates a new exercise.
+	 *
+	 * @throws IllegalStateException if no exercise factory has been set
+	 */
 	public void newExercise() {
 		if (exerciseFactory != null) {
 			exercise = exerciseFactory.make();
@@ -59,8 +68,12 @@ public class MelodyTrainer<T extends MelodyExercise> {
 	 * Returns the active exercise.
 	 *
 	 * @return the active exercise
+	 * @throws IllegalStateException if no exercise has been initialized
 	 */
 	public T getExercise() {
+		if (exercise == null) {
+			throw new IllegalStateException("No exercise started");
+		}
 		return exercise;
 	}
 }
