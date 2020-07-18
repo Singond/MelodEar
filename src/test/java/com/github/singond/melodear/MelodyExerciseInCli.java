@@ -5,7 +5,7 @@ import static com.github.singond.music.PitchClass.C_DBL_SHARP;
 
 import java.util.Arrays;
 
-import com.github.singond.melodear.MelodyExercise.NoteEvaluationStatus;
+import com.github.singond.melodear.MelodyExercise.Status;
 import com.github.singond.music.Keys;
 import com.github.singond.music.Pitch;
 
@@ -36,7 +36,7 @@ public class MelodyExerciseInCli {
 
 		private KeyedMelodyExerciseFactory exerciseFactory = new KeyedMelodyExerciseFactory();
 		private MelodyExercise exercise;
-		private Status status = Status.IDLE;
+		private TrainerStatus status = TrainerStatus.IDLE;
 
 		@Override
 		protected void processLine(String line) {
@@ -46,17 +46,17 @@ public class MelodyExerciseInCli {
 			} else if (line.equals("exit")) {
 				System.out.println("Bye");
 				terminate();
-			} else if (status == Status.IDENTIFYING){
+			} else if (status == TrainerStatus.IDENTIFYING){
 				Pitch pitch = parser.parse(line);
-				NoteEvaluationStatus noteStatus = exercise.evaluate(pitch);
+				Status noteStatus = exercise.evaluate(pitch);
 				switch (noteStatus) {
-					case ALL_NOTES_CORRECT:
+					case COMPLETED:
 						System.out.println("Congratulations! You identified all the notes");
 						newExercise();
 						break;
 					case NOTE_CORRECT:
 						System.out.format("You have identified %d note(s) so far\n",
-								exercise.identifiedNotesCount());
+								exercise.notesIdentified());
 						break;
 					case NOTE_INCORRECT:
 						System.out.println("Wrong. Start again from the beginning");
@@ -70,10 +70,10 @@ public class MelodyExerciseInCli {
 		private void newExercise() {
 			exercise = exerciseFactory.make();
 			System.out.println("You hear: " + exercise);
-			status = Status.IDENTIFYING;
+			status = TrainerStatus.IDENTIFYING;
 		}
 
-		private enum Status {
+		private enum TrainerStatus {
 			IDLE,
 			IDENTIFYING
 		}
