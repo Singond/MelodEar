@@ -15,7 +15,7 @@
 			</Menu>
 			<Menu text="%menu.view">
 				<MenuItem text="%menu.view.piano" onAction="#switchToPiano"/>
-				<MenuItem text="%menu.view.trainer" onAction="#switchToTrainer"/>
+				<MenuItem text="%menu.view.trainer_melody" onAction="#switchToMelodyTrainer"/>
 				<SeparatorMenuItem/>
 				<MenuItem text="%menu.settings" onAction="#openSettings"/>
 			</Menu>

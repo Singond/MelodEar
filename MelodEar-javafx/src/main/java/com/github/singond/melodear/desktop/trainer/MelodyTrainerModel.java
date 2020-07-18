@@ -13,22 +13,20 @@ import com.github.singond.music.Degree;
 import com.github.singond.music.Keys;
 import com.github.singond.music.Pitch;
 
-public class TrainerModel {
+public class MelodyTrainerModel {
 
 	private static final Set<Degree> DIATONIC_DEGREES;
 	private static final Set<Degree> CHROMATIC_DEGREES;
 	static {
 		DIATONIC_DEGREES = new HashSet<>();
-		DIATONIC_DEGREES.addAll(Degree.basicDegrees);
+		DIATONIC_DEGREES.addAll(Degree.DIATONIC_DEGREES);
 		CHROMATIC_DEGREES = new HashSet<>();
-		CHROMATIC_DEGREES.addAll(Degree.basicDegrees);
-		CHROMATIC_DEGREES.addAll(Degree.loweredDegrees);
-		CHROMATIC_DEGREES.addAll(Degree.raisedDegrees);
+		CHROMATIC_DEGREES.addAll(Degree.CHROMATIC_DEGREES_ASC);
 	}
 	private MelodyTrainer<KeyedMelodyExercise> trainer;
 
 	@Inject
-	public TrainerModel() {
+	public MelodyTrainerModel() {
 		trainer = new MelodyTrainer<>();
 		KeyedMelodyExerciseFactory factory = new KeyedMelodyExerciseFactory();
 		factory.setKeysAvailable(Arrays.asList(Keys.C_MAJOR, Keys.G_MAJOR, Keys.D_MAJOR));

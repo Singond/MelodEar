@@ -5,6 +5,7 @@ import java.util.List;
 import javax.sound.midi.InvalidMidiDataException;
 
 import com.github.singond.music.Pitch;
+import com.github.singond.music.PitchGroup;
 
 public interface AudioDevice {
 
@@ -38,5 +39,5 @@ public interface AudioDevice {
 	 * @param pitches the pitches to be played
 	 * @param bpm the tempo to play the notes at (in notes per minute)
 	 */
-	void playSequentially(List<Pitch> pitches, double bpm);
+	void playSequentially(List<? extends PitchGroup> pitches, double bpm);
 }
