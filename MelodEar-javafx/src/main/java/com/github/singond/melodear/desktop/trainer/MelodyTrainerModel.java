@@ -9,10 +9,12 @@ import javax.inject.Inject;
 import com.github.singond.melodear.KeyedMelodyExercise;
 import com.github.singond.melodear.KeyedMelodyExerciseFactory;
 import com.github.singond.melodear.MelodyTrainer;
+import com.github.singond.melodear.desktop.PaneScoped;
 import com.github.singond.music.Degree;
 import com.github.singond.music.Keys;
 import com.github.singond.music.Pitch;
 
+@PaneScoped
 public class MelodyTrainerModel {
 
 	private static final Set<Degree> DIATONIC_DEGREES;
