@@ -11,7 +11,7 @@
 <VBox xmlns:fx="http://javafx.com/fxml" alignment="center"
 		styleClass="keymel-pane" stylesheets="@keymel.css">
 
-	<HBox xmlns:fx="http://javafx.com/fxml" alignment="center_left"
+	<HBox alignment="center_left"
 			styleClass="toolbar">
 		<Button fx:id="startBtn" text="%start_exercise"
 				onAction="#startExercise">
@@ -29,6 +29,10 @@
 		</Button>
 		<Button text="Play Chord Progression" onAction="#playChordProgression">
 		</Button>
+	</HBox>
+
+	<HBox alignment="center" styleClass="exercisePanel">
+		<Label fx:id="progressLabel"/>
 	</HBox>
 
 	<ScrollPane vbarPolicy="NEVER"

@@ -2,6 +2,9 @@
 	-fx-spacing: 5;
 	-fx-padding: 5;
 }
+.exercisePanel #progressLabel {
+	-fx-font-weight: bold;
+}
 .piano-pane {
 	-fx-padding: 25;
 }

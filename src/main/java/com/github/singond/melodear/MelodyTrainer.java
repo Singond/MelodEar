@@ -52,13 +52,14 @@ public class MelodyTrainer<T extends MelodyExercise> {
 	}
 
 	/**
-	 * Instantiates a new exercise.
+	 * Instantiates a new exercise in this trainer.
 	 *
+	 * @return the new exercise instance
 	 * @throws IllegalStateException if no exercise factory has been set
 	 */
-	public void newExercise() {
+	public T newExercise() {
 		if (exerciseFactory != null) {
-			exercise = exerciseFactory.make();
+			return exercise = exerciseFactory.make();
 		} else {
 			throw new IllegalStateException("No exercise factory set");
 		}

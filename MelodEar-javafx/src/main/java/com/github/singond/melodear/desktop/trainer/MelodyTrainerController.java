@@ -2,18 +2,20 @@ package com.github.singond.melodear.desktop.trainer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
 
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.singond.melodear.KeyedMelodyExercise;
-import com.github.singond.melodear.MelodyTrainer;
 import com.github.singond.melodear.desktop.audio.AudioDevice;
 import com.github.singond.melodear.desktop.components.Keyboard;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
@@ -36,6 +38,9 @@ public class MelodyTrainerController {
 	@Inject
 	Provider<TrainerComponent.Builder> trainerProvider;
 
+	@Inject @Named("trainer-resources")
+	ResourceBundle bundle;
+
 	KeyboardSettings kbdSettings;
 
 	@FXML
@@ -49,6 +54,9 @@ public class MelodyTrainerController {
 
 	@FXML
 	private Button replayMelodyBtn;
+
+	@FXML
+	private Label progressLabel;
 
 	@Inject
 	public MelodyTrainerController(AllSettings settings) {
@@ -66,6 +74,10 @@ public class MelodyTrainerController {
 		startBtn.setDisable(false);
 		replayReferenceBtn.setDisable(true);
 		replayMelodyBtn.setDisable(true);
+		progressLabel.textProperty().bind(Bindings.format(
+				bundle.getString("keymel.progress"),
+				trainerModel.notesIdentifiedProperty(),
+				trainerModel.melodyLengthProperty()));
 	}
 
 	private void initTrainer() {
@@ -74,25 +86,17 @@ public class MelodyTrainerController {
 		keyboard.setListener(trainerComp.getTrainerKeyboardListener());
 	}
 
-	private MelodyTrainer<KeyedMelodyExercise> trainer() {
-		final MelodyTrainerModel tm = trainerModel;
-		if (tm == null) {
-			throw new IllegalStateException("Trainer has not been initialized");
-		}
-		return tm.trainer();
-	}
-
 	public void startExercise() {
 		logger.debug("Starting exercise");
 		startBtn.setDisable(true);
 		replayReferenceBtn.setDisable(false);
 		replayMelodyBtn.setDisable(false);
-		trainer().newExercise();
+		trainerModel.newExercise();
 	}
 
 	public void replayReference() {
 		logger.debug("'Replay reference' pressed");
-		final Key key = trainer().getExercise().key();
+		final Key key = trainerModel.getMelodyKey();
 		Pitch tonic = Pitch.of(key.tonic(), 4);
 		List<PitchGroup> voice = new ArrayList<>(3);
 		voice.add(Chords.chordAtRoot(tonic, Chords.MAJOR_TRIAD));
@@ -108,7 +112,7 @@ public class MelodyTrainerController {
 
 	public void replayMelody() {
 		logger.debug("Replaying melody");
-		audio.playSequentially(trainer().getExercise().melody(), 120);
+		audio.playSequentially(trainerModel.getMelody(), 120);
 	}
 
 	public void playChord() {

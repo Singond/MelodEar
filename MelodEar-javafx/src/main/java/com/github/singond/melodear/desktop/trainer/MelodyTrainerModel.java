@@ -1,16 +1,28 @@
 package com.github.singond.melodear.desktop.trainer;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.github.singond.melodear.KeyedMelodyExercise;
 import com.github.singond.melodear.KeyedMelodyExerciseFactory;
+import com.github.singond.melodear.MelodyExercise;
 import com.github.singond.melodear.MelodyTrainer;
 import com.github.singond.melodear.desktop.PaneScoped;
 import com.github.singond.music.Degree;
+import com.github.singond.music.Key;
 import com.github.singond.music.Keys;
 import com.github.singond.music.Pitch;
 
@@ -25,7 +37,19 @@ public class MelodyTrainerModel {
 		CHROMATIC_DEGREES = new HashSet<>();
 		CHROMATIC_DEGREES.addAll(Degree.CHROMATIC_DEGREES_ASC);
 	}
+
+	private static Logger logger = LogManager.getLogger(MelodyTrainerModel.class);
+
 	private MelodyTrainer<KeyedMelodyExercise> trainer;
+
+	private final ReadOnlyObjectWrapper<Key> melodyKey
+			= new ReadOnlyObjectWrapper<>();
+	private final ReadOnlyIntegerWrapper melodyLength
+			= new ReadOnlyIntegerWrapper();
+	private final ReadOnlyIntegerWrapper notesIdentified
+			= new ReadOnlyIntegerWrapper();
+	private final ReadOnlyObjectWrapper<MelodyExercise.Status> status
+			= new ReadOnlyObjectWrapper<>();
 
 	@Inject
 	public MelodyTrainerModel() {
@@ -40,7 +64,82 @@ public class MelodyTrainerModel {
 		trainer.setExerciseFactory(factory);
 	}
 
-	public MelodyTrainer<KeyedMelodyExercise> trainer() {
-		return trainer;
+	public List<Pitch> getMelody() {
+		if (trainer.hasExercise()) {
+			return trainer.getExercise().melody();
+		} else {
+			return Collections.emptyList();
+		}
+	}
+
+	public Key getMelodyKey() {
+		return melodyKey.get();
+	}
+
+	public ReadOnlyObjectProperty<Key> melodyKeyProperty() {
+		return melodyKey.getReadOnlyProperty();
+	}
+
+	public int getMelodyLength() {
+		return melodyLength.get();
+	}
+
+	public ReadOnlyIntegerProperty melodyLengthProperty() {
+		return melodyLength.getReadOnlyProperty();
+	}
+
+	public int getNotesIdentified() {
+		return notesIdentified.get();
+	}
+
+	public ReadOnlyIntegerProperty notesIdentifiedProperty() {
+		return notesIdentified.getReadOnlyProperty();
+	}
+
+	public MelodyExercise.Status getStatus() {
+		return status.get();
+	}
+
+	public ReadOnlyObjectProperty<MelodyExercise.Status> statusProperty() {
+		return status.getReadOnlyProperty();
+	}
+
+	public void newExercise() {
+		KeyedMelodyExercise exercise = trainer.newExercise();
+		melodyKey.setValue(exercise.key());
+		melodyLength.setValue(exercise.melody().size());
+		notesIdentified.setValue(exercise.notesIdentified());
+		status.setValue(exercise.status());
+	}
+
+	public void evaluate(Pitch pitch) {
+		if (trainer.hasExercise()) {
+			KeyedMelodyExercise exercise = trainer.getExercise();
+			MelodyExercise.Status st = exercise.evaluate(pitch);
+			status.setValue(st);
+			notesIdentified.setValue(exercise.notesIdentified());
+			if (logger.isDebugEnabled()) {
+				switch (st) {
+					case NOT_EVALUATED:
+						break;
+					case NOTE_INCORRECT:
+						logger.debug("Note {} is not correct", pitch);
+						break;
+					case NOTE_CORRECT:
+						logger.debug("Note {} is correct", pitch);
+						break;
+					case COMPLETED:
+						logger.debug("Completed");
+						break;
+					case RESTARTED:
+						logger.debug("Restarted");
+						break;
+					default:
+						break;
+				}
+			}
+		} else {
+			// No exercise has been set
+		}
 	}
 }
