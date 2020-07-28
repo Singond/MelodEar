@@ -31,6 +31,7 @@ public class MelodyTrainerController {
 	private static Logger logger = LogManager.getLogger(MelodyTrainerController.class);
 
 	private MelodyTrainerModel trainerModel;
+	private KeyFormatter keyFormatter;
 
 	@Inject
 	AudioDevice audio;
@@ -43,24 +44,18 @@ public class MelodyTrainerController {
 
 	KeyboardSettings kbdSettings;
 
-	@FXML
-	private Keyboard keyboard;
-
-	@FXML
-	private Button startBtn;
-
-	@FXML
-	private Button replayReferenceBtn;
-
-	@FXML
-	private Button replayMelodyBtn;
-
-	@FXML
-	private Label progressLabel;
+	@FXML private Keyboard keyboard;
+	@FXML private Label keyName;
+	@FXML private Label noteStatus;
+	@FXML private Label progressNumeric;
+	@FXML private Button startBtn;
+	@FXML private Button replayReferenceBtn;
+	@FXML private Button replayMelodyBtn;
 
 	@Inject
 	public MelodyTrainerController(AllSettings settings) {
 		kbdSettings = settings.keyboard();
+		keyFormatter = new KeyFormatter();
 	}
 
 	public void initialize() {
@@ -71,13 +66,16 @@ public class MelodyTrainerController {
 			keyboard.setLabelFormat(n);
 		});
 		initTrainer();
-		startBtn.setDisable(false);
-		replayReferenceBtn.setDisable(true);
-		replayMelodyBtn.setDisable(true);
-		progressLabel.textProperty().bind(Bindings.format(
+		keyName.textProperty().bind(Bindings.createStringBinding(
+				() -> keyFormatter.format(trainerModel.getMelodyKey()),
+				trainerModel.melodyKeyProperty()));
+		progressNumeric.textProperty().bind(Bindings.format(
 				bundle.getString("keymel.progress"),
 				trainerModel.notesIdentifiedProperty(),
 				trainerModel.melodyLengthProperty()));
+		startBtn.setDisable(false);
+		replayReferenceBtn.setDisable(true);
+		replayMelodyBtn.setDisable(true);
 	}
 
 	private void initTrainer() {
@@ -128,5 +126,14 @@ public class MelodyTrainerController {
 		voice.add(Chords.chordAtRoot(Pitch.A4, Chords.MAJOR_TRIAD.invert(1)));
 		voice.add(Chords.chordAtRoot(Pitch.D4, Chords.MAJOR_TRIAD));
 		audio.playSequentially(voice, 120);
+	}
+
+	private static class KeyFormatter {
+		public String format(Key key) {
+			if (key == null) {
+				return "";
+			}
+			return key.toString();
+		}
 	}
 }

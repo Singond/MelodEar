@@ -11,29 +11,43 @@
 <VBox xmlns:fx="http://javafx.com/fxml" alignment="center"
 		styleClass="keymel-pane" stylesheets="@keymel.css">
 
-	<HBox alignment="center_left"
-			styleClass="toolbar">
-		<Button fx:id="startBtn" text="%start_exercise"
-				onAction="#startExercise">
-			<tooltip><Tooltip text="%start_exercise.tt"/></tooltip>
-		</Button>
-		<Button fx:id="replayReferenceBtn" text="%keymel.replay_key"
-				onAction="#replayReference">
-			<tooltip><Tooltip text="%keymel.replay_key.tt"/></tooltip>
-		</Button>
-		<Button fx:id="replayMelodyBtn" text="%keymel.replay_melody"
-				onAction="#replayMelody">
-			<tooltip><Tooltip text="%keymel.replay_melody.tt"/></tooltip>
-		</Button>
-		<Button text="Play Chord" onAction="#playChord">
-		</Button>
-		<Button text="Play Chord Progression" onAction="#playChordProgression">
-		</Button>
-	</HBox>
+	<GridPane fx:id="mainToolbar" styleClass="toolbar"
+			hgap="10" vgap="10">
+		<columnConstraints>
+			<ColumnConstraints percentWidth="30"/>
+			<ColumnConstraints percentWidth="30"/>
+			<ColumnConstraints percentWidth="40"/>
+		</columnConstraints>
 
-	<HBox alignment="center" styleClass="exercisePanel">
-		<Label fx:id="progressLabel"/>
-	</HBox>
+		<HBox fx:id="keyDisplay" alignment="center_left"
+				GridPane.columnIndex="0">
+			<Label fx:id="keyName"/>
+		</HBox>
+
+		<HBox fx:id="statusDisplay" alignment="center"
+				GridPane.columnIndex="1">
+			<Label fx:id="noteStatus"/>
+			<Label fx:id="progressNumeric"/>
+		</HBox>
+
+		<HBox fx:id="trainerControls" alignment="center_right"
+				GridPane.columnIndex="2">
+			<Button fx:id="startBtn" text="%start_exercise"
+					onAction="#startExercise">
+				<tooltip><Tooltip text="%start_exercise.tt"/></tooltip>
+			</Button>
+			<Button fx:id="replayReferenceBtn" text="%keymel.replay_key"
+					onAction="#replayReference">
+				<tooltip><Tooltip text="%keymel.replay_key.tt"/></tooltip>
+			</Button>
+			<Button fx:id="replayMelodyBtn" text="%keymel.replay_melody"
+					onAction="#replayMelody">
+				<tooltip>
+					<Tooltip text="%keymel.replay_melody.tt"/>
+				</tooltip>
+			</Button>
+		</HBox>
+	</GridPane>
 
 	<ScrollPane vbarPolicy="NEVER"
 			styleClass="piano-pane" stylesheets="@../piano/piano.css">
