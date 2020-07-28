@@ -123,16 +123,18 @@ public class MelodyTrainerModel {
 					case NOT_EVALUATED:
 						break;
 					case NOTE_INCORRECT:
-						logger.debug("Note {} is not correct", pitch);
+						logger.debug("Note {} is not correct. Exercise restarted.",
+								pitch);
 						break;
 					case NOTE_CORRECT:
-						logger.debug("Note {} is correct", pitch);
+						logger.debug("Note {} is correct.", pitch);
 						break;
 					case COMPLETED:
-						logger.debug("Completed");
+						logger.debug("Note {} is correct. Exercise complete.",
+								pitch);
 						break;
 					case RESTARTED:
-						logger.debug("Restarted");
+						logger.debug("Exercise restarted.");
 						break;
 					default:
 						break;
