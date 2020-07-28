@@ -14,24 +14,31 @@
 	<GridPane fx:id="mainToolbar" styleClass="toolbar"
 			hgap="10" vgap="10">
 		<columnConstraints>
-			<ColumnConstraints percentWidth="30"/>
-			<ColumnConstraints percentWidth="30"/>
-			<ColumnConstraints percentWidth="40"/>
+			<ColumnConstraints/>
+			<ColumnConstraints/>
+			<ColumnConstraints hgrow="ALWAYS"/>
+			<ColumnConstraints/>
 		</columnConstraints>
 
 		<HBox fx:id="keyDisplay" alignment="center_left"
 				GridPane.columnIndex="0">
-			<Label fx:id="keyName"/>
+			<Label fx:id="keyNameLabel" styleClass="label,leading"/>
+			<Label fx:id="keyName" styleClass="value"/>
 		</HBox>
 
-		<HBox fx:id="statusDisplay" alignment="center"
+		<HBox fx:id="progressDisplay" alignment="center_left"
 				GridPane.columnIndex="1">
+			<Label fx:id="progressNumericLabel" styleClass="label,leading"/>
+			<Label fx:id="progressNumeric" styleClass="value"/>
+		</HBox>
+
+		<HBox fx:id="statusDisplay" alignment="center_left"
+				GridPane.columnIndex="2">
 			<Label fx:id="noteStatus"/>
-			<Label fx:id="progressNumeric"/>
 		</HBox>
 
 		<HBox fx:id="trainerControls" alignment="center_right"
-				GridPane.columnIndex="2">
+				GridPane.columnIndex="3">
 			<Button fx:id="startBtn" text="%start_exercise"
 					onAction="#startExercise">
 				<tooltip><Tooltip text="%start_exercise.tt"/></tooltip>

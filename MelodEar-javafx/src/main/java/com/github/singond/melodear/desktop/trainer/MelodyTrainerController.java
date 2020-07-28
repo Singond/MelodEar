@@ -17,6 +17,7 @@ import javafx.scene.control.Label;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.github.singond.melodear.MelodyExercise.Status;
 import com.github.singond.melodear.desktop.audio.AudioDevice;
 import com.github.singond.melodear.desktop.components.Keyboard;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
@@ -48,8 +49,10 @@ public class MelodyTrainerController {
 
 	@FXML private Keyboard keyboard;
 	@FXML private Label keyName;
+	@FXML private Label keyNameLabel;
 	@FXML private Label noteStatus;
 	@FXML private Label progressNumeric;
+	@FXML private Label progressNumericLabel;
 	@FXML private Button startBtn;
 	@FXML private Button replayReferenceBtn;
 	@FXML private Button replayMelodyBtn;
@@ -72,10 +75,15 @@ public class MelodyTrainerController {
 		keyName.textProperty().bind(Bindings.createStringBinding(
 				() -> keyFormatter.format(trainerModel.getMelodyKey()),
 				trainerModel.melodyKeyProperty()));
+		keyNameLabel.setText(bundle.getString("keymel.key") + ": ");
+		noteStatus.textProperty().bind(Bindings.createStringBinding(
+				this::noteStatusString, trainerModel.statusProperty()));
 		progressNumeric.textProperty().bind(Bindings.format(
 				bundle.getString("keymel.progress"),
 				trainerModel.notesIdentifiedProperty(),
 				trainerModel.melodyLengthProperty()));
+		progressNumericLabel.setText(
+				bundle.getString("keymel.progress_label") + ": ");
 		startBtn.disableProperty().bind(running.getReadOnlyProperty());
 		replayReferenceBtn.disableProperty().bind(
 				Bindings.not(running.getReadOnlyProperty()));
@@ -87,6 +95,15 @@ public class MelodyTrainerController {
 		TrainerComponent trainerComp = trainerProvider.get().build();
 		trainerModel = trainerComp.getTrainerModel();
 		keyboard.setListener(trainerComp.getTrainerKeyboardListener());
+	}
+
+	private String noteStatusString() {
+		Status status = trainerModel.getStatus();
+		if (status == null) {
+			return "";
+		}
+		String result = status.toString().toLowerCase().replace("_", " ");
+		return result.substring(0, 1).toUpperCase() + result.substring(1);
 	}
 
 	public void startExercise() {

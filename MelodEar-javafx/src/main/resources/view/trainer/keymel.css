@@ -2,7 +2,18 @@
 	-fx-spacing: 5;
 	-fx-padding: 5;
 }
-#statusDisplay #progressNumeric {
+.toolbar HBox {
+	-fx-spacing: 5;
+}
+.toolbar #keyDisplay,
+.toolbar #progressDisplay,
+.toolbar #statusDisplay {
+	-fx-min-width: 150;
+}
+.toolbar #statusDisplay {
+	-fx-hgrow: ALWAYS;
+}
+.toolbar .value {
 	-fx-font-weight: bold;
 }
 
