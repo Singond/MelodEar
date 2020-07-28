@@ -9,6 +9,7 @@ import javax.inject.Named;
 import javax.inject.Provider;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,6 +33,7 @@ public class MelodyTrainerController {
 
 	private MelodyTrainerModel trainerModel;
 	private KeyFormatter keyFormatter;
+	private ReadOnlyBooleanWrapper running;
 
 	@Inject
 	AudioDevice audio;
@@ -55,6 +57,7 @@ public class MelodyTrainerController {
 	@Inject
 	public MelodyTrainerController(AllSettings settings) {
 		kbdSettings = settings.keyboard();
+		running = new ReadOnlyBooleanWrapper(false);
 		keyFormatter = new KeyFormatter();
 	}
 
@@ -73,9 +76,11 @@ public class MelodyTrainerController {
 				bundle.getString("keymel.progress"),
 				trainerModel.notesIdentifiedProperty(),
 				trainerModel.melodyLengthProperty()));
-		startBtn.setDisable(false);
-		replayReferenceBtn.setDisable(true);
-		replayMelodyBtn.setDisable(true);
+		startBtn.disableProperty().bind(running.getReadOnlyProperty());
+		replayReferenceBtn.disableProperty().bind(
+				Bindings.not(running.getReadOnlyProperty()));
+		replayMelodyBtn.disableProperty().bind(
+				Bindings.not(running.getReadOnlyProperty()));
 	}
 
 	private void initTrainer() {
@@ -86,9 +91,7 @@ public class MelodyTrainerController {
 
 	public void startExercise() {
 		logger.debug("Starting exercise");
-		startBtn.setDisable(true);
-		replayReferenceBtn.setDisable(false);
-		replayMelodyBtn.setDisable(false);
+		running.set(true);
 		trainerModel.newExercise();
 	}
 
