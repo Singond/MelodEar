@@ -65,7 +65,7 @@ public class MelodyTrainerController {
 	}
 
 	public void initialize() {
-		logger.debug("Setting keyboard listener");
+		logger.debug("Initializing melody trainer controller.");
 		keyboard.setLabelFormat(kbdSettings.getKeyLabelFormat());
 		kbdSettings.keyLabelFormatProperty().addListener((v, o, n) -> {
 			logger.debug("Setting label format");
@@ -94,6 +94,8 @@ public class MelodyTrainerController {
 	private void initTrainer() {
 		TrainerComponent trainerComp = trainerProvider.get().build();
 		trainerModel = trainerComp.getTrainerModel();
+		running.set(false);
+		logger.debug("Setting keyboard listener.");
 		keyboard.setListener(trainerComp.getTrainerKeyboardListener());
 	}
 
