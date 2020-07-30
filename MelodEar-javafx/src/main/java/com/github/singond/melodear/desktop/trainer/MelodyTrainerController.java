@@ -1,6 +1,8 @@
 package com.github.singond.melodear.desktop.trainer;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -58,10 +60,14 @@ public class MelodyTrainerController {
 	@Inject
 	public MelodyTrainerController(AllSettings settings) {
 		kbdSettings = settings.keyboard();
-
 		keyFormatter = new KeyFormatter();
 	}
 
+	/**
+	 * Initializes this controller.
+	 * If the controller is reused between views, this method is called
+	 * every time a new view is built.
+	 */
 	public void initialize() {
 		logger.debug("Initializing melody trainer controller.");
 		keyboard.setLabelFormat(kbdSettings.getKeyLabelFormat());
@@ -125,23 +131,57 @@ public class MelodyTrainerController {
 
 	public void replayReference() {
 		logger.debug("'Replay reference' pressed");
-		final Key key = trainerModel.getMelodyKey();
-		Pitch tonic = Pitch.of(key.tonic(), 4);
-		List<PitchGroup> voice = new ArrayList<>(3);
-		voice.add(Chords.chordAtRoot(tonic, Chords.MAJOR_TRIAD));
-		voice.add(Chords.chordAtRoot(
-				tonic.transposeUp(SimpleInterval.PERFECT_FOURTH),
-				Chords.MAJOR_TRIAD.invert(2)));
-		voice.add(Chords.chordAtRoot(
-				tonic.transposeUp(SimpleInterval.PERFECT_FIFTH),
-				Chords.MAJOR_TRIAD.invert(1)));
-		voice.add(Chords.chordAtRoot(tonic, Chords.MAJOR_TRIAD));
-		audio.playSequentially(voice, 120);
+		playKey();
+	}
+
+	private void playKey() {
+		audio.playSequentially(cadence(), tempo());
 	}
 
 	public void replayMelody() {
 		logger.debug("Replaying melody");
-		audio.playSequentially(trainerModel.getMelody(), 120);
+		playMelody();
+	}
+
+	private void playMelody() {
+		audio.playSequentially(trainerModel.getMelody(), tempo());
+	}
+
+	private void playKeyAndMelody() {
+		List<Pitch> melody = trainerModel.getMelody();
+		List<PitchGroup> cadence = cadence();
+		List<PitchGroup> voice
+				= new ArrayList<>(melody.size() + cadence.size() + 1);
+		voice.addAll(cadence);
+		voice.add(new Rest());
+		voice.addAll(melody);
+		audio.playSequentially(voice, tempo());
+	}
+
+	private List<PitchGroup> cadence() {
+		final Key key = trainerModel.getMelodyKey();
+		final int startOctave = 4;
+		Pitch tonic = Pitch.of(key.tonic(), startOctave);
+		List<PitchGroup> cadence = new ArrayList<>(4);
+		cadence.add(Chords.chordAtRoot(tonic, Chords.MAJOR_TRIAD));
+		cadence.add(Chords.chordAtRoot(
+				tonic.transposeUp(SimpleInterval.PERFECT_FOURTH),
+				Chords.MAJOR_TRIAD.invert(2)));
+		cadence.add(Chords.chordAtRoot(
+				tonic.transposeUp(SimpleInterval.PERFECT_FIFTH),
+				Chords.MAJOR_TRIAD.invert(1)));
+		cadence.add(Chords.chordAtRoot(tonic, Chords.MAJOR_TRIAD));
+		return cadence;
+	}
+
+	/**
+	 * Returns the tempo in which MIDI sequences should be played,
+	 * in beats per minute.
+	 *
+	 * @return tempo in BPM
+	 */
+	private double tempo() {
+		return 120;
 	}
 
 	public void playChord() {
@@ -166,5 +206,24 @@ public class MelodyTrainerController {
 			}
 			return key.toString();
 		}
+	}
+
+	private static class Rest implements PitchGroup {
+
+		@Override
+		public Iterator<Pitch> iterator() {
+			return Collections.emptyIterator();
+		}
+
+		@Override
+		public List<Pitch> pitches() {
+			return Collections.emptyList();
+		}
+
+		@Override
+		public int size() {
+			return 0;
+		}
+
 	}
 }
