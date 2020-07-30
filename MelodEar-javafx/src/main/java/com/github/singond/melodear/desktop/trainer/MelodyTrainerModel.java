@@ -8,6 +8,8 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -52,6 +54,8 @@ public class MelodyTrainerModel {
 			= new ReadOnlyIntegerWrapper();
 	private final ReadOnlyObjectWrapper<MelodyExercise.Status> status
 			= new ReadOnlyObjectWrapper<>();
+	private ReadOnlyBooleanWrapper running
+			= new ReadOnlyBooleanWrapper(false);
 
 	@Inject
 	public MelodyTrainerModel() {
@@ -106,6 +110,29 @@ public class MelodyTrainerModel {
 		return status.getReadOnlyProperty();
 	}
 
+	public boolean isRunning() {
+		return running.get();
+	}
+
+	public ReadOnlyBooleanProperty runningProperty() {
+		return running.getReadOnlyProperty();
+	}
+
+	public void start() {
+		logger.debug("Starting trainer");
+		running.set(true);
+		newExercise();
+	}
+
+	public void stop() {
+		logger.debug("Stopping trainer");
+		running.set(false);
+		melodyKey.setValue(null);
+		melodyLength.setValue(0);
+		notesIdentified.setValue(0);
+		status.setValue(null);
+	}
+
 	public void newExercise() {
 		logger.debug("Starting new exercise");
 		KeyedMelodyExercise exercise = trainer.newExercise();
@@ -116,7 +143,7 @@ public class MelodyTrainerModel {
 	}
 
 	public void evaluate(Pitch pitch) {
-		if (trainer.hasExercise()) {
+		if (trainer.hasExercise() && running.get()) {
 			KeyedMelodyExercise exercise = trainer.getExercise();
 			MelodyExercise.Status st = exercise.evaluate(pitch);
 			status.setValue(st);

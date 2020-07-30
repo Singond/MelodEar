@@ -9,7 +9,6 @@ import javax.inject.Named;
 import javax.inject.Provider;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -34,7 +33,6 @@ public class MelodyTrainerController {
 
 	private MelodyTrainerModel trainerModel;
 	private KeyFormatter keyFormatter;
-	private ReadOnlyBooleanWrapper running;
 
 	@Inject
 	AudioDevice audio;
@@ -60,7 +58,7 @@ public class MelodyTrainerController {
 	@Inject
 	public MelodyTrainerController(AllSettings settings) {
 		kbdSettings = settings.keyboard();
-		running = new ReadOnlyBooleanWrapper(false);
+
 		keyFormatter = new KeyFormatter();
 	}
 
@@ -84,17 +82,23 @@ public class MelodyTrainerController {
 				trainerModel.melodyLengthProperty()));
 		progressNumericLabel.setText(
 				bundle.getString("keymel.progress_label") + ": ");
-		startBtn.disableProperty().bind(running.getReadOnlyProperty());
+		startBtn.textProperty().bind(Bindings.createStringBinding(
+				() -> bundle.getString(trainerModel.isRunning()
+						? "keymel.stop_trainer"
+						: "keymel.start_trainer"),
+				trainerModel.runningProperty()));
 		replayReferenceBtn.disableProperty().bind(
-				Bindings.not(running.getReadOnlyProperty()));
+				Bindings.not(trainerModel.runningProperty()));
 		replayMelodyBtn.disableProperty().bind(
-				Bindings.not(running.getReadOnlyProperty()));
+				Bindings.not(trainerModel.runningProperty()));
 	}
 
 	private void initTrainer() {
 		TrainerComponent trainerComp = trainerProvider.get().build();
 		trainerModel = trainerComp.getTrainerModel();
-		running.set(false);
+		// An exercise may still be present if returning from another pane;
+		// stop it now.
+		trainerModel.stop();
 		logger.debug("Setting keyboard listener.");
 		keyboard.setListener(trainerComp.getTrainerKeyboardListener());
 	}
@@ -108,10 +112,15 @@ public class MelodyTrainerController {
 		return result.substring(0, 1).toUpperCase() + result.substring(1);
 	}
 
-	public void startExercise() {
-		logger.debug("\"Start exercise\" pressed.");
-		running.set(true);
-		trainerModel.newExercise();
+	public void startStopExercise() {
+		logger.debug("\"Start/stop exercise\" pressed.");
+		if (trainerModel.isRunning()) {
+			// Stop
+			trainerModel.stop();
+		} else {
+			// Start
+			trainerModel.start();
+		}
 	}
 
 	public void replayReference() {

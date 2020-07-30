@@ -40,7 +40,7 @@
 		<HBox fx:id="trainerControls" alignment="center_right"
 				GridPane.columnIndex="3">
 			<Button fx:id="startBtn" text="%start_exercise"
-					onAction="#startExercise">
+					onAction="#startStopExercise">
 				<tooltip><Tooltip text="%start_exercise.tt"/></tooltip>
 			</Button>
 			<Button fx:id="replayReferenceBtn" text="%keymel.replay_key"
