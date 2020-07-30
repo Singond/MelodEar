@@ -113,7 +113,7 @@ public class MelodyTrainerController {
 	}
 
 	public void startStopExercise() {
-		logger.debug("\"Start/stop exercise\" pressed.");
+		logger.debug("'Start/stop exercise' pressed.");
 		if (trainerModel.isRunning()) {
 			// Stop
 			trainerModel.stop();
