@@ -41,6 +41,8 @@ public class MelodyTrainerModel {
 	private static Logger logger = LogManager.getLogger(MelodyTrainerModel.class);
 
 	private MelodyTrainer<KeyedMelodyExercise> trainer;
+	/** Start new exercise automatically on completion of the previous. */
+	private boolean autoNew = true;
 
 	private final ReadOnlyObjectWrapper<Key> melodyKey
 			= new ReadOnlyObjectWrapper<>();
@@ -105,6 +107,7 @@ public class MelodyTrainerModel {
 	}
 
 	public void newExercise() {
+		logger.debug("Starting new exercise");
 		KeyedMelodyExercise exercise = trainer.newExercise();
 		melodyKey.setValue(exercise.key());
 		melodyLength.setValue(exercise.melody().size());
@@ -132,6 +135,9 @@ public class MelodyTrainerModel {
 					case COMPLETED:
 						logger.debug("Note {} is correct. Exercise complete.",
 								pitch);
+						if (autoNew) {
+							newExercise();
+						}
 						break;
 					case RESTARTED:
 						logger.debug("Exercise restarted.");

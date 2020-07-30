@@ -109,7 +109,7 @@ public class MelodyTrainerController {
 	}
 
 	public void startExercise() {
-		logger.debug("Starting exercise");
+		logger.debug("\"Start exercise\" pressed.");
 		running.set(true);
 		trainerModel.newExercise();
 	}
