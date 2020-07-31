@@ -18,7 +18,7 @@ import javafx.scene.control.Label;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.singond.melodear.MelodyExercise.Status;
+import com.github.singond.melodear.MelodyExercise.NoteStatus;
 import com.github.singond.melodear.desktop.audio.AudioDevice;
 import com.github.singond.melodear.desktop.components.Keyboard;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
@@ -110,7 +110,7 @@ public class MelodyTrainerController {
 	}
 
 	private String noteStatusString() {
-		Status status = trainerModel.getStatus();
+		NoteStatus status = trainerModel.getStatus();
 		if (status == null) {
 			return "";
 		}

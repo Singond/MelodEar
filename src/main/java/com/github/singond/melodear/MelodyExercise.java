@@ -43,12 +43,9 @@ public abstract class MelodyExercise {
 	 */
 	private int identify;
 
-	private Status status;
-
 	protected MelodyExercise(List<Pitch> pitches) {
 		this.melody = new ArrayList<>(pitches);
 		identify = 0;
-		status = Status.NOT_EVALUATED;
 	}
 
 	protected static final List<Pitch> randomMelody(Set<PitchClass> pitchClasses,
@@ -77,10 +74,6 @@ public abstract class MelodyExercise {
 		return identify;
 	}
 
-	public final Status status() {
-		return status;
-	}
-
 	/**
 	 * Returns the number of notes which have been correctly identified so far.
 	 *
@@ -101,25 +94,24 @@ public abstract class MelodyExercise {
 		return notesIdentified();
 	}
 
-	public final Status evaluate(Pitch pitch) {
-		Status status;
+	protected final NoteStatus evaluate(Pitch pitch) {
+		NoteStatus status;
 		assert identify >= 0;
 		if (identify >= melody.size()) {
 			// Called on completed exercise
-			status = Status.COMPLETED;
+			status = NoteStatus.COMPLETED;
 		} else if (melody.get(identify).equals(pitch)) {
 			if (++identify < melody.size()) {
 				// Note identified
-				status = Status.NOTE_CORRECT;
+				status = NoteStatus.NOTE_CORRECT;
 			} else {
 				// All notes identified
-				status = Status.COMPLETED;
+				status = NoteStatus.COMPLETED;
 			}
 		} else {
 			reset();
-			status = Status.NOTE_INCORRECT;
+			status = NoteStatus.NOTE_INCORRECT;
 		}
-		this.status = status;
 		return status;
 	}
 
@@ -133,9 +125,8 @@ public abstract class MelodyExercise {
 	/**
 	 * Forces the exercise to start evaluating notes from the beginning.
 	 */
-	public final void restart() {
+	protected final void restart() {
 		reset();
-		status = Status.RESTARTED;
 	}
 
 	@Override
@@ -143,33 +134,20 @@ public abstract class MelodyExercise {
 		return melody.toString() + "; identified " + identify + " notes";
 	}
 
-	public enum Status {
+	public enum NoteStatus {
 		/**
-		 * Indicates that the exercise has not been evaluated yet
-		 * ({@link #evaluate} has never been called on this exercise).
-		 * Note evaluation will proceed from the first note.
-		 */
-		NOT_EVALUATED,
-		/**
-		 * Indicates that the exercise has been restarted by calling
-		 * {@link #restart()}.
-		 * Note evaluation will proceed from the first note.
-		 */
-		RESTARTED,
-		/**
-		 * Indicates that the last evaluated note is correct,
-		 * but unidentified notes remain.
+		 * Indicates that the note is correct, but unidentified notes remain.
 		 * Note evaluation will proceed from the next unidentified note.
 		 */
 		NOTE_CORRECT,
 		/**
-		 * Indicates that the last evaluated note is not correct.
+		 * Indicates that the note is not correct.
 		 * Note evaluation will proceed from the first note.
 		 */
 		NOTE_INCORRECT,
 		/**
-		 * Indicates that the last evaluated note is correct
-		 * and no unidentified notes remain, that is, the exercise is complete.
+		 * Indicates that the note is correct and no unidentified notes remain,
+		 * that is, the exercise is complete.
 		 */
 		COMPLETED;
 	}

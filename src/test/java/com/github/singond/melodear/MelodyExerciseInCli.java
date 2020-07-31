@@ -5,7 +5,7 @@ import static com.github.singond.music.PitchClass.C_DBL_SHARP;
 
 import java.util.Arrays;
 
-import com.github.singond.melodear.MelodyExercise.Status;
+import com.github.singond.melodear.MelodyExercise.NoteStatus;
 import com.github.singond.music.Keys;
 import com.github.singond.music.Pitch;
 
@@ -48,7 +48,7 @@ public class MelodyExerciseInCli {
 				terminate();
 			} else if (status == TrainerStatus.IDENTIFYING){
 				Pitch pitch = parser.parse(line);
-				Status noteStatus = exercise.evaluate(pitch);
+				NoteStatus noteStatus = exercise.evaluate(pitch);
 				switch (noteStatus) {
 					case COMPLETED:
 						System.out.println("Congratulations! You identified all the notes");

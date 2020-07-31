@@ -1,5 +1,8 @@
 package com.github.singond.melodear;
 
+import com.github.singond.melodear.MelodyExercise.NoteStatus;
+import com.github.singond.music.Pitch;
+
 /**
  * Provider of exercises in melodic dictation.
  * Instances of this class are used to create, contain and evaluate
@@ -76,5 +79,15 @@ public class MelodyTrainer<T extends MelodyExercise> {
 			throw new IllegalStateException("No exercise started");
 		}
 		return exercise;
+	}
+
+	/**
+	 * Evaluates the given note in the current exercise.
+	 *
+	 * @param pitch the note to be evaluated
+	 * @return status of {@code pitch}
+	 */
+	public NoteStatus evaluate(Pitch pitch) {
+		return getExercise().evaluate(pitch);
 	}
 }

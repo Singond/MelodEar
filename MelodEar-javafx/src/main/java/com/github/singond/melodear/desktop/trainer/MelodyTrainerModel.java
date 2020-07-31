@@ -52,7 +52,7 @@ public class MelodyTrainerModel {
 			= new ReadOnlyIntegerWrapper();
 	private final ReadOnlyIntegerWrapper notesIdentified
 			= new ReadOnlyIntegerWrapper();
-	private final ReadOnlyObjectWrapper<MelodyExercise.Status> status
+	private final ReadOnlyObjectWrapper<MelodyExercise.NoteStatus> status
 			= new ReadOnlyObjectWrapper<>();
 	private ReadOnlyBooleanWrapper running
 			= new ReadOnlyBooleanWrapper(false);
@@ -102,11 +102,11 @@ public class MelodyTrainerModel {
 		return notesIdentified.getReadOnlyProperty();
 	}
 
-	public MelodyExercise.Status getStatus() {
+	public MelodyExercise.NoteStatus getStatus() {
 		return status.get();
 	}
 
-	public ReadOnlyObjectProperty<MelodyExercise.Status> statusProperty() {
+	public ReadOnlyObjectProperty<MelodyExercise.NoteStatus> statusProperty() {
 		return status.getReadOnlyProperty();
 	}
 
@@ -139,19 +139,17 @@ public class MelodyTrainerModel {
 		melodyKey.setValue(exercise.key());
 		melodyLength.setValue(exercise.melody().size());
 		notesIdentified.setValue(exercise.notesIdentified());
-		status.setValue(exercise.status());
+		status.setValue(null);
 	}
 
 	public void evaluate(Pitch pitch) {
 		if (trainer.hasExercise() && running.get()) {
 			KeyedMelodyExercise exercise = trainer.getExercise();
-			MelodyExercise.Status st = exercise.evaluate(pitch);
+			MelodyExercise.NoteStatus st = trainer.evaluate(pitch);
 			status.setValue(st);
 			notesIdentified.setValue(exercise.notesIdentified());
 			if (logger.isDebugEnabled()) {
 				switch (st) {
-					case NOT_EVALUATED:
-						break;
 					case NOTE_INCORRECT:
 						logger.debug("Note {} is not correct. Exercise restarted.",
 								pitch);
@@ -165,9 +163,6 @@ public class MelodyTrainerModel {
 						if (autoNew) {
 							newExercise();
 						}
-						break;
-					case RESTARTED:
-						logger.debug("Exercise restarted.");
 						break;
 					default:
 						break;
