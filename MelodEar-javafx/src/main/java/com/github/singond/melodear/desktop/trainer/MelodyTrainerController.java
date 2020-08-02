@@ -126,6 +126,7 @@ public class MelodyTrainerController {
 		} else {
 			// Start
 			trainerModel.start();
+			playKeyAndMelody();
 		}
 	}
 
