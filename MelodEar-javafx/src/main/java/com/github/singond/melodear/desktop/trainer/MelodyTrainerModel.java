@@ -54,7 +54,7 @@ public class MelodyTrainerModel {
 			= new ReadOnlyIntegerWrapper();
 	private final ReadOnlyObjectWrapper<MelodyExercise.NoteStatus> status
 			= new ReadOnlyObjectWrapper<>();
-	private ReadOnlyBooleanWrapper running
+	private final ReadOnlyBooleanWrapper running
 			= new ReadOnlyBooleanWrapper(false);
 
 	@Inject
