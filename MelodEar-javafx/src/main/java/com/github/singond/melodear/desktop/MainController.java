@@ -25,7 +25,7 @@ import com.github.singond.melodear.desktop.audio.AudioController;
 import com.github.singond.melodear.desktop.piano.PianoController;
 import com.github.singond.melodear.desktop.settings.AllSettings;
 import com.github.singond.melodear.desktop.settings.SettingsControllerComponent;
-import com.github.singond.melodear.desktop.trainer.MelodyTrainerController;
+import com.github.singond.melodear.desktop.trainer.TrainerComponent;
 
 public class MainController {
 
@@ -38,7 +38,7 @@ public class MainController {
 	Lazy<PianoController> pianoController;
 
 	@Inject
-	Lazy<MelodyTrainerController> trainerController;
+	Provider<TrainerComponent.Builder> trainerProvider;
 
 	@Inject
 	AudioController audioController;
@@ -69,6 +69,7 @@ public class MainController {
 	}
 
 	public void switchToPiano() {
+		logger.debug("Opening piano view");
 		try {
 			Parent pane = pianoPane();
 			preSwitchView();
@@ -80,13 +81,14 @@ public class MainController {
 	}
 
 	public void switchToMelodyTrainer() {
+		logger.debug("Opening melody trainer view");
 		try {
 			Parent pane = trainerPane();
 			preSwitchView();
 			main.setCenter(pane);
 			postSwitchView();
 		} catch (IOException e) {
-			logger.error("Error loading trainer view", e);
+			logger.error("Error loading melody trainer view", e);
 		}
 	}
 
@@ -102,7 +104,8 @@ public class MainController {
 		ResourceBundle bundle = ResourceBundle.getBundle("loc/trainer");
 		FXMLLoader loader = new FXMLLoader(
 				getClass().getResource("/view/trainer/keymel.fxml"), bundle);
-		loader.setController(trainerController.get());
+		TrainerComponent tc = trainerProvider.get().build();
+		loader.setController(tc.getTrainerController());
 		Parent pane = loader.load();
 		return pane;
 	}

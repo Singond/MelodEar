@@ -8,7 +8,6 @@ import java.util.ResourceBundle;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Provider;
 
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -19,8 +18,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.github.singond.melodear.MelodyExercise.NoteStatus;
+import com.github.singond.melodear.desktop.PaneScoped;
 import com.github.singond.melodear.desktop.audio.AudioDevice;
 import com.github.singond.melodear.desktop.components.Keyboard;
+import com.github.singond.melodear.desktop.components.KeyboardListener;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
 import com.github.singond.melodear.desktop.settings.AllSettings;
 import com.github.singond.music.Chords;
@@ -29,18 +30,17 @@ import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchGroup;
 import com.github.singond.music.SimpleInterval;
 
+@PaneScoped
 public class MelodyTrainerController {
 
 	private static Logger logger = LogManager.getLogger(MelodyTrainerController.class);
 
-	private MelodyTrainerModel trainerModel;
+	private final MelodyTrainerModel trainerModel;
+	private final KeyboardListener keyboardListener;
 	private KeyFormatter keyFormatter;
 
 	@Inject
 	AudioDevice audio;
-
-	@Inject
-	Provider<TrainerComponent.Builder> trainerProvider;
 
 	@Inject @Named("trainer-resources")
 	ResourceBundle bundle;
@@ -58,9 +58,14 @@ public class MelodyTrainerController {
 	@FXML private Button replayMelodyBtn;
 
 	@Inject
-	public MelodyTrainerController(AllSettings settings) {
+	public MelodyTrainerController(AllSettings settings,
+			MelodyTrainerModel trainerModel,
+			MelodyTrainerKeyboardListener keyboardListener) {
+		logger.trace("Creating MelodyTrainerController");
 		kbdSettings = settings.keyboard();
 		keyFormatter = new KeyFormatter();
+		this.trainerModel = trainerModel;
+		this.keyboardListener = keyboardListener;
 	}
 
 	/**
@@ -71,11 +76,11 @@ public class MelodyTrainerController {
 	public void initialize() {
 		logger.debug("Initializing melody trainer controller.");
 		keyboard.setLabelFormat(kbdSettings.getKeyLabelFormat());
+		keyboard.setListener(keyboardListener);
 		kbdSettings.keyLabelFormatProperty().addListener((v, o, n) -> {
 			logger.debug("Setting label format");
 			keyboard.setLabelFormat(n);
 		});
-		initTrainer();
 		keyName.textProperty().bind(Bindings.createStringBinding(
 				() -> keyFormatter.format(trainerModel.getMelodyKey()),
 				trainerModel.melodyKeyProperty()));
@@ -97,16 +102,6 @@ public class MelodyTrainerController {
 				Bindings.not(trainerModel.runningProperty()));
 		replayMelodyBtn.disableProperty().bind(
 				Bindings.not(trainerModel.runningProperty()));
-	}
-
-	private void initTrainer() {
-		TrainerComponent trainerComp = trainerProvider.get().build();
-		trainerModel = trainerComp.getTrainerModel();
-		// An exercise may still be present if returning from another pane;
-		// stop it now.
-		trainerModel.stop();
-		logger.debug("Setting keyboard listener.");
-		keyboard.setListener(trainerComp.getTrainerKeyboardListener());
 	}
 
 	private String noteStatusString() {

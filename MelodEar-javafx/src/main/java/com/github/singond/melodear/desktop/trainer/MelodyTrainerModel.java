@@ -59,6 +59,7 @@ public class MelodyTrainerModel {
 
 	@Inject
 	public MelodyTrainerModel() {
+		logger.trace("Creating MelodyTrainerModel");
 		trainer = new MelodyTrainer<>();
 		KeyedMelodyExerciseFactory factory = new KeyedMelodyExerciseFactory();
 		factory.setKeysAvailable(Arrays.asList(Keys.C_MAJOR, Keys.G_MAJOR, Keys.D_MAJOR));
