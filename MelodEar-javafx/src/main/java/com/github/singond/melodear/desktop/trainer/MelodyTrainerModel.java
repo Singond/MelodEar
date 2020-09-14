@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import com.github.singond.melodear.KeyedMelodyExercise;
 import com.github.singond.melodear.KeyedMelodyExerciseFactory;
 import com.github.singond.melodear.MelodyExercise;
+import com.github.singond.melodear.MelodyExercise.NoteStatus;
 import com.github.singond.melodear.MelodyTrainer;
 import com.github.singond.melodear.desktop.PaneScoped;
 import com.github.singond.music.Degree;
@@ -143,7 +144,7 @@ public class MelodyTrainerModel {
 		status.setValue(null);
 	}
 
-	public void evaluate(Pitch pitch) {
+	public NoteStatus evaluate(Pitch pitch) {
 		if (trainer.hasExercise() && running.get()) {
 			KeyedMelodyExercise exercise = trainer.getExercise();
 			MelodyExercise.NoteStatus st = trainer.evaluate(pitch);
@@ -169,8 +170,10 @@ public class MelodyTrainerModel {
 						break;
 				}
 			}
+			return st;
 		} else {
 			// No exercise has been set
+			return null;
 		}
 	}
 }

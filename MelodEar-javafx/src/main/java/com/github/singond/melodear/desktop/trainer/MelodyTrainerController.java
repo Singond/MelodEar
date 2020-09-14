@@ -9,10 +9,13 @@ import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import javafx.animation.FadeTransition;
 import javafx.beans.binding.Bindings;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.util.Duration;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,9 +38,15 @@ public class MelodyTrainerController {
 
 	private static Logger logger = LogManager.getLogger(MelodyTrainerController.class);
 
+	private static final String NOTE_CORRECT_CLASS = "correct";
+	private static final String NOTE_INCORRECT_CLASS = "incorrect";
+	private static final String EXERCISE_COMPLETED_CLASS = "completed";
+
 	private final MelodyTrainerModel trainerModel;
 	private final KeyboardListener keyboardListener;
+
 	private KeyFormatter keyFormatter;
+	private FadeTransition noteStatusFader;
 
 	@Inject
 	AudioDevice audio;
@@ -85,8 +94,10 @@ public class MelodyTrainerController {
 				() -> keyFormatter.format(trainerModel.getMelodyKey()),
 				trainerModel.melodyKeyProperty()));
 		keyNameLabel.setText(bundle.getString("keymel.key") + ": ");
-		noteStatus.textProperty().bind(Bindings.createStringBinding(
-				this::noteStatusString, trainerModel.statusProperty()));
+		noteStatusFader = new FadeTransition(Duration.millis(500), noteStatus);
+		noteStatusFader.setFromValue(1);
+		noteStatusFader.setToValue(0);
+		noteStatusFader.setDelay(Duration.millis(1000));
 		progressNumeric.textProperty().bind(Bindings.format(
 				bundle.getString("keymel.progress"),
 				trainerModel.notesIdentifiedProperty(),
@@ -104,13 +115,38 @@ public class MelodyTrainerController {
 				Bindings.not(trainerModel.runningProperty()));
 	}
 
-	private String noteStatusString() {
-		NoteStatus status = trainerModel.getStatus();
+	private String noteStatusClass(NoteStatus status) {
 		if (status == null) {
 			return "";
 		}
-		String result = status.toString().toLowerCase().replace("_", " ");
-		return result.substring(0, 1).toUpperCase() + result.substring(1);
+		switch (status) {
+			case NOTE_CORRECT:
+				return NOTE_CORRECT_CLASS;
+			case NOTE_INCORRECT:
+				return NOTE_INCORRECT_CLASS;
+			case COMPLETED:
+				return EXERCISE_COMPLETED_CLASS;
+			default:
+				return "";
+		}
+	}
+
+	public void noteEvaluated(NoteStatus status) {
+		if (status == null) {
+			return;
+		}
+		// Set text
+		String str = status.toString().toLowerCase().replace("_", " ");
+		str = str.substring(0, 1).toUpperCase() + str.substring(1);
+		noteStatus.setText(str);
+		// Set style class
+		ObservableList<String> classes = noteStatus.getStyleClass();
+		classes.clear();
+		classes.add(this.noteStatusClass(status));
+		// Set opacity and (re)set fade animation
+		noteStatus.setOpacity(1);
+		noteStatusFader.stop();
+		noteStatusFader.playFromStart();
 	}
 
 	public void startStopExercise() {
