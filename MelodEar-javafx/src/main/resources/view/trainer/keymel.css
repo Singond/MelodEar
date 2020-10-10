@@ -9,12 +9,8 @@
 	-fx-font-weight: bold;
 }
 .toolbar #keyDisplay,
-.toolbar #progressDisplay,
-.toolbar #statusDisplay {
+.toolbar #progressDisplay {
 	-fx-min-width: 150;
-}
-.toolbar #statusDisplay {
-	-fx-hgrow: ALWAYS;
 }
 .toolbar #statusDisplay #noteStatus {
 	-fx-font-weight: bold;
