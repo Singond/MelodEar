@@ -46,6 +46,8 @@ public class MelodyTrainerModel {
 	private MelodyTrainer<KeyedMelodyExercise> trainer;
 	/** Start new exercise automatically on completion of the previous. */
 	private boolean autoNew = true;
+	/** Callback to be executed after starting new exercise. */
+	private Runnable newExerciseCallback;
 
 	private final ReadOnlyObjectWrapper<Key> melodyKey
 			= new ReadOnlyObjectWrapper<>();
@@ -120,6 +122,16 @@ public class MelodyTrainerModel {
 		return running.getReadOnlyProperty();
 	}
 
+	/**
+	 * Sets the callback to be executed after a new exercise is created.
+	 * The callback is called in the same thread as {@link #newExercise}.
+	 *
+	 * @param callback the callback to be set
+	 */
+	public void onNewExercise(Runnable callback) {
+		newExerciseCallback = callback;
+	}
+
 	public void start() {
 		logger.debug("Starting trainer");
 		running.set(true);
@@ -142,6 +154,10 @@ public class MelodyTrainerModel {
 		melodyLength.setValue(exercise.melody().size());
 		notesIdentified.setValue(exercise.notesIdentified());
 		status.setValue(null);
+		Runnable callback = newExerciseCallback;
+		if (callback != null) {
+			callback.run();
+		}
 	}
 
 	public NoteStatus evaluate(Pitch pitch) {

@@ -12,6 +12,7 @@ import javax.inject.Named;
 import javafx.animation.FadeTransition;
 import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -47,6 +48,8 @@ public class MelodyTrainerController {
 
 	private KeyFormatter keyFormatter;
 	private FadeTransition noteStatusFader;
+	/** Play exercise automatically when it is created. */
+	private boolean autoPlayExercise;
 
 	@Inject
 	AudioDevice audio;
@@ -113,6 +116,7 @@ public class MelodyTrainerController {
 				Bindings.not(trainerModel.runningProperty()));
 		replayMelodyBtn.disableProperty().bind(
 				Bindings.not(trainerModel.runningProperty()));
+		trainerModel.onNewExercise(() -> onNewExercise());
 	}
 
 	private String noteStatusClass(NoteStatus status) {
@@ -149,15 +153,35 @@ public class MelodyTrainerController {
 		noteStatusFader.playFromStart();
 	}
 
+	private void onNewExercise() {
+		if (autoPlayExercise) {
+			Task<Void> delay = new Task<>() {
+				@Override
+				protected Void call() throws Exception {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// Do nothing
+					}
+					return null;
+				}
+			};
+			delay.setOnSucceeded((e) -> playKeyAndMelody());
+			new Thread(delay).start();
+		}
+	}
+
 	public void startStopExercise() {
 		logger.debug("'Start/stop exercise' pressed.");
 		if (trainerModel.isRunning()) {
 			// Stop
 			trainerModel.stop();
+			autoPlayExercise = false;
 		} else {
 			// Start
 			trainerModel.start();
 			playKeyAndMelody();
+			autoPlayExercise = true;
 		}
 	}
 
