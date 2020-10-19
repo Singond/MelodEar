@@ -14,36 +14,51 @@ public abstract class BasicSettingsView<T extends SettingsTreeNode<?>>
 
 	protected final String id;
 	protected final ResourceBundle bundle;
-	private transient String uiName;
-	private transient String intName;
+	private final String nameKey;
+	private final String intName;
+	private final String fxmlPath;
+	private final String cssPath;
 
-	protected BasicSettingsView(String id) {
+	protected BasicSettingsView(String id, String fxmlPath, String cssPath,
+			ResourceBundle bundle, String nameKey) {
 		this.id = id;
-		this.bundle = ResourceBundle.getBundle("loc/settings");
-		this.uiName = bundle.getString(id + ".title");
+		this.bundle = bundle;
+		this.nameKey = nameKey;
+		this.fxmlPath = fxmlPath;
+		this.cssPath = cssPath;
 		this.intName = id + " settings";
 	}
 
-	protected BasicSettingsView(String id, ResourceBundle bundle) {
-		this.id = id;
-		this.bundle = bundle;
-		this.uiName = bundle.getString(id + ".settings.title");
-		this.intName = id + " settings";
+	protected BasicSettingsView(String id, String resPath,
+			ResourceBundle bundle, String nameKey) {
+		this(id, resPath + ".fxml", resPath + ".css", bundle, nameKey);
+	}
+
+	protected BasicSettingsView(String id, String resPath,
+			ResourceBundle bundle) {
+		this(id, resPath, bundle, id + ".settings.title");
+	}
+
+	protected BasicSettingsView(String id, String resPath) {
+		this(id, resPath, ResourceBundle.getBundle("loc/" + id),
+				id + ".settings.title");
+	}
+
+	protected BasicSettingsView(String id) {
+		this(id, "/view/" + id);
 	}
 
 	@Override
 	public Node getNode(AllSettings s) {
-		String fxml = String.format("/view/settings_%s.fxml", id);
 		FXMLLoader loader = new FXMLLoader(
-				getClass().getResource(fxml), bundle);
+				getClass().getResource(fxmlPath), bundle);
 		loader.setController(makeController(s));
 		try {
 			Parent node = (Parent) loader.load();
-			String css = String.format("/view/settings_%s.css", id);
-			node.getStylesheets().add(css);
+			node.getStylesheets().add(cssPath);
 			return node;
 		} catch (IOException e) {
-			throw new RuntimeException("Could not load " + fxml, e);
+			throw new RuntimeException("Could not load " + fxmlPath, e);
 		}
 	}
 
@@ -51,7 +66,7 @@ public abstract class BasicSettingsView<T extends SettingsTreeNode<?>>
 
 	@Override
 	public String getName() {
-		return uiName;
+		return bundle.getString(nameKey);
 	}
 
 	@Override
