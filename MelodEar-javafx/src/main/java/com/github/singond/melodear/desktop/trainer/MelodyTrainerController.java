@@ -27,7 +27,6 @@ import com.github.singond.melodear.desktop.audio.AudioDevice;
 import com.github.singond.melodear.desktop.components.Keyboard;
 import com.github.singond.melodear.desktop.components.KeyboardListener;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
-import com.github.singond.melodear.desktop.settings.AllSettings;
 import com.github.singond.music.Chords;
 import com.github.singond.music.Key;
 import com.github.singond.music.Pitch;
@@ -57,6 +56,7 @@ public class MelodyTrainerController {
 	@Inject @Named("trainer-resources")
 	ResourceBundle bundle;
 
+	@Inject
 	KeyboardSettings kbdSettings;
 
 	@FXML private Keyboard keyboard;
@@ -70,11 +70,10 @@ public class MelodyTrainerController {
 	@FXML private Button replayMelodyBtn;
 
 	@Inject
-	public MelodyTrainerController(AllSettings settings,
+	public MelodyTrainerController(
 			MelodyTrainerModel trainerModel,
 			MelodyTrainerKeyboardListener keyboardListener) {
 		logger.trace("Creating MelodyTrainerController");
-		kbdSettings = settings.keyboard();
 		keyFormatter = new KeyFormatter();
 		this.trainerModel = trainerModel;
 		this.keyboardListener = keyboardListener;
