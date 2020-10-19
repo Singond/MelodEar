@@ -22,7 +22,7 @@ public class MelodyTrainerSettingsController {
 
 	public void initialize() {
 		// Delay before new exercise
-		settings.newExerciseDelayProperty().bind(
-				newExerciseDelay.valueProperty());
+		newExerciseDelay.getValueFactory().valueProperty().bindBidirectional(
+				settings.newExerciseDelayProperty().asObject());
 	}
 }
