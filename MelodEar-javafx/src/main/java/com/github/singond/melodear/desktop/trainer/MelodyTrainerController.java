@@ -58,6 +58,8 @@ public class MelodyTrainerController {
 
 	@Inject
 	KeyboardSettings kbdSettings;
+	@Inject
+	MelodyTrainerSettings trainerSettings;
 
 	@FXML private Keyboard keyboard;
 	@FXML private Label keyName;
@@ -158,7 +160,7 @@ public class MelodyTrainerController {
 				@Override
 				protected Void call() throws Exception {
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(trainerSettings.getNewExerciseDelay());
 					} catch (InterruptedException e) {
 						// Do nothing
 					}
