@@ -1,4 +1,4 @@
-package com.github.singond.melodear.desktop.settings;
+package com.github.singond.settings;
 
 import java.util.List;
 import java.util.prefs.BackingStoreException;
@@ -7,31 +7,32 @@ import java.util.prefs.Preferences;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.singond.settings.SettingsNode;
-import com.github.singond.settings.SettingsNodeVisitor;
-import com.github.singond.settings.SettingsTreeNode;
-import com.github.singond.settings.SettingsValueNode;
-
-public class PreferencesStorage {
+/**
+ * A storage for settings trees which uses the {@code java.util.prefs}
+ * package as its backend.
+ */
+public class PreferencesSettingsStorage implements SettingsStorage {
 
 	private static final String SEPARATOR = ".";
 	private static final String DEFAULT_STRING = "";
 
 	private static Logger logger
-			= LogManager.getLogger(PreferencesStorage.class);
+			= LogManager.getLogger(PreferencesSettingsStorage.class);
 
 	private final Preferences prefs;
 	private final SettingsNodeVisitor writer = new SettingsWriter();
 	private final SettingsNodeVisitor reader = new SettingsReader();
 
-	public PreferencesStorage(Preferences preferencesNode) {
+	public PreferencesSettingsStorage(Preferences preferencesNode) {
 		this.prefs = preferencesNode;
 	}
 
+	@Override
 	public void writeSettings(SettingsTreeNode<?> settings) {
 		settings.invite(writer);
 	}
 
+	@Override
 	public void readSettings(SettingsTreeNode<?> settings) {
 		settings.invite(reader);
 	}

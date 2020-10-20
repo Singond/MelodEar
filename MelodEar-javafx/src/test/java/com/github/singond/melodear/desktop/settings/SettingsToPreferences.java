@@ -17,6 +17,9 @@ import org.junit.Test;
 
 import com.github.singond.settings.MockEnum;
 import com.github.singond.settings.MockSettings;
+import com.github.singond.settings.PreferencesSettingsStorage;
+import com.github.singond.settings.SettingsStorage;
+import com.github.singond.settings.SettingsStorageException;
 
 public class SettingsToPreferences {
 
@@ -30,7 +33,7 @@ public class SettingsToPreferences {
 	private MockEnum enm = MockEnum.TWO;
 
 	private Preferences userPrefs;
-	private PreferencesStorage storage;
+	private SettingsStorage storage;
 	private MockSettings settings;
 
 	@Before
@@ -51,12 +54,17 @@ public class SettingsToPreferences {
 		settings.getNested().setInteger(integer);
 
 		userPrefs = Preferences.userNodeForPackage(SettingsToPreferences.class);
-		storage = new PreferencesStorage(userPrefs);
+		storage = new PreferencesSettingsStorage(userPrefs);
 	}
 
 	@Test
 	public void writeSettings() {
-		storage.writeSettings(settings);
+		try {
+			storage.writeSettings(settings);
+		} catch (SettingsStorageException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		assertEquals(name, userPrefs.get("MockSettings.name", ""));
 		assertEquals(path.toString(), userPrefs.get("MockSettings.path", ""));
 		assertEquals(DATE_FMT.format(date), userPrefs.get("MockSettings.date", ""));
@@ -67,9 +75,13 @@ public class SettingsToPreferences {
 
 	@Test
 	public void readSettings() {
-		storage.writeSettings(settings);
 		MockSettings saved = new MockSettings();
-		storage.readSettings(saved);
+		try {
+			storage.writeSettings(settings);
+			storage.readSettings(saved);
+		} catch (SettingsStorageException e) {
+			e.printStackTrace();
+		}
 		assertEquals(name, saved.getName());
 		assertEquals(path, saved.getPath());
 		assertEquals(date, saved.getDate());
