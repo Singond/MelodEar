@@ -193,7 +193,7 @@ public final class KeyedMelodyExerciseFactory
 			throw new IllegalStateException("No available degrees are set");
 
 		if (logger.isDebugEnabled())
-			logger.debug("Regenerating cache of available pitch classes...");
+			logger.debug("Generating available pitch classes...");
 
 		// Update pitch classes
 		Set<PitchClass> pitchClasses = new TreeSet<>();
@@ -220,7 +220,7 @@ public final class KeyedMelodyExerciseFactory
 			throw new IllegalStateException("No upper bound set on pitches");
 
 		if (logger.isDebugEnabled())
-			logger.debug("Regenerating cache of available pitches...");
+			logger.debug("Generating available pitches...");
 
 		// Update pitches
 		pitchesAvailable = Pitches.allBetween(lowerBound, upperBound,
@@ -248,6 +248,8 @@ public final class KeyedMelodyExerciseFactory
 	@Override
 	public KeyedMelodyExercise make() {
 		KeyedMelodyExercise exc = new KeyedMelodyExercise(newMelody(), key);
+		if (logger.isDebugEnabled())
+			logger.debug("New exercise: {}", exc);
 		policy.exerciseUsed();
 		return exc;
 	}

@@ -25,6 +25,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.github.singond.music.Pitch;
+import com.github.singond.music.PitchGroup;
 
 class MidiAudioDevice implements AudioDevice, Closeable {
 
@@ -154,7 +155,7 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 	}
 
 	@Override
-	public void playSequentially(List<Pitch> pitches, double bpm) {
+	public void playSequentially(List<? extends PitchGroup> pitches, double bpm) {
 		try {
 			if (!sequencer.isOpen()) {
 				sequencer.open();
@@ -170,7 +171,7 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 		}
 	}
 
-	private Sequence makeSequence(List<Pitch> pitches) {
+	private Sequence makeSequence(List<? extends PitchGroup> pitches) {
 		Sequence sequence;
 		try {
 			// One tick per quarter note; one track
@@ -184,22 +185,24 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 
 		// Put all pitches into the track, one after anonether
 		int i = 0;
-		for (Pitch pitch : pitches) {
+		for (PitchGroup pitchGrp : pitches) {
 			long startTicks = i;
 			long endTicks = ++i;
-			ShortMessage startMsg, endMsg;
-			try {
-				startMsg = new ShortMessage(ShortMessage.NOTE_ON, channel,
-						pitch.midiNumber(), velocity);
-				endMsg = new ShortMessage(ShortMessage.NOTE_OFF, channel,
-						pitch.midiNumber(), velocity);
-			} catch (InvalidMidiDataException e) {
-				logger.error("Error when constructing MIDI message", e);
-				e.printStackTrace();
-				return null;
+			for (Pitch pitch : pitchGrp) {
+				ShortMessage startMsg, endMsg;
+				try {
+					startMsg = new ShortMessage(ShortMessage.NOTE_ON, channel,
+							pitch.midiNumber(), velocity);
+					endMsg = new ShortMessage(ShortMessage.NOTE_OFF, channel,
+							pitch.midiNumber(), velocity);
+				} catch (InvalidMidiDataException e) {
+					logger.error("Error when constructing MIDI message", e);
+					e.printStackTrace();
+					return null;
+				}
+				track.add(new MidiEvent(startMsg, startTicks));
+				track.add(new MidiEvent(endMsg, endTicks));
 			}
-			track.add(new MidiEvent(startMsg, startTicks));
-			track.add(new MidiEvent(endMsg, endTicks));
 		}
 		return sequence;
 	}

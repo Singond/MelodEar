@@ -7,6 +7,7 @@ import dagger.Provides;
 
 import com.github.singond.melodear.desktop.audio.MidiSettings;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
+import com.github.singond.melodear.desktop.trainer.MelodyTrainerSettings;
 
 @Module(subcomponents = {SettingsControllerComponent.class})
 public class SettingsModule {
@@ -29,6 +30,11 @@ public class SettingsModule {
 	@Provides
 	public static MidiSettings provideMidiSettings(AllSettings s) {
 		return s.midi();
+	}
+
+	@Provides
+	public static MelodyTrainerSettings provideMelodyTrainerSettings(AllSettings s) {
+		return s.melodyTrainer();
 	}
 
 }

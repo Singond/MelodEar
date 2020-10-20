@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.singond.melodear.desktop.audio.MidiSettingsView;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettingsView;
+import com.github.singond.melodear.desktop.trainer.MelodyTrainerSettingsView;
 
 /**
  * JavaFX controller class for the settings dialog window.
@@ -39,6 +40,8 @@ public class SettingsController {
 	KeyboardSettingsView keyboardSettingsView;
 	@Inject
 	MidiSettingsView midiSettingsView;
+	@Inject
+	MelodyTrainerSettingsView melodyTrainerSettingsView;
 
 	@FXML
 	DialogPane settingsDlg;
@@ -95,6 +98,7 @@ public class SettingsController {
 		List<SettingsView<?>> sections = new ArrayList<>();
 		sections.add(keyboardSettingsView);
 		sections.add(midiSettingsView);
+		sections.add(melodyTrainerSettingsView);
 		return sections;
 	}
 }

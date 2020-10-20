@@ -75,32 +75,58 @@ public abstract class MelodyExercise {
 	}
 
 	/**
-	 * Restarts the exercise.
+	 * Returns the number of notes which have been correctly identified so far.
+	 *
+	 * @return the number of identified notes in this exercise
 	 */
-	public final void reset() {
-		identify = 0;
-	}
-
-	public final NoteEvaluationStatus evaluate(Pitch pitch) {
-		if (melody.get(identify).equals(pitch)) {
-			if (++identify < melody.size()) {
-				return NoteEvaluationStatus.NOTE_CORRECT;
-			} else {
-				return NoteEvaluationStatus.ALL_NOTES_CORRECT;
-			}
-		} else {
-			reset();
-			return NoteEvaluationStatus.NOTE_INCORRECT;
-		}
+	public final int notesIdentified() {
+		return identify;
 	}
 
 	/**
 	 * Returns the number of notes which have been correctly identified so far.
 	 *
 	 * @return the number of identified notes in thie exercise
+	 * @deprecated Use {@link #notesIdentified()}.
 	 */
-	public int identifiedNotesCount() {
-		return identify;
+	@Deprecated
+	public final int identifiedNotesCount() {
+		return notesIdentified();
+	}
+
+	protected final NoteStatus evaluate(Pitch pitch) {
+		NoteStatus status;
+		assert identify >= 0;
+		if (identify >= melody.size()) {
+			// Called on completed exercise
+			status = NoteStatus.COMPLETED;
+		} else if (melody.get(identify).equals(pitch)) {
+			if (++identify < melody.size()) {
+				// Note identified
+				status = NoteStatus.NOTE_CORRECT;
+			} else {
+				// All notes identified
+				status = NoteStatus.COMPLETED;
+			}
+		} else {
+			reset();
+			status = NoteStatus.NOTE_INCORRECT;
+		}
+		return status;
+	}
+
+	/**
+	 * Resets the exercise.
+	 */
+	private void reset() {
+		identify = 0;
+	}
+
+	/**
+	 * Forces the exercise to start evaluating notes from the beginning.
+	 */
+	protected final void restart() {
+		reset();
 	}
 
 	@Override
@@ -108,18 +134,21 @@ public abstract class MelodyExercise {
 		return melody.toString() + "; identified " + identify + " notes";
 	}
 
-	public enum NoteEvaluationStatus {
+	public enum NoteStatus {
 		/**
-		 * Signifies that the note is correct, but unidentified notes remain.
+		 * Indicates that the note is correct, but unidentified notes remain.
+		 * Note evaluation will proceed from the next unidentified note.
 		 */
 		NOTE_CORRECT,
 		/**
-		 * Signifies that the note is not correct.
+		 * Indicates that the note is not correct.
+		 * Note evaluation will proceed from the first note.
 		 */
 		NOTE_INCORRECT,
 		/**
-		 * Signifies that the note is correct and no unidentified notes remain.
+		 * Indicates that the note is correct and no unidentified notes remain,
+		 * that is, the exercise is complete.
 		 */
-		ALL_NOTES_CORRECT
+		COMPLETED;
 	}
 }

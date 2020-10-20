@@ -2,6 +2,29 @@
 	-fx-spacing: 5;
 	-fx-padding: 5;
 }
+.toolbar HBox {
+	-fx-spacing: 5;
+}
+.toolbar .value {
+	-fx-font-weight: bold;
+}
+.toolbar #keyDisplay,
+.toolbar #progressDisplay {
+	-fx-min-width: 150;
+}
+.toolbar #statusDisplay #noteStatus {
+	-fx-font-weight: bold;
+}
+.toolbar #statusDisplay #noteStatus.correct {
+	-fx-text-fill: blue;
+}
+.toolbar #statusDisplay #noteStatus.incorrect {
+	-fx-text-fill: red;
+}
+.toolbar #statusDisplay #noteStatus.completed {
+	-fx-text-fill: green;
+}
+
 .piano-pane {
 	-fx-padding: 25;
 }

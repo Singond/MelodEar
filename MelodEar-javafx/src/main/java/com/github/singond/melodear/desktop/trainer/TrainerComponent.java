@@ -2,16 +2,20 @@ package com.github.singond.melodear.desktop.trainer;
 
 import dagger.Subcomponent;
 
+import com.github.singond.melodear.desktop.PaneScoped;
+
 /**
- * Creates instances of {@link TrainerModel}.
+ * Creates objects related to the trainer view.
  *
  * @author Singon
  */
+@PaneScoped
 @Subcomponent
 public interface TrainerComponent {
 
-	TrainerModel getTrainerModel();
-	TrainerKeyboardListener getTrainerKeyboardListener();
+	MelodyTrainerModel getTrainerModel();
+	MelodyTrainerController getTrainerController();
+	MelodyTrainerKeyboardListener getTrainerKeyboardListener();
 
 	@Subcomponent.Builder
 	interface Builder {

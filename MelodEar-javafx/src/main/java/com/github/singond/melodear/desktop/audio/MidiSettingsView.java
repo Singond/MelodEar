@@ -11,12 +11,10 @@ import com.github.singond.melodear.desktop.settings.SettingsView;
 public class MidiSettingsView extends BasicSettingsView<MidiSettings>
 		implements SettingsView<MidiSettings> {
 
-	private static final ResourceBundle bundle
-			= ResourceBundle.getBundle("loc/audio");
-
 	@Inject
 	public MidiSettingsView() {
-		super("midi", bundle);
+		super("midi", "/view/settings_midi",
+				ResourceBundle.getBundle("loc/audio"));
 	}
 
 	@Override

@@ -19,7 +19,7 @@ allprojects {
 	repositories {
 		jcenter()
 	}
-	ext.versions = ['music': '0.6.1']
+	ext.versions = ['music': '0.8.0']
 }
 
 repositories {

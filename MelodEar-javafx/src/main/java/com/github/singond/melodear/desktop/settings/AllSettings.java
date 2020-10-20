@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.singond.melodear.desktop.audio.MidiSettings;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
+import com.github.singond.melodear.desktop.trainer.MelodyTrainerSettings;
 import com.github.singond.settings.AbstractSettingsTree;
 
 /**
@@ -21,6 +22,7 @@ public class AllSettings extends AbstractSettingsTree<AllSettings>{
 
 	private final KeyboardSettings keyboard;
 	private final MidiSettings midi;
+	private final MelodyTrainerSettings melodyTrainer;
 
 	/**
 	 * Constructs a new instance of MelodEar settings.
@@ -30,8 +32,9 @@ public class AllSettings extends AbstractSettingsTree<AllSettings>{
 	public AllSettings(String key) {
 		super(key);
 		logger.debug("Creating AllSettings");
-		keyboard = newNode(new KeyboardSettings("keyboard"));
-		midi     = newNode(new MidiSettings("midi"));
+		keyboard      = newNode(new KeyboardSettings("keyboard"));
+		midi          = newNode(new MidiSettings("midi"));
+		melodyTrainer = newNode(new MelodyTrainerSettings("melodyTrainer"));
 	}
 
 	@Override
@@ -55,5 +58,14 @@ public class AllSettings extends AbstractSettingsTree<AllSettings>{
 	 */
 	public MidiSettings midi() {
 		return midi;
+	}
+
+	/**
+	 * Returns settings for the melody trainer.
+	 *
+	 * @return melody trainer settings
+	 */
+	public MelodyTrainerSettings melodyTrainer() {
+		return melodyTrainer;
 	}
 }

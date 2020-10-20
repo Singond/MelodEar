@@ -1,5 +1,8 @@
 package com.github.singond.melodear;
 
+import com.github.singond.melodear.MelodyExercise.NoteStatus;
+import com.github.singond.music.Pitch;
+
 /**
  * Provider of exercises in melodic dictation.
  * Instances of this class are used to create, contain and evaluate
@@ -35,21 +38,31 @@ public class MelodyTrainer<T extends MelodyExercise> {
 	 * @param factory the factory to be set
 	 */
 	public void setExerciseFactory(ExerciseFactory<T> factory) {
+		if (factory == null) {
+			throw new NullPointerException("Factory must not be null");
+		}
 		this.exerciseFactory = factory;
 	}
 
 	/**
 	 * Returns {@code true} if an exercise is ready in this trainer.
 	 *
-	 * @return {@code true} if {@link #getExercise} would not return {@code null}
+	 * @return {@code true} if {@link #getExercise} would not throw
+	 *         an {@code IllegalStateException}
 	 */
 	public boolean hasExercise() {
 		return exercise != null;
 	}
 
-	public void newExercise() {
+	/**
+	 * Instantiates a new exercise in this trainer.
+	 *
+	 * @return the new exercise instance
+	 * @throws IllegalStateException if no exercise factory has been set
+	 */
+	public T newExercise() {
 		if (exerciseFactory != null) {
-			exercise = exerciseFactory.make();
+			return exercise = exerciseFactory.make();
 		} else {
 			throw new IllegalStateException("No exercise factory set");
 		}
@@ -59,8 +72,22 @@ public class MelodyTrainer<T extends MelodyExercise> {
 	 * Returns the active exercise.
 	 *
 	 * @return the active exercise
+	 * @throws IllegalStateException if no exercise has been initialized
 	 */
 	public T getExercise() {
+		if (exercise == null) {
+			throw new IllegalStateException("No exercise started");
+		}
 		return exercise;
+	}
+
+	/**
+	 * Evaluates the given note in the current exercise.
+	 *
+	 * @param pitch the note to be evaluated
+	 * @return status of {@code pitch}
+	 */
+	public NoteStatus evaluate(Pitch pitch) {
+		return getExercise().evaluate(pitch);
 	}
 }

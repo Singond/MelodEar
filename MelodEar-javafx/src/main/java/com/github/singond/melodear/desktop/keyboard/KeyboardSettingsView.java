@@ -1,5 +1,7 @@
 package com.github.singond.melodear.desktop.keyboard;
 
+import java.util.ResourceBundle;
+
 import javax.inject.Inject;
 
 import com.github.singond.melodear.desktop.settings.AllSettings;
@@ -12,7 +14,8 @@ public class KeyboardSettingsView
 
 	@Inject
 	public KeyboardSettingsView() {
-		super("keyboard");
+		super("keyboard", "/view/settings_keyboard",
+				ResourceBundle.getBundle("loc/settings"), "keyboard.title");
 	}
 
 	@Override

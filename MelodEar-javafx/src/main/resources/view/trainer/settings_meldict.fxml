@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml/1" styleClass="settings-form">
+
+	<columnConstraints>
+		<ColumnConstraints/>
+		<ColumnConstraints hgrow="ALWAYS"/>
+	</columnConstraints>
+
+	<Label text="%meldict.settings.newExerciseDelay"
+			GridPane.rowIndex="0" GridPane.columnIndex="0">
+		<tooltip>
+			<Tooltip text="%meldict.settings.newExerciseDelay.tt"/>
+		</tooltip>
+	</Label>
+	<Spinner fx:id="newExerciseDelay"
+			GridPane.rowIndex="0" GridPane.columnIndex="1"
+			GridPane.halignment="RIGHT"
+			editable="true"
+			styleClass="value,number,newExerciseDelay">
+		<valueFactory>
+			<SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="5000"
+					amountToStepBy="100"/>
+		</valueFactory>
+	</Spinner>
+
+</GridPane>
