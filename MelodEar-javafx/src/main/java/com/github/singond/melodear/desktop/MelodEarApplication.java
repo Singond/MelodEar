@@ -54,6 +54,12 @@ public class MelodEarApplication extends Application {
 		stage.show();
 	}
 
+	@Override
+	public void stop() {
+		logger.debug("Writing settings");
+		component.getSettingsLoader().writeSettings();
+	}
+
 	private List<Image> initIcons() {
 		List<Image> icons = new ArrayList<>(iconNames.size());
 		for (String name : iconNames) {
