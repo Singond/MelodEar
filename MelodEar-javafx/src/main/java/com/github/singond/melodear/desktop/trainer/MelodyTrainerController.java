@@ -26,6 +26,7 @@ import org.apache.logging.log4j.Logger;
 import com.github.singond.melodear.MelodyExercise.NoteStatus;
 import com.github.singond.melodear.desktop.PaneScoped;
 import com.github.singond.melodear.desktop.audio.AudioDevice;
+import com.github.singond.melodear.desktop.audio.AudioException;
 import com.github.singond.melodear.desktop.components.Keyboard;
 import com.github.singond.melodear.desktop.components.KeyboardListener;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
@@ -203,7 +204,11 @@ public class MelodyTrainerController {
 	}
 
 	private void playKey() {
-		audio.playSequentially(cadence(), tempo());
+		try {
+			audio.playSequentially(cadence(), tempo());
+		} catch (AudioException e) {
+			logger.error("Exception playing key", e);
+		}
 	}
 
 	public void replayMelody() {
@@ -212,7 +217,11 @@ public class MelodyTrainerController {
 	}
 
 	private void playMelody() {
-		audio.playSequentially(trainerModel.getMelody(), tempo());
+		try {
+			audio.playSequentially(trainerModel.getMelody(), tempo());
+		} catch (AudioException e) {
+			logger.error("Exception playing melody", e);
+		}
 	}
 
 	private void playKeyAndMelody() {
@@ -223,7 +232,11 @@ public class MelodyTrainerController {
 		voice.addAll(cadence);
 		voice.add(new Rest());
 		voice.addAll(melody);
-		audio.playSequentially(voice, tempo());
+		try {
+			audio.playSequentially(voice, tempo());
+		} catch (AudioException e) {
+			logger.error("Exception playing key and melody", e);
+		}
 	}
 
 	private List<PitchGroup> cadence() {
@@ -255,7 +268,11 @@ public class MelodyTrainerController {
 	public void playChord() {
 		List<PitchGroup> voice = new ArrayList<>(3);
 		voice.add(Chords.chordAtRoot(Pitch.D4, Chords.MAJOR_TRIAD));
-		audio.playSequentially(voice, 120);
+		try {
+			audio.playSequentially(voice, 120);
+		} catch (AudioException e) {
+			logger.error("Exception playing chord", e);
+		}
 	}
 
 	public void playChordProgression() {
@@ -264,7 +281,11 @@ public class MelodyTrainerController {
 		voice.add(Chords.chordAtRoot(Pitch.G4, Chords.MAJOR_TRIAD.invert(2)));
 		voice.add(Chords.chordAtRoot(Pitch.A4, Chords.MAJOR_TRIAD.invert(1)));
 		voice.add(Chords.chordAtRoot(Pitch.D4, Chords.MAJOR_TRIAD));
-		audio.playSequentially(voice, 120);
+		try {
+			audio.playSequentially(voice, 120);
+		} catch (AudioException e) {
+			logger.error("Exception playing chord progression", e);
+		}
 	}
 
 	private static class KeyFormatter {

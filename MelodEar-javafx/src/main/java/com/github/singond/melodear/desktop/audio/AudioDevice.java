@@ -14,6 +14,7 @@ public interface AudioDevice {
 	 * No {@code Note Off} event is generated.
 	 *
 	 * @param pitch the pitch of the note to be played
+	 * @throws AudioException if an exception occurs with the audio device
 	 */
 	void playNote(Pitch pitch) throws AudioException;
 
@@ -23,6 +24,7 @@ public interface AudioDevice {
 	 * This sends a {@code Note Off} MIDI message directly to the receiver.
 	 *
 	 * @param pitch the pitch of the note to be stopped
+	 * @throws AudioException if an exception occurs with the audio device
 	 */
 	void muteNote(Pitch pitch) throws AudioException;
 
@@ -38,6 +40,8 @@ public interface AudioDevice {
 	 *
 	 * @param pitches the pitches to be played
 	 * @param bpm the tempo to play the notes at (in notes per minute)
+	 * @throws AudioException if an exception occurs with the audio device
 	 */
-	void playSequentially(List<? extends PitchGroup> pitches, double bpm);
+	void playSequentially(List<? extends PitchGroup> pitches, double bpm)
+			throws AudioException;
 }
