@@ -130,9 +130,13 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 	 * @param pitch the pitch of the note to be played
 	 */
 	@Override
-	public void playNote(Pitch pitch) throws InvalidMidiDataException {
-		receiver.send(new ShortMessage(ShortMessage.NOTE_ON, channel,
-				pitch.midiNumber(), velocity), -1);
+	public void playNote(Pitch pitch) throws AudioException {
+		try {
+			receiver.send(new ShortMessage(ShortMessage.NOTE_ON, channel,
+					pitch.midiNumber(), velocity), -1);
+		} catch (InvalidMidiDataException e) {
+			throw new AudioException(e);
+		}
 	}
 
 	/**
@@ -143,15 +147,23 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 	 * @param pitch the pitch of the note to be stopped
 	 */
 	@Override
-	public void muteNote(Pitch pitch) throws InvalidMidiDataException {
-		receiver.send(new ShortMessage(ShortMessage.NOTE_OFF, channel,
-				pitch.midiNumber(), velocity), -1);
+	public void muteNote(Pitch pitch) throws AudioException {
+		try {
+			receiver.send(new ShortMessage(ShortMessage.NOTE_OFF, channel,
+					pitch.midiNumber(), velocity), -1);
+		} catch (InvalidMidiDataException e) {
+			throw new AudioException(e);
+		}
 	}
 
 	@Override
-	public void muteAllNotes() throws InvalidMidiDataException {
-		receiver.send(new ShortMessage(ShortMessage.CONTROL_CHANGE,
-				channel, CONTROL_ALL_SOUND_OFF, 0), -1);
+	public void muteAllNotes() throws AudioException {
+		try {
+			receiver.send(new ShortMessage(ShortMessage.CONTROL_CHANGE,
+					channel, CONTROL_ALL_SOUND_OFF, 0), -1);
+		} catch (InvalidMidiDataException e) {
+			throw new AudioException(e);
+		}
 	}
 
 	@Override

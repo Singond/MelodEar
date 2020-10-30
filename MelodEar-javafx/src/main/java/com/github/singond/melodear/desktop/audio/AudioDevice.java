@@ -2,8 +2,6 @@ package com.github.singond.melodear.desktop.audio;
 
 import java.util.List;
 
-import javax.sound.midi.InvalidMidiDataException;
-
 import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchGroup;
 
@@ -17,7 +15,7 @@ public interface AudioDevice {
 	 *
 	 * @param pitch the pitch of the note to be played
 	 */
-	void playNote(Pitch pitch) throws InvalidMidiDataException;
+	void playNote(Pitch pitch) throws AudioException;
 
 	/**
 	 * Mutes (stops playing) the note of a given pitch.
@@ -26,12 +24,12 @@ public interface AudioDevice {
 	 *
 	 * @param pitch the pitch of the note to be stopped
 	 */
-	void muteNote(Pitch pitch) throws InvalidMidiDataException;
+	void muteNote(Pitch pitch) throws AudioException;
 
 	/**
 	 * Stops playing all notes.
 	 */
-	public void muteAllNotes() throws InvalidMidiDataException;
+	public void muteAllNotes() throws AudioException;
 
 	/**
 	 * Plays notes of the given pitches in sequence.

@@ -1,11 +1,10 @@
 package com.github.singond.melodear.desktop.keyboard;
 
-import javax.sound.midi.InvalidMidiDataException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.github.singond.melodear.desktop.audio.AudioDevice;
+import com.github.singond.melodear.desktop.audio.AudioException;
 import com.github.singond.melodear.desktop.components.KeyboardListener;
 import com.github.singond.music.Pitch;
 
@@ -41,7 +40,7 @@ public abstract class AbstractKeyboardListener implements KeyboardListener {
 				audio.muteAllNotes();
 			}
 			audio.playNote(pitch);
-		} catch (InvalidMidiDataException e) {
+		} catch (AudioException e) {
 			logger.error("Error stopping or playing note", e);
 		}
 		onKeyDown(pitch);
@@ -61,7 +60,7 @@ public abstract class AbstractKeyboardListener implements KeyboardListener {
 		if (settings.getKeyDuration() == KeyPlayDuration.KEY_HELD) {
 			try {
 				audio.muteNote(pitch);
-			} catch (InvalidMidiDataException e) {
+			} catch (AudioException e) {
 				e.printStackTrace();
 				logger.error("Error stopping note", e);
 			}
