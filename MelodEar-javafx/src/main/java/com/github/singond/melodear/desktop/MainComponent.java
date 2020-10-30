@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 
+import com.github.singond.melodear.desktop.audio.AudioDevice;
 import com.github.singond.melodear.desktop.audio.AudioModule;
 import com.github.singond.melodear.desktop.settings.SettingsLoader;
 import com.github.singond.melodear.desktop.settings.SettingsModule;
@@ -16,4 +17,6 @@ interface MainComponent {
 	MainController getMainController();
 
 	SettingsLoader getSettingsLoader();
+
+	AudioDevice getAudioDevice();
 }

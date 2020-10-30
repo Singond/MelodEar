@@ -18,6 +18,8 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.github.singond.melodear.desktop.audio.AudioException;
+
 /**
  * The main class of the application.
  *
@@ -56,6 +58,11 @@ public class MelodEarApplication extends Application {
 
 	@Override
 	public void stop() {
+		try {
+			component.getAudioDevice().muteAll();
+		} catch (AudioException e) {
+			logger.error("Exception when muting sound", e);
+		}
 		logger.debug("Writing settings");
 		component.getSettingsLoader().writeSettings();
 	}

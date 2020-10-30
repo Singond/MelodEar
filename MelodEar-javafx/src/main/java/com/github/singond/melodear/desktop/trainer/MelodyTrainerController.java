@@ -189,6 +189,11 @@ public class MelodyTrainerController {
 		if (trainerModel.isRunning()) {
 			// Stop
 			trainerModel.stop();
+			try {
+				audio.muteAll();
+			} catch (AudioException e) {
+				logger.error("Exception when muting sound", e);
+			}
 			autoPlayExercise = false;
 		} else {
 			// Start

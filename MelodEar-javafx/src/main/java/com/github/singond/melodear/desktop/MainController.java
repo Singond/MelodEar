@@ -22,6 +22,8 @@ import org.apache.logging.log4j.Logger;
 import dagger.Lazy;
 
 import com.github.singond.melodear.desktop.audio.AudioController;
+import com.github.singond.melodear.desktop.audio.AudioDevice;
+import com.github.singond.melodear.desktop.audio.AudioException;
 import com.github.singond.melodear.desktop.piano.PianoController;
 import com.github.singond.melodear.desktop.settings.AllSettings;
 import com.github.singond.melodear.desktop.settings.SettingsControllerComponent;
@@ -43,6 +45,9 @@ public class MainController {
 	@Inject
 	AudioController audioController;
 
+	@Inject
+	AudioDevice audioDevice;
+
 	/**
 	 * Creates fresh instance of SettingsController based on a copy of
 	 * the current settings on every invocation.
@@ -58,7 +63,13 @@ public class MainController {
 		switchToPiano();
 	}
 
-	private void preSwitchView() {}
+	private void preSwitchView() {
+		try {
+			audioDevice.muteAll();
+		} catch (AudioException e) {
+			logger.error("Exception when muting sound", e);
+		}
+	}
 
 	private void postSwitchView() {
 		Scene scene = main.getScene();
