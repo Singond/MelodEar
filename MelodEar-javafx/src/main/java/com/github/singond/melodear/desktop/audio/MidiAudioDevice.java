@@ -183,6 +183,17 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 		}
 	}
 
+	@Override
+	public void mutePlayback() {
+		try {
+			if (sequencer.isOpen()) {
+				sequencer.stop();
+			}
+		} catch (IllegalStateException e) {
+			logger.warn("The sequencer has already been closed", e);
+		}
+	}
+
 	private Sequence makeSequence(List<? extends PitchGroup> pitches) {
 		Sequence sequence;
 		try {
@@ -217,6 +228,12 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 			}
 		}
 		return sequence;
+	}
+
+	@Override
+	public void muteAll() throws AudioException {
+		muteAllNotes();
+		mutePlayback();
 	}
 
 	private class EndListener implements MetaEventListener {

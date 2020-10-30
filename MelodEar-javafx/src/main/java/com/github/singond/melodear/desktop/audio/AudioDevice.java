@@ -44,4 +44,19 @@ public interface AudioDevice {
 	 */
 	void playSequentially(List<? extends PitchGroup> pitches, double bpm)
 			throws AudioException;
+
+	/**
+	 * Stops playback of all sequences previously started by
+	 * {@link #playSequentially}.
+	 *
+	 * @throws AudioException if an exception occurs with the audio device
+	 */
+	void mutePlayback() throws AudioException;
+
+	/**
+	 * Mutes all sound.
+	 *
+	 * @throws AudioException if an exception occurs with the audio device
+	 */
+	void muteAll() throws AudioException;
 }
