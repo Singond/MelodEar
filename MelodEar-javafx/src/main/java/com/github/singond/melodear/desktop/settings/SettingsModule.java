@@ -36,5 +36,4 @@ public class SettingsModule {
 	public static MelodyTrainerSettings provideMelodyTrainerSettings(AllSettings s) {
 		return s.melodyTrainer();
 	}
-
 }

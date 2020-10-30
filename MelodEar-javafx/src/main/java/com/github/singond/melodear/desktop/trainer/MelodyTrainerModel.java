@@ -61,7 +61,7 @@ public class MelodyTrainerModel {
 			= new ReadOnlyBooleanWrapper(false);
 
 	@Inject
-	public MelodyTrainerModel() {
+	public MelodyTrainerModel(MelodyTrainerSettings settings) {
 		logger.trace("Creating MelodyTrainerModel");
 		trainer = new MelodyTrainer<>();
 		KeyedMelodyExerciseFactory factory = new KeyedMelodyExerciseFactory();
@@ -70,7 +70,9 @@ public class MelodyTrainerModel {
 		factory.setDegreesAvailable(Keys.MINOR, DIATONIC_DEGREES);
 		factory.setLowerBound(Pitch.C3);
 		factory.setUpperBound(Pitch.C6);
-		factory.setLength(3);
+		settings.melodyLengthProperty().addListener(
+				o -> factory.setLength(settings.getMelodyLength()));
+		factory.setLength(settings.getMelodyLength());
 		trainer.setExerciseFactory(factory);
 	}
 

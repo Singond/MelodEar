@@ -32,3 +32,8 @@
 ScrollPane.piano-pane > .viewport {
 	-fx-background-color: transparent;
 }
+
+.settings-quick .settings-form {
+	-fx-hgap: 1em;
+	-fx-vgap: 0.5em;
+}

@@ -11,11 +11,13 @@ import javax.inject.Named;
 
 import javafx.animation.FadeTransition;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
 import javafx.util.Duration;
 
 import org.apache.logging.log4j.LogManager;
@@ -70,6 +72,9 @@ public class MelodyTrainerController {
 	@FXML private Button startBtn;
 	@FXML private Button replayReferenceBtn;
 	@FXML private Button replayMelodyBtn;
+	// Tweaks
+	@FXML private Spinner<Integer> melodyLength;
+	private IntegerProperty melodyLengthProperty;
 
 	@Inject
 	public MelodyTrainerController(
@@ -118,6 +123,12 @@ public class MelodyTrainerController {
 		replayMelodyBtn.disableProperty().bind(
 				Bindings.not(trainerModel.runningProperty()));
 		trainerModel.onNewExercise(() -> onNewExercise());
+		// Keep a reference to the IntegerProperty, otherwise it may get
+		// garbage-collected.
+		melodyLengthProperty = IntegerProperty.integerProperty(
+				melodyLength.getValueFactory().valueProperty());
+		melodyLengthProperty.bindBidirectional(
+				trainerSettings.melodyLengthProperty());
 	}
 
 	private String noteStatusClass(NoteStatus status) {
