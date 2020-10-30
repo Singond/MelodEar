@@ -27,9 +27,11 @@ public interface AudioDevice {
 	void muteNote(Pitch pitch) throws AudioException;
 
 	/**
-	 * Stops playing all notes.
+	 * Stops playing all notes previously started by {@link #playNote}.
+	 *
+	 * @throws AudioException if an exception occurs with the audio device
 	 */
-	public void muteAllNotes() throws AudioException;
+	void muteAllNotes() throws AudioException;
 
 	/**
 	 * Plays notes of the given pitches in sequence.
