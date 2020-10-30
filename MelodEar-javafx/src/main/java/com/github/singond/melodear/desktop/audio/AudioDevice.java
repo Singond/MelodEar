@@ -26,12 +26,12 @@ public interface AudioDevice {
 	 *
 	 * @param pitch the pitch of the note to be stopped
 	 */
-	void stopNote(Pitch pitch) throws InvalidMidiDataException;
+	void muteNote(Pitch pitch) throws InvalidMidiDataException;
 
 	/**
 	 * Stops playing all notes.
 	 */
-	public void stopAllNotes() throws InvalidMidiDataException;
+	public void muteAllNotes() throws InvalidMidiDataException;
 
 	/**
 	 * Plays notes of the given pitches in sequence.

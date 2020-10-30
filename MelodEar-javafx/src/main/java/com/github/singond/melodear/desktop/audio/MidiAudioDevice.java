@@ -143,13 +143,13 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 	 * @param pitch the pitch of the note to be stopped
 	 */
 	@Override
-	public void stopNote(Pitch pitch) throws InvalidMidiDataException {
+	public void muteNote(Pitch pitch) throws InvalidMidiDataException {
 		receiver.send(new ShortMessage(ShortMessage.NOTE_OFF, channel,
 				pitch.midiNumber(), velocity), -1);
 	}
 
 	@Override
-	public void stopAllNotes() throws InvalidMidiDataException {
+	public void muteAllNotes() throws InvalidMidiDataException {
 		receiver.send(new ShortMessage(ShortMessage.CONTROL_CHANGE,
 				channel, CONTROL_ALL_SOUND_OFF, 0), -1);
 	}

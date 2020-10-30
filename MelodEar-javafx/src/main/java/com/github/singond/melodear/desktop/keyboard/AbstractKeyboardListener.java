@@ -38,7 +38,7 @@ public abstract class AbstractKeyboardListener implements KeyboardListener {
 	public void keyDown(final Pitch pitch) {
 		try {
 			if (settings.getKeyDuration() == KeyPlayDuration.NEXT_KEY) {
-				audio.stopAllNotes();
+				audio.muteAllNotes();
 			}
 			audio.playNote(pitch);
 		} catch (InvalidMidiDataException e) {
@@ -60,7 +60,7 @@ public abstract class AbstractKeyboardListener implements KeyboardListener {
 	public void keyUp(final Pitch pitch) {
 		if (settings.getKeyDuration() == KeyPlayDuration.KEY_HELD) {
 			try {
-				audio.stopNote(pitch);
+				audio.muteNote(pitch);
 			} catch (InvalidMidiDataException e) {
 				e.printStackTrace();
 				logger.error("Error stopping note", e);
