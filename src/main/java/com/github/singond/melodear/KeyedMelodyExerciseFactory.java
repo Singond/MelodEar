@@ -159,7 +159,7 @@ public final class KeyedMelodyExerciseFactory
 	}
 
 	/**
-	 * Sets the musical key of future geneŕated exercises to a random key
+	 * Sets the musical key of future generated exercises to a random key
 	 * chosen from the collection of available keys.
 	 */
 	public void newKey() {
