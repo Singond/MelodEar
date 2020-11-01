@@ -37,3 +37,6 @@ ScrollPane.piano-pane > .viewport {
 	-fx-hgap: 1em;
 	-fx-vgap: 0.5em;
 }
+.settings-quick .settings-form .value {
+	-fx-max-width: 10000;
+}
