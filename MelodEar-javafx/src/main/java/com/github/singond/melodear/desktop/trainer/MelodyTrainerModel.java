@@ -119,6 +119,10 @@ public class MelodyTrainerModel {
 		return status.getReadOnlyProperty();
 	}
 
+	public boolean isKeyNew() {
+		return trainer.isKeyNew();
+	}
+
 	public boolean isRunning() {
 		return running.get();
 	}

@@ -186,7 +186,14 @@ public class MelodyTrainerController {
 					return null;
 				}
 			};
-			delay.setOnSucceeded((e) -> playKeyAndMelody());
+			if (trainerModel.isKeyNew()) {
+				// This is the first exercise in a new key: play key and melody
+				delay.setOnSucceeded((e) -> playKeyAndMelody());
+			} else {
+				// This is not the first exercise in the current key:
+				// play only the melody
+				delay.setOnSucceeded((e) -> playMelody());
+			}
 			new Thread(delay).start();
 		}
 	}
