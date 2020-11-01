@@ -1,11 +1,15 @@
 package com.github.singond.melodear.desktop.trainer;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.github.singond.melodear.IntervalView;
 import com.github.singond.melodear.desktop.settings.PropertyAbstractSettingsTree;
+import com.github.singond.melodear.desktop.util.IntervalViews;
 
 public class MelodyTrainerSettings
 		extends PropertyAbstractSettingsTree<MelodyTrainerSettings>{
@@ -21,12 +25,18 @@ public class MelodyTrainerSettings
 	/** Number of exercise to generate before changing key. */
 	private final IntegerProperty keyRepeat;
 
+	/** Maximum interval between consecutive notes in melody. */
+	private final Property<IntervalView> maxInterval;
+
 	public MelodyTrainerSettings(String name) {
 		super(name);
 		logger.debug("Initializing MelodyTrainerSettings");
 		newExerciseDelay = newPropertyNode("newExerciseDelay", 1000);
 		melodyLength = newPropertyNode("melodyLength", 3);
 		keyRepeat = newPropertyNode("keyRepeat", 1);
+		maxInterval = newPropertyNode("maxInterval",
+				new SimpleObjectProperty<IntervalView>(IntervalView.UNSET),
+				IntervalViews.CONVERTER);
 	}
 
 	public MelodyTrainerSettings() {
@@ -72,5 +82,17 @@ public class MelodyTrainerSettings
 
 	public IntegerProperty keyRepeatProperty() {
 		return keyRepeat;
+	}
+
+	public IntervalView getMaxInterval() {
+		return maxInterval.getValue();
+	}
+
+	public void setMaxInterval(IntervalView interval) {
+		maxInterval.setValue(interval);
+	}
+
+	public Property<IntervalView> maxIntervalProperty() {
+		return maxInterval;
 	}
 }

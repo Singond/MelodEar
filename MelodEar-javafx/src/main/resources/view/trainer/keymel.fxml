@@ -45,6 +45,17 @@
 				</valueFactory>
 			</Spinner>
 
+			<!-- Maximum interval -->
+			<Label text="%meldict.settings.maxInterval"
+					GridPane.rowIndex="2" GridPane.columnIndex="0">
+				<tooltip>
+					<Tooltip text="%meldict.settings.maxInterval.tt"/>
+				</tooltip>
+			</Label>
+			<ChoiceBox fx:id="maxInterval"
+					GridPane.rowIndex="2" GridPane.columnIndex="1"
+					styleClass="value,number"/>
+
 		</GridPane>
 	</TitledPane>
 

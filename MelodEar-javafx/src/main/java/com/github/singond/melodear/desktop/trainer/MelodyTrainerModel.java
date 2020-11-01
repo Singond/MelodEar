@@ -70,6 +70,10 @@ public class MelodyTrainerModel {
 		factory.setDegreesAvailable(Keys.MINOR, DIATONIC_DEGREES);
 		factory.setLowerBound(Pitch.C3);
 		factory.setUpperBound(Pitch.C6);
+		settings.maxIntervalProperty().addListener(
+				v -> factory.setMaximumInterval(
+						settings.getMaxInterval().value()));
+		factory.setMaximumInterval(settings.getMaxInterval().value());
 		settings.melodyLengthProperty().addListener(
 				o -> factory.setLength(settings.getMelodyLength()));
 		factory.setLength(settings.getMelodyLength());

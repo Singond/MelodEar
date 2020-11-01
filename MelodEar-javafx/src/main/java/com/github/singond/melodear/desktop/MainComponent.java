@@ -11,7 +11,8 @@ import com.github.singond.melodear.desktop.settings.SettingsModule;
 import com.github.singond.melodear.desktop.trainer.TrainerModule;
 
 @Singleton
-@Component(modules = {AudioModule.class, SettingsModule.class, TrainerModule.class})
+@Component(modules = {MainModule.class, AudioModule.class, SettingsModule.class,
+                      TrainerModule.class})
 interface MainComponent {
 
 	MainController getMainController();

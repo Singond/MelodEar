@@ -12,10 +12,12 @@ import javax.inject.Named;
 import javafx.animation.FadeTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.util.Duration;
@@ -23,6 +25,7 @@ import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.github.singond.melodear.IntervalView;
 import com.github.singond.melodear.MelodyExercise.NoteStatus;
 import com.github.singond.melodear.desktop.PaneScoped;
 import com.github.singond.melodear.desktop.audio.AudioDevice;
@@ -30,6 +33,8 @@ import com.github.singond.melodear.desktop.audio.AudioException;
 import com.github.singond.melodear.desktop.components.Keyboard;
 import com.github.singond.melodear.desktop.components.KeyboardListener;
 import com.github.singond.melodear.desktop.keyboard.KeyboardSettings;
+import com.github.singond.melodear.desktop.util.IntervalViewLabelConverter;
+import com.github.singond.melodear.desktop.util.IntervalViews;
 import com.github.singond.music.Chords;
 import com.github.singond.music.Key;
 import com.github.singond.music.Pitch;
@@ -56,8 +61,12 @@ public class MelodyTrainerController {
 	@Inject
 	AudioDevice audio;
 
+	@Inject @Named("main-resources")
+	ResourceBundle bundleMain;
 	@Inject @Named("trainer-resources")
 	ResourceBundle bundle;
+	@Inject
+	IntervalViewLabelConverter intervalViewConverter;
 
 	@Inject
 	KeyboardSettings kbdSettings;
@@ -79,6 +88,7 @@ public class MelodyTrainerController {
 	private IntegerProperty melodyLengthProperty;
 	@FXML private Spinner<Integer> keyRepeat;
 	private IntegerProperty keyRepeatProperty;
+	@FXML private ChoiceBox<IntervalView> maxInterval;
 
 	@Inject
 	public MelodyTrainerController(
@@ -137,6 +147,11 @@ public class MelodyTrainerController {
 				keyRepeat.getValueFactory().valueProperty());
 		keyRepeatProperty.bindBidirectional(
 				trainerSettings.keyRepeatProperty());
+		maxInterval.setItems(FXCollections.observableList(
+				IntervalViews.values()));
+		maxInterval.setConverter(intervalViewConverter);
+		maxInterval.valueProperty().bindBidirectional(
+				trainerSettings.maxIntervalProperty());
 	}
 
 	private String noteStatusClass(NoteStatus status) {
