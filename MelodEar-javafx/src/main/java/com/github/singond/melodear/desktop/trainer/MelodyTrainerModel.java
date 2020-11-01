@@ -20,9 +20,9 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.singond.melodear.KeyedMelodyExercise;
 import com.github.singond.melodear.KeyedMelodyExerciseFactory;
+import com.github.singond.melodear.KeyedMelodyTrainer;
 import com.github.singond.melodear.MelodyExercise;
 import com.github.singond.melodear.MelodyExercise.NoteStatus;
-import com.github.singond.melodear.MelodyTrainer;
 import com.github.singond.melodear.desktop.PaneScoped;
 import com.github.singond.music.Degree;
 import com.github.singond.music.Key;
@@ -43,7 +43,7 @@ public class MelodyTrainerModel {
 
 	private static Logger logger = LogManager.getLogger(MelodyTrainerModel.class);
 
-	private MelodyTrainer<KeyedMelodyExercise> trainer;
+	private KeyedMelodyTrainer trainer;
 	/** Start new exercise automatically on completion of the previous. */
 	private boolean autoNew = true;
 	/** Callback to be executed after starting new exercise. */
@@ -63,7 +63,7 @@ public class MelodyTrainerModel {
 	@Inject
 	public MelodyTrainerModel(MelodyTrainerSettings settings) {
 		logger.trace("Creating MelodyTrainerModel");
-		trainer = new MelodyTrainer<>();
+		trainer = new KeyedMelodyTrainer();
 		KeyedMelodyExerciseFactory factory = new KeyedMelodyExerciseFactory();
 		factory.setKeysAvailable(Arrays.asList(Keys.C_MAJOR, Keys.G_MAJOR, Keys.D_MAJOR));
 		factory.setDegreesAvailable(Keys.MAJOR, DIATONIC_DEGREES);
