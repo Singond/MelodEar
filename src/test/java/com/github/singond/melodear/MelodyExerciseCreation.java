@@ -1,12 +1,13 @@
 package com.github.singond.melodear;
 
 import static com.github.singond.music.PitchClass.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +19,7 @@ import com.github.singond.music.Degree;
 import com.github.singond.music.Keys;
 import com.github.singond.music.Pitch;
 import com.github.singond.music.PitchClass;
+import com.github.singond.music.Pitches;
 
 public class MelodyExerciseCreation {
 
@@ -146,5 +148,50 @@ public class MelodyExerciseCreation {
 		exc2 = factory.make();
 		assertFalse(factory.isKeyNew());
 		assertEquals(Keys.B_MAJOR, exc2.key());
+	}
+
+	@Test
+	public void maxIntervalSelection() {
+		factory.setKeysAvailable(Arrays.asList(Keys.G_MAJOR));
+		List<Pitch> pitchesAvailable
+			= Pitches.allBetween(Pitch.C3, Pitch.C6, Keys.G_MAJOR.pitchClasses());
+		Object selected;
+
+		selected = invokeSelectPitches(factory, pitchesAvailable,
+				Pitch.G3, Pitch.B3);
+		assertEquals("Wrong result of selectPitches",
+				Arrays.asList(Pitch.G3, Pitch.A3, Pitch.B3), selected);
+
+		selected = invokeSelectPitches(factory, pitchesAvailable,
+				Pitch.C3, Pitch.E3);
+		assertEquals("Wrong result of selectPitches",
+				Arrays.asList(Pitch.C3, Pitch.D3, Pitch.E3), selected);
+
+		selected = invokeSelectPitches(factory, pitchesAvailable,
+				Pitch.C3, Pitch.C3);
+		assertEquals("Wrong result of selectPitches",
+				Arrays.asList(Pitch.C3), selected);
+
+		selected = invokeSelectPitches(factory, pitchesAvailable,
+				Pitch.C6, Pitch.C6);
+		assertEquals("Wrong result of selectPitches",
+				Arrays.asList(Pitch.C6), selected);
+	}
+
+	private Object invokeSelectPitches(KeyedMelodyExerciseFactory factory,
+		List<Pitch> pitches, Pitch from, Pitch to) {
+		Method method;
+		try {
+			method = factory.getClass().getDeclaredMethod("selectPitches",
+					List.class, Pitch.class, Pitch.class);
+			method.setAccessible(true);
+			return method.invoke(factory, pitches, from, to);
+		} catch (NoSuchMethodException | SecurityException
+				| IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			logger.error("Error invoking selectPitches", e);
+			fail("Error in test: Cannot invoke selectPitches");
+		}
+		return null;
 	}
 }

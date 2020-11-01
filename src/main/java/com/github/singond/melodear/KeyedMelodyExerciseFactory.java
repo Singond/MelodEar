@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.github.singond.music.Degree;
+import com.github.singond.music.Interval;
 import com.github.singond.music.Key;
 import com.github.singond.music.KeyType;
 import com.github.singond.music.Keys;
@@ -68,6 +69,12 @@ public final class KeyedMelodyExerciseFactory
 
 	private transient List<Pitch> pitchesAvailable;
 	private transient boolean pitchesAvailableValid;
+
+	/**
+	 * Maximum interval between consecutive notes in the melody.
+	 * If this is null, it means there is no limit.
+	 */
+	private Interval maxInterval = null;
 
 	/**
 	 * Length of the melody.
@@ -144,7 +151,19 @@ public final class KeyedMelodyExerciseFactory
 		invalidatePitchesAvailable();
 	}
 
+	/**
+	 * Sets the upper bound on the interval between two consecutive notes.
+	 *
+	 * @param interval the upper bound to be set
+	 */
+	public void setMaximumInterval(Interval interval) {
+		maxInterval = interval;
+	}
+
 	public void setLength(int length) {
+		if (length < 1) {
+			throw new IllegalArgumentException("Length must be positive");
+		}
 		this.length = length;
 	}
 
@@ -218,6 +237,9 @@ public final class KeyedMelodyExerciseFactory
 			throw new IllegalStateException("No lower bound set on pitches");
 		if (upperBound == null)
 			throw new IllegalStateException("No upper bound set on pitches");
+		if (lowerBound.compareTo(upperBound) > 0)
+			throw new IllegalStateException(
+					"Lower bound is higher than upper bound");
 
 		if (logger.isDebugEnabled())
 			logger.debug("Generating available pitches...");
@@ -239,10 +261,54 @@ public final class KeyedMelodyExerciseFactory
 			throw new IllegalStateException("No pitches available");
 
 		List<Pitch> melody = new ArrayList<>(length);
-		for (int i = 0; i < length; i++) {
-			melody.add(rnd.randomFrom(pitchesAvailable));
+		Pitch pitch = rnd.randomFrom(pitchesAvailable);
+		melody.add(pitch);
+		for (int i = 1; i < length; i++) {
+			List<Pitch> pitchesSelected = pitchesAvailable;
+			if (maxInterval != null) {
+				// Select only pitches lying within the maximum interval
+				// from the previous pitch
+				Pitch from = pitch.transposeDown(maxInterval);
+				Pitch to = pitch.transposeUp(maxInterval);
+				pitchesSelected = selectPitches(pitchesAvailable, from, to);
+			}
+			pitch = rnd.randomFrom(pitchesSelected);
+			melody.add(pitch);
 		}
 		return melody;
+	}
+
+	/**
+	 * Returns a sublist of the given sorted list of pitches whose elements
+	 * lie between the given limits.
+	 * <p>
+	 * The behaviour of this method is undefined if the {@code pitches}
+	 * argument is not sorted.
+	 *
+	 * @param pitches a sorted list of pitches
+	 * @param from lower bound (inclusive)
+	 * @param to upper bound (inclusive)
+	 * @return a sublist of {@code pitches} between {@code from} and {@code to}
+	 */
+	private List<Pitch> selectPitches(List<Pitch> pitches, Pitch from, Pitch to) {
+		int lower = 0;
+		for (int i = 0; i < pitches.size(); i++) {
+			Pitch p = pitches.get(i);
+			if (p.compareTo(from) >= 0) {
+				lower = i;
+				break;
+			}
+		}
+		int upper = pitches.size() - 1;
+		for (int i = pitches.size() - 1; i >= 0; i--) {
+			Pitch p = pitches.get(i);
+			if (p.compareTo(to) <= 0) {
+				upper = i;
+				break;
+			}
+		}
+		List<Pitch> result = pitches.subList(lower, upper + 1);
+		return result;
 	}
 
 	@Override
