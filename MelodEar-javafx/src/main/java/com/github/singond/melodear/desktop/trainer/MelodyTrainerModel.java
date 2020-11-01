@@ -144,6 +144,8 @@ public class MelodyTrainerModel {
 	public void start() {
 		logger.debug("Starting trainer");
 		running.set(true);
+		// Reset key counter and randomize
+		trainer.getExerciseFactory().newKey();
 		newExercise();
 	}
 
