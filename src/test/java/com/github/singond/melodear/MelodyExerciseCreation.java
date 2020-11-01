@@ -1,6 +1,9 @@
 package com.github.singond.melodear;
 
 import static com.github.singond.music.PitchClass.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -107,5 +110,41 @@ public class MelodyExerciseCreation {
 		exc = factory.make();
 
 		logger.info("");
+	}
+
+	@Test
+	public void autoRepeatedKey() {
+		factory.setKeysAvailable(Arrays.asList(Keys.C_MAJOR,
+				Keys.G_MAJOR, Keys.D_MAJOR, Keys.A_MAJOR, Keys.E_MAJOR));
+		factory.setKeyRepeat(2);
+		for (int i = 1; i < 10; i++) {
+			KeyedMelodyExercise exc1 = factory.make();
+			assertTrue(factory.isKeyNew());
+			KeyedMelodyExercise exc2 = factory.make();
+			assertFalse(factory.isKeyNew());
+			assertEquals(exc1.key(), exc2.key());
+		}
+	}
+
+	@Test
+	public void manualRepeatedKey() {
+		factory.setKeysAvailable(Arrays.asList(Keys.C_MAJOR));
+		factory.setKeyRepeat(2);
+
+		factory.setKey(Keys.F_MAJOR);
+		KeyedMelodyExercise exc1 = factory.make();
+		assertEquals(Keys.F_MAJOR, exc1.key());
+		assertTrue(factory.isKeyNew());
+		KeyedMelodyExercise exc2 = factory.make();
+		assertFalse(factory.isKeyNew());
+		assertEquals(Keys.F_MAJOR, exc2.key());
+
+		factory.setKey(Keys.B_MAJOR);
+		exc1 = factory.make();
+		assertEquals(Keys.B_MAJOR, exc1.key());
+		assertTrue(factory.isKeyNew());
+		exc2 = factory.make();
+		assertFalse(factory.isKeyNew());
+		assertEquals(Keys.B_MAJOR, exc2.key());
 	}
 }

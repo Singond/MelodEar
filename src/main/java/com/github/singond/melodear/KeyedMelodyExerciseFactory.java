@@ -156,6 +156,10 @@ public final class KeyedMelodyExerciseFactory
 	public void setKey(Key key) {
 		this.key = key;
 		invalidatePitchClassesAvailable();
+		if (logger.isDebugEnabled())
+			logger.debug("Changing key to {}", key);
+		policy.reset();
+		keyValid = true;
 	}
 
 	/**
@@ -168,10 +172,6 @@ public final class KeyedMelodyExerciseFactory
 
 		Key newKey = rnd.randomFrom(keysAvailable);
 		setKey(newKey);
-		if (logger.isDebugEnabled())
-			logger.debug("Changing key to {}", newKey);
-		policy.reset();
-		keyValid = true;
 	}
 
 	public void setKeyRepeat(int times) {
@@ -254,9 +254,22 @@ public final class KeyedMelodyExerciseFactory
 		return exc;
 	}
 
+	/**
+	 * Returns {@code true} if the exercise returned by the most recent
+	 * call to {@link #make} is the first since a key has been set.
+	 * A key can be set either implicitly inside {@link #make},
+	 * or explicitly by calling {@link #setKey}.
+	 *
+	 * @return {@code true} if the last exercise is in a new key
+	 */
+	public boolean isKeyNew() {
+		return policy.isKeyNew();
+	}
+
 	private interface Policy {
 		public void exerciseUsed();
 		public void reset();
+		public boolean isKeyNew();
 	}
 
 	private class NoRepeatPolicy implements Policy {
@@ -269,6 +282,11 @@ public final class KeyedMelodyExerciseFactory
 		public void reset() {
 			// Do nothing
 		}
+
+		@Override
+		public boolean isKeyNew() {
+			return true;
+		}
 	}
 
 	private class RepeatKeyPolicy implements Policy {
@@ -280,7 +298,7 @@ public final class KeyedMelodyExerciseFactory
 		private final int repeatKeyTimes;
 
 		/**
-		 * How many times the current musical has been used for exercise
+		 * How many times the current musical key has been used for exercise
 		 * since the last key change.
 		 */
 		private int usedKeyTimes = 0;
@@ -303,6 +321,11 @@ public final class KeyedMelodyExerciseFactory
 		@Override
 		public void reset() {
 			usedKeyTimes = 0;
+		}
+
+		@Override
+		public boolean isKeyNew() {
+			return usedKeyTimes == 1;
 		}
 	}
 }
