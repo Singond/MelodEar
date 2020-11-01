@@ -73,6 +73,9 @@ public class MelodyTrainerModel {
 		settings.melodyLengthProperty().addListener(
 				o -> factory.setLength(settings.getMelodyLength()));
 		factory.setLength(settings.getMelodyLength());
+		settings.keyRepeatProperty().addListener(
+				o -> factory.setKeyRepeat(settings.getKeyRepeat()));
+		factory.setKeyRepeat(settings.getKeyRepeat());
 		trainer.setExerciseFactory(factory);
 	}
 

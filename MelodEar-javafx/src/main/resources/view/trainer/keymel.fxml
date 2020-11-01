@@ -11,9 +11,11 @@
 <VBox xmlns:fx="http://javafx.com/fxml" alignment="center"
 		styleClass="keymel-pane" stylesheets="@keymel.css">
 
+	<!-- Quick settings -->
 	<TitledPane fx:id="tweaks" styleClass="settings-quick">
 		<GridPane xmlns:fx="http://javafx.com/fxml/1" styleClass="settings-form">
 
+			<!-- Melody length -->
 			<Label text="%meldict.settings.melodyLength"
 					GridPane.rowIndex="0" GridPane.columnIndex="0">
 				<tooltip>
@@ -28,9 +30,25 @@
 				</valueFactory>
 			</Spinner>
 
+			<!-- Key repeat -->
+			<Label text="%meldict.settings.keyRepeat"
+					GridPane.rowIndex="1" GridPane.columnIndex="0">
+				<tooltip>
+					<Tooltip text="%meldict.settings.keyRepeat.tt"/>
+				</tooltip>
+			</Label>
+			<Spinner fx:id="keyRepeat"
+					GridPane.rowIndex="1" GridPane.columnIndex="1"
+					editable="true" styleClass="value,number">
+				<valueFactory>
+					<SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="10"/>
+				</valueFactory>
+			</Spinner>
+
 		</GridPane>
 	</TitledPane>
 
+	<!-- Main trainer controls -->
 	<GridPane fx:id="mainToolbar" styleClass="toolbar"
 			hgap="10" vgap="10">
 		<columnConstraints>
@@ -75,6 +93,7 @@
 		</HBox>
 	</GridPane>
 
+	<!-- Keyboard -->
 	<ScrollPane vbarPolicy="NEVER"
 			styleClass="piano-pane" stylesheets="@../piano/piano.css">
 		<Keyboard fx:id="keyboard" from="C3" to="C6"/>

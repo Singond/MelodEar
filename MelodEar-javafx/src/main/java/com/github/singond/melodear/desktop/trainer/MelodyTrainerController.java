@@ -65,6 +65,7 @@ public class MelodyTrainerController {
 	MelodyTrainerSettings trainerSettings;
 
 	@FXML private Keyboard keyboard;
+	// Trainer controls
 	@FXML private Label keyName;
 	@FXML private Label keyNameLabel;
 	@FXML private Label noteStatus;
@@ -73,9 +74,11 @@ public class MelodyTrainerController {
 	@FXML private Button startBtn;
 	@FXML private Button replayReferenceBtn;
 	@FXML private Button replayMelodyBtn;
-	// Tweaks
+	// Trainer settings
 	@FXML private Spinner<Integer> melodyLength;
 	private IntegerProperty melodyLengthProperty;
+	@FXML private Spinner<Integer> keyRepeat;
+	private IntegerProperty keyRepeatProperty;
 
 	@Inject
 	public MelodyTrainerController(
@@ -130,6 +133,10 @@ public class MelodyTrainerController {
 				melodyLength.getValueFactory().valueProperty());
 		melodyLengthProperty.bindBidirectional(
 				trainerSettings.melodyLengthProperty());
+		keyRepeatProperty = IntegerProperty.integerProperty(
+				keyRepeat.getValueFactory().valueProperty());
+		keyRepeatProperty.bindBidirectional(
+				trainerSettings.keyRepeatProperty());
 	}
 
 	private String noteStatusClass(NoteStatus status) {

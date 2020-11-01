@@ -18,11 +18,15 @@ public class MelodyTrainerSettings
 	/** Number of notes in a melody. */
 	private final IntegerProperty melodyLength;
 
+	/** Number of exercise to generate before changing key. */
+	private final IntegerProperty keyRepeat;
+
 	public MelodyTrainerSettings(String name) {
 		super(name);
 		logger.debug("Initializing MelodyTrainerSettings");
 		newExerciseDelay = newPropertyNode("newExerciseDelay", 1000);
 		melodyLength = newPropertyNode("melodyLength", 3);
+		keyRepeat = newPropertyNode("keyRepeat", 1);
 	}
 
 	public MelodyTrainerSettings() {
@@ -56,5 +60,17 @@ public class MelodyTrainerSettings
 
 	public IntegerProperty melodyLengthProperty() {
 		return melodyLength;
+	}
+
+	public int getKeyRepeat() {
+		return keyRepeat.get();
+	}
+
+	public void setKeyRepeat(int times) {
+		keyRepeat.set(times);
+	}
+
+	public IntegerProperty keyRepeatProperty() {
+		return keyRepeat;
 	}
 }
