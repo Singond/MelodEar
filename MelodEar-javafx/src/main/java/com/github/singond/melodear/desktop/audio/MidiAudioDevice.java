@@ -84,7 +84,7 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 		// Load soundbank
 		Path sbFile = settings.getSoundbank();
 		if (sbFile != null && Files.exists(sbFile)) {
-			logger.debug("Loading soundbank from {}", sbFile);
+			logger.debug("Loading soundbank from '{}'", sbFile);
 			try {
 				Soundbank soundbank = MidiSystem.getSoundbank(sbFile.toFile());
 				if (synthesizer.loadAllInstruments(soundbank)) {

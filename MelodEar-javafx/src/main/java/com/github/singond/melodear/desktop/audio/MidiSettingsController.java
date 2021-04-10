@@ -99,7 +99,7 @@ public class MidiSettingsController {
 		// Launch it and evaluate
 		File file = chooser.showOpenDialog(soundbankBtn.getScene().getWindow());
 		if (file != null) {
-			logger.debug("Selected {}", file);
+			logger.debug("Selected '{}'", file);
 			Path path = file.toPath();
 			if (Files.exists(path)) {
 				logger.debug("File exists");
