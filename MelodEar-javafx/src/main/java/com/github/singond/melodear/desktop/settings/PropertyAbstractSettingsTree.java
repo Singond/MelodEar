@@ -129,7 +129,11 @@ public abstract class PropertyAbstractSettingsTree
 
 		@Override
 		public final void updateWith(S src) {
-			property.setValue(src.valueCopy());
+			if (src != null) {
+				property.setValue(src.valueCopy());
+			} else {
+				property.setValue(null);
+			}
 		}
 
 		@Override
