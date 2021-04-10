@@ -85,6 +85,13 @@ public class MidiSettingsController {
 				f.getValue().getVersion()));
 	}
 
+	/**
+	 * Launches a dialog to select the soundbank file and waits for a file
+	 * to be selected.
+	 * If a valid file is selected, updates the settings {@code soundbank}
+	 * value to this file and the {@code soundbankDefaultDir} value to its
+	 * parent.
+	 */
 	private void selectSoundbankFile() {
 		logger.debug("Selecting soundbank file");
 		// Setup file chooser
@@ -92,7 +99,7 @@ public class MidiSettingsController {
 		chooser.setTitle(bundle.getString(
 				"midi.settings.soundbank.browser.title"));
 		Path defaultDir = settings.getSoundbankDefaultDir();
-		if (defaultDir != null) {
+		if (defaultDir != null && Files.exists(defaultDir)) {
 			chooser.setInitialDirectory(defaultDir.toFile());
 		}
 
