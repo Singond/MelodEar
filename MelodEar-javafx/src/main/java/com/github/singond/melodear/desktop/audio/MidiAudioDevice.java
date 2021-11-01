@@ -83,7 +83,10 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 
 		// Load soundbank
 		Path sbFile = settings.getSoundbank();
-		if (sbFile != null && Files.exists(sbFile)) {
+		if (sbFile == null) {
+			// No path is specified (or is blank): Do nothing
+			soundbankStatus = SoundbankStatus.NOT_LOADED;
+		} else if (sbFile != null && Files.exists(sbFile)) {
 			logger.debug("Loading soundbank from '{}'", sbFile);
 			try {
 				Soundbank soundbank = MidiSystem.getSoundbank(sbFile.toFile());
@@ -249,6 +252,8 @@ class MidiAudioDevice implements AudioDevice, Closeable {
 	 * Status of loading a soundbank file into a synthesizer.
 	 */
 	public enum SoundbankStatus {
+		/** No attempt to load a soundbank has been made. */
+		NOT_LOADED(true),
 		/** The soundbank has been loaded correctly. */
 		LOADED(true),
 		/** The data in the file were not recognized as soundbank. */
