@@ -3,11 +3,10 @@
 bin/
 build/
 
+*.jar
 *.md.backup
 .classpath
 .project
 local.properties
-EarTrainer.jar
-melodear-old.jar
 out.midi
 test.mid
