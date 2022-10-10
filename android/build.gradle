@@ -1,6 +1,16 @@
 apply plugin: 'com.android.application'
 apply plugin: 'eclipse'
 
+buildscript {
+	repositories {
+		google()
+		mavenCentral()
+	}
+	dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.0'
+    }
+}
+
 android {
 	compileSdkVersion 25
 	
@@ -18,13 +28,15 @@ android {
 	}
 }
 
+ext.versions = ['music': '0.8.0']
+
 repositories {
 	google()
 	maven {url "https://jitpack.io"}
 }
 
 dependencies {
-	implementation project(":")
+	implementation project(":core")
 	implementation 'com.github.billthefarmer:mididriver:v1.14'
 	implementation group: "com.github.singond", name: "music",
 			version: "${versions.music}", changing: true

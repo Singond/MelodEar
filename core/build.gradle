@@ -1,35 +1,16 @@
-/*
- * MelodEar top-level build file.
- */
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-buildscript {
-	repositories {
-		jcenter()
-		google()
-	}
-	dependencies {
-		classpath 'com.android.tools.build:gradle:3.1.0'
-	}
-}
-
-allprojects {
-	repositories {
-		jcenter()
-	}
-	ext.versions = ['music': '0.8.0']
-}
+ext.versions = ['music': '0.8.0']
 
 repositories {
 	mavenCentral()
 }
 
 dependencies {
-	implementation group: 'com.github.singond', name: 'music',
+	implementation group: 'io.github.singond', name: 'music',
 			version: "${versions.music}", changing: true // Occurs in API!
-	implementation group: 'com.github.singond', name: 'music',
+	implementation group: 'io.github.singond', name: 'music',
 			classifier: 'javadoc', version: "${versions.music}", changing: true
 
 	// Logging

@@ -1,10 +1,12 @@
 rootProject.name = name
-// Include the Android project only if the Android SDK is available.
-// Assume it is available if the ANDROID_HOME environment variable
-// or the sdk.dir property is set, as required by the android plugin.
-if (System.getenv()['ANDROID_HOME'] || hasProperty("sdk.dir")) {
-	include ':MelodEar-android'
-	project(':MelodEar-android').name = "melodear-android"
+include "core", "desktop"
+
+// Include android subproject if Android SDK appears to be configured
+def local = new Properties()
+file("local.properties").withInputStream {
+	local.load(it)
 }
-include ':MelodEar-javafx'
-project(':MelodEar-javafx').name = "melodear-javafx"
+if (System.getenv()['ANDROID_HOME']
+		|| (local.containsKey("sdk.dir") && local.getProperty("sdk.dir") != "")) {
+	include "android"
+}

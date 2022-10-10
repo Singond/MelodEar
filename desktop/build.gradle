@@ -6,11 +6,17 @@ plugins {
 apply plugin: 'application'
 apply plugin: 'eclipse'
 
+ext.versions = ['music': '0.8.0']
+
+repositories {
+	mavenCentral()
+}
+
 dependencies {
-	implementation rootProject
-	implementation group: "com.github.singond", name: "music",
+	implementation project(":core")
+	implementation group: "io.github.singond", name: "music",
 			version: "${versions.music}", changing: true
-	implementation group: "com.github.singond", name: "music",
+	implementation group: "io.github.singond", name: "music",
 			classifier: "javadoc", version: "${versions.music}", changing: true
 	implementation group: 'org.openjfx', name: 'javafx', version: '11.0.2',
 			ext: 'pom'
